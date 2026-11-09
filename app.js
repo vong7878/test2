@@ -269,7 +269,7 @@ function drawSnakeGame() {
 function gameOver() { 
     clearInterval(snakeInterval); snakeInterval = null; 
     const overlay = document.getElementById('snake-overlay'); 
-    document.getElementById('snake-overlay-title').innerText = '💀 ເກມຈົບແນວ (Game Over)'; 
+    document.getElementById('snake-overlay-title').innerText = '💀 ເກມຈົບແລ້ວ (Game Over)'; 
     document.getElementById('snake-overlay-desc').innerHTML = `ຄະແນນຂອງທ່ານ: <strong class="text-amber-400 text-sm">${score}</strong><br>ກົດປຸ່ມລຸ່ມນີ້ເພື່ອເລີ່ມຫຼິ້ນໃໝ່!`; 
     overlay.classList.remove('hidden'); 
 } 
@@ -402,6 +402,56 @@ window.clearNotifications = () => {
     updateNotificationUI(); 
 }; 
 
+// 🚀 ຟັງຊັນສ້າງ Offline Notifications ໄປຫາທຸກຫ້ອງໃນ Firestore
+async function notifyAllRoomsForNewPost(postId, postTitle) {
+    const rooms = ["ຫ້ອງ 104", "ຫ້ອງ 105", "ຫ້ອງ 108", "ຫ້ອງ 109", "ຫ້ອງ 110", "ຫ້ອງ 111", "ຫ້ອງ 112", "ຫ້ອງ 113", "ຫ້ອງ 114"];
+    try {
+        for (const room of rooms) {
+            await addDoc(collection(db, "room_notifications"), {
+                room: room,
+                title: "📢 ແຈ້ງການ/ຂ່າວສານໃໝ່!",
+                message: postTitle,
+                linkId: postId,
+                time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString('lo-LA'),
+                read: false,
+                timestamp: new Date()
+            });
+        }
+    } catch (e) {
+        console.error("Error creating offline notifications:", e);
+    }
+}
+
+// 🔄 ຟັງຊັນດຶງ Offline Notifications ຂຶ້ນມາສະແດງທັນທີເມື່ອ User ເຂົ້າເວັບມາ
+async function syncOfflineNotificationsForUser() {
+    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) return;
+    try {
+        const q = query(collection(db, "room_notifications"), orderBy("timestamp", "asc"));
+        const snapshot = await getDocs(q);
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            if (data.room === currentRoomUser) {
+                const exists = notifications.some(n => n.linkId === data.linkId && n.title === data.title);
+                if (!exists) {
+                    notifications.unshift({
+                        id: docSnap.id,
+                        title: data.title,
+                        message: data.message,
+                        linkId: data.linkId,
+                        time: data.time || '',
+                        read: data.read || false
+                    });
+                }
+            }
+        });
+        saveUserNotifications();
+        updateNotificationUI();
+    } catch (e) {
+        console.error("Error syncing offline notifications:", e);
+    }
+}
+
 function initRealtimeListeners() { 
     const newsQuery = query(collection(db, "news"), orderBy("date", "desc")); 
     globalNewsUnsubscribe = onSnapshot(newsQuery, (snapshot) => { 
@@ -509,6 +559,8 @@ window.handleLoginTypeChange = (val) => {
 function checkRoomAuthUI() { 
     loadUserNotifications();
     loadUserHighScore();
+    syncOfflineNotificationsForUser(); // 🔄 ຊິ້ງຂໍ້ມູນແຈ້ງເຕືອນຍ້ອນຫຼັງເມື່ອເຂົ້າເວັບມາ
+
     const authNav = document.getElementById('auth-nav'); 
     const adminBox = document.getElementById('admin-panel-box'); 
     const roomModal = document.getElementById('room-login-modal'); 
@@ -737,7 +789,6 @@ async function loadUserFeedbacks() {
         let html = ''; 
         snapshot.forEach(docSnap => { 
             const fb = docSnap.data(); 
-            // 🔒 ແຍກສະແດງປະຫວັດຄຳຄິດຄຳເຫັນສະເພາະຫ້ອງໃຜຫ້ອງມັນ (ຫຼື Admin)
             if (fb.room === currentRoomUser || userRole === 'admin') { 
                 html += ` 
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-pink-500/30 space-y-2 animate-fade-in"> 
@@ -863,1061 +914,542 @@ async function loadFullScoreSummary() {
             return ` 
                 <div class="space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60"> 
                     <div class="flex justify-between items-center text-xs font-semibold"> 
-
                         <span class="text-slate-200">🏠 ${room}</span> 
-
                         <span class="text-amber-400 font-bold">${pts} ຄະແນນ (${percent}%)</span> 
-
                     </div> 
-
                     <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700"> 
-
                         <div class="bg-gradient-to-r from-emerald-500 to-amber-400 h-3 rounded-full transition-all duration-500" style="width: ${percent}%"></div> 
-
                     </div> 
-
                 </div> 
-
             `; 
-
         }).join(''); 
-
     } catch (err) { container.innerHTML = `<div class="text-center py-6 text-red-400">ຜິດພາດ: ${err.message}</div>`; } 
-
 } 
-
- 
 
 function parseLaoDate(dateStr) { 
-
     try { 
-
         if (dateStr.includes('/')) { 
-
             const parts = dateStr.split(',')[0].split('/'); 
-
             if (parts.length === 3) { 
-
                 return new Date(parts[2], parts[1] - 1, parts[0]); 
-
             } 
-
         } 
-
     } catch (e) { } 
-
     return new Date(); 
-
 } 
-
- 
 
 async function loadFullScoreboard() { 
-
     const container = document.getElementById('full-scoreboard-container'); 
-
     if (!container) return; 
-
     try { 
-
         const querySnapshot = await getDocs(collection(db, "member_reports")); 
-
         let scores = {}; 
-
         const rooms = ["ຫ້ອງ 104", "ຫ້ອງ 105", "ຫ້ອງ 108", "ຫ້ອງ 109", "ຫ້ອງ 110", "ຫ້ອງ 111", "ຫ້ອງ 112", "ຫ້ອງ 113", "ຫ້ອງ 114"]; 
-
         rooms.forEach(room => { scores[room] = 0; }); 
-
         querySnapshot.forEach(docSnap => { 
-
             const data = docSnap.data(); 
-
             if (data.approved && data.room) {  
-
                 const ptsToAdd = (data.specialPoints !== undefined) ? data.specialPoints : 1; 
-
                 scores[data.room] = (scores[data.room] || 0) + ptsToAdd;  
-
                 if (scores[data.room] < 0) scores[data.room] = 0; 
-
             } 
-
         }); 
-
          
-
         container.innerHTML = rooms.map((room, index) => { 
-
             const pts = scores[room] || 0; 
-
             return ` 
-
                 <div class="bg-slate-800/85 backdrop-blur border border-amber-500/50 bg-amber-950/20 p-5 rounded-2xl shadow-xl flex items-center justify-between animate-fade-in"> 
-
                     <div class="flex items-center space-x-3"> 
-
                         <div class="bg-amber-500/20 text-amber-400 font-bold w-10 h-10 rounded-xl flex items-center justify-center text-base border border-amber-500/40"> 
-
                             #${index + 1} 
-
                         </div> 
-
                         <div> 
-
                             <h4 class="font-bold text-slate-100 text-base">${room}</h4> 
-
                             <p class="text-xs text-slate-400">ສະຖານະ: ພ້ອມປະຕິບັດງານ</p> 
-
                         </div> 
-
                     </div> 
-
                     <div class="text-right"> 
-
                         <span class="text-2xl font-extrabold text-amber-400">${pts}</span> 
-
                         <span class="block text-[10px] text-slate-400 uppercase">ຄະແນນສະສົມ</span> 
-
                     </div> 
-
                 </div> 
-
             `; 
-
         }).join(''); 
-
     } catch (err) { container.innerHTML = `<div class="text-center py-12 text-red-400 col-span-full">ຜິດພາດ: ${err.message}</div>`; } 
-
 } 
-
- 
 
 function getDeviceType() { 
-
     const ua = navigator.userAgent; 
-
     if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "mobile"; 
-
     if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return "mobile"; 
-
     return "desktop"; 
-
 } 
-
- 
 
 async function trackVisitor() { 
-
     const today = new Date().toISOString().split('T')[0]; 
-
     const device = getDeviceType();  
-
     if (sessionStorage.getItem(`visited_${today}`)) { loadVisitorStats(); return; } 
 
- 
-
     try { 
-
         await runTransaction(db, async (transaction) => { 
-
             const todayRef = doc(db, "visitors", today); 
-
             const totalRef = doc(db, "visitors", "total_stats"); 
-
             const todayDoc = await transaction.get(todayRef); 
-
             if (!todayDoc.exists()) transaction.set(todayRef, { desktop: device === 'desktop' ? 1 : 0, mobile: device === 'mobile' ? 1 : 0, count: 1 }); 
-
             else transaction.update(todayRef, { desktop: increment(device === 'desktop' ? 1 : 0), mobile: increment(device === 'mobile' ? 1 : 0), count: increment(1) }); 
 
- 
-
             const totalDoc = await transaction.get(totalRef); 
-
             if (!totalDoc.exists()) transaction.set(totalRef, { desktop: device === 'desktop' ? 1 : 0, mobile: device === 'mobile' ? 1 : 0, count: 1 }); 
-
             else transaction.update(totalRef, { desktop: increment(device === 'desktop' ? 1 : 0), mobile: increment(device === 'mobile' ? 1 : 0), count: increment(1) }); 
-
         }); 
-
         sessionStorage.setItem(`visited_${today}`, 'true'); 
-
     } catch (e) { console.error(e); } 
-
     loadVisitorStats(); 
-
 } 
-
- 
 
 async function loadVisitorStats() { 
-
     try { 
-
         const totalDoc = await getDoc(doc(db, "visitors", "total_stats")); 
-
         if (totalDoc.exists()) { 
-
             const data = totalDoc.data(); 
-
             document.getElementById('visitor-desktop').innerText = (data.desktop || 0).toLocaleString(); 
-
             document.getElementById('visitor-mobile').innerText = (data.mobile || 0).toLocaleString(); 
-
             document.getElementById('visitor-total').innerText = (data.count || 0).toLocaleString(); 
-
         } 
-
     } catch (e) { console.error(e); } 
-
 } 
-
 trackVisitor(); 
 
- 
-
 async function loadNews() { 
-
     try { 
-
         const q = query(collection(db, "news"), orderBy("date", "desc")); 
-
         const snapshot = await getDocs(q); 
-
         allNews = []; 
-
         snapshot.forEach(docSnap => allNews.push({ id: docSnap.id, ...docSnap.data() })); 
-
         document.getElementById('stat-total-news').innerText = allNews.length; 
-
         renderNews(allNews); 
-
     } catch (e) { console.error(e); } 
-
 } 
-
- 
 
 function renderNews(newsList) { 
-
     const container = document.getElementById('news-container'); 
-
     if (!container) return; 
-
     if (newsList.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-500 bg-slate-800/85 rounded-2xl border border-slate-700">ຍັງບໍ່ມີຂ່າວສານ</div>`; return; } 
-
     container.innerHTML = newsList.map(item => { 
-
         const likes = item.likes || []; 
-
         const hasLiked = currentRoomUser && likes.includes(currentRoomUser); 
-
         return ` 
-
             <div id="post-${item.id}" class="bg-slate-800/85 backdrop-blur border border-slate-700/80 rounded-2xl p-5 space-y-3 shadow-xl animate-fade-in transition-all"> 
-
                 <div class="flex justify-between items-start"> 
-
                     <span class="text-xs px-3 py-1 rounded-full font-medium ${item.category === 'notice' ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'}"> 
-
                         ${item.category === 'notice' ? '📢 ແຈ້ງການດ່ວນ' : '🎖️ ພາວະກິດ/ກິດຈະກຳ'} 
-
                     </span> 
-
                     <span class="text-xs text-slate-400">${item.date || ''}</span> 
-
                 </div> 
-
                 <h3 class="text-lg font-bold text-emerald-300">${item.title}</h3> 
-
                 <p class="text-sm text-slate-300 whitespace-pre-line leading-relaxed">${item.content}</p> 
-
                  
-
                 <div class="flex flex-wrap justify-between items-center pt-3 border-t border-slate-700/60 gap-2"> 
-
                     <div class="flex items-center space-x-2"> 
-
                         <button onclick="toggleLike('${item.id}')" class="text-xs px-3.5 py-1.5 rounded-xl border transition flex items-center space-x-1.5 ${hasLiked ? 'bg-pink-600/30 text-pink-400 border-pink-500/50' : 'bg-slate-900/60 text-slate-300 border-slate-700'}"> 
-
-                            <span>${hasLiked ? '❤️' : '🤍'}</span> <span>${hasLiked ? 'ຖືກໃຈແນວ' : 'ຖືກໃຈ'} (${likes.length})</span> 
-
+                            <span>${hasLiked ? '❤️' : '🤍'}</span> <span>${hasLiked ? 'ຖືກໃຈແລ້ວ' : 'ຖືກໃຈ'} (${likes.length})</span> 
                         </button> 
-
                         <button onclick="handleShare('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, ' ').substring(0, 100)}...')" class="text-xs bg-emerald-900/60 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-700/60 transition flex items-center space-x-1"><span>🔗</span> <span>ແຊ</span></button> 
-
                     </div> 
-
                     ${userRole === 'admin' && isSuperAdmin() ? ` 
-
                         <div class="flex space-x-2"> 
-
                             <button onclick="openEditNewsModal('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.category}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="text-xs bg-amber-600 px-3 py-1.5 rounded-lg text-white">ແກ້ໄຂ</button> 
-
                             <button onclick="deleteNewsItem('${item.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ລົບ</button> 
-
                         </div> 
-
                     ` : ''} 
-
                 </div> 
-
             </div> 
-
         `; 
-
     }).join(''); 
-
 } 
-
- 
 
 window.toggleLike = async (newsId) => { 
-
     if (!currentRoomUser) { alert('ກະລຸນາເລືອກຫ້ອງພັກກ່ອນ!'); document.getElementById('room-login-modal').classList.remove('hidden'); return; } 
-
     const newsRef = doc(db, "news", newsId); 
-
     try { 
-
         await runTransaction(db, async (transaction) => { 
-
             const docSnap = await transaction.get(newsRef); 
-
             if (!docSnap.exists()) throw "ບໍ່ພົບຂ່າວສານ!"; 
-
             let likes = docSnap.data().likes || []; 
-
             if (likes.includes(currentRoomUser)) likes = likes.filter(r => r !== currentRoomUser); 
-
             else likes.push(currentRoomUser); 
-
             transaction.update(newsRef, { likes: likes }); 
-
         }); 
-
         loadNews(); 
-
     } catch (e) { alert('ຜິດພາດ: ' + e); } 
-
 }; 
-
- 
 
 window.handleShare = (id, title, text) => { 
-
     const baseUrl = window.location.origin + window.location.pathname; 
-
     currentShareData = { title, text, url: `${baseUrl}#post-${id}` }; 
-
     document.getElementById('share-modal-title').innerText = title; 
-
     document.getElementById('share-modal').classList.remove('hidden'); 
-
 }; 
-
 window.closeShareModal = () => document.getElementById('share-modal').classList.add('hidden'); 
 
- 
-
 window.shareToPlatform = (platform) => { 
-
     const url = encodeURIComponent(currentShareData.url); 
-
     const text = encodeURIComponent(`${currentShareData.title}\n${currentShareData.text}`); 
-
     if (platform === 'facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400'); 
-
     else if (platform === 'messenger') window.open(`https://www.facebook.com/dialog/send?link=${url}&app_id=291494419107518&redirect_uri=${url}`, '_blank', 'width=600,height=400'); 
-
     else if (platform === 'telegram') window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank', 'width=600,height=400'); 
-
     else if (platform === 'whatsapp') window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, '_blank', 'width=600,height=400'); 
-
     else if (platform === 'copy') { 
-
         navigator.clipboard.writeText(`${currentShareData.title}\n${currentShareData.url}`).then(() => { alert('ກ໊ອບປີ້ລິ້ງສຳເລັດ!'); closeShareModal(); }); 
-
     } 
-
 }; 
-
- 
 
 window.openNewsModal = () => { if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } document.getElementById('news-modal').classList.remove('hidden'); }; 
-
 window.closeNewsModal = () => document.getElementById('news-modal').classList.add('hidden'); 
-
 window.openEditNewsModal = (id, title, category, content) => { 
-
     if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } 
-
     document.getElementById('edit-news-id').value = id; 
-
     document.getElementById('edit-news-title').value = title; 
-
     document.getElementById('edit-news-category').value = category; 
-
     document.getElementById('edit-news-content').value = content; 
-
     document.getElementById('edit-news-modal').classList.remove('hidden'); 
-
 }; 
-
 window.closeEditNewsModal = () => document.getElementById('edit-news-modal').classList.add('hidden'); 
 
- 
-
 window.saveNews = async () => { 
-
     if (!isSuperAdmin()) return; 
-
     const title = document.getElementById('news-title').value; 
-
     const category = document.getElementById('news-category').value; 
-
     const content = document.getElementById('news-content').value; 
-
     if (!title || !content) return alert('ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບ'); 
+    
+    // ບັນທຶກຂ່າວລົງ Firestore
+    const docRef = await addDoc(collection(db, "news"), { 
+        title, category, content, date: new Date().toLocaleString('lo-LA'), likes: [] 
+    }); 
 
-    await addDoc(collection(db, "news"), { title, category, content, date: new Date().toLocaleString('lo-LA'), likes: [] }); 
+    // 🚀 ສร้างແຈ້ງເຕືອນ Offline ໄປຫາທຸກຫ້ອງພັກ
+    await notifyAllRoomsForNewPost(docRef.id, title);
 
-    alert('ເພີ່ມຂ່າວສຳເລັດ!'); closeNewsModal(); loadNews(); 
-
+    alert('ເພີ່ມຂ່າວສຳເລັດ!'); 
+    closeNewsModal(); 
+    loadNews(); 
 }; 
-
- 
 
 window.updateNews = async () => { 
-
     if (!isSuperAdmin()) return; 
-
     const id = document.getElementById('edit-news-id').value; 
-
     const title = document.getElementById('edit-news-title').value; 
-
     const category = document.getElementById('edit-news-category').value; 
-
     const content = document.getElementById('edit-news-content').value; 
-
     if (!title || !content) return alert('ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບ'); 
-
     await updateDoc(doc(db, "news", id), { title, category, content }); 
-
     alert('ແກ້ໄຂຂ່າວສຳເລັດ!'); closeEditNewsModal(); loadNews(); 
-
 }; 
-
- 
 
 window.deleteNewsItem = async (id) => { 
-
     if (!isSuperAdmin()) return; 
-
     if (confirm('ລົບຂ່າວນີ້ແທ້ບໍ?')) { await deleteDoc(doc(db, "news", id)); loadNews(); } 
-
 }; 
-
- 
 
 const uploadMediaSmart = (file) => { 
-
     return new Promise((resolve, reject) => { 
-
         const reader = new FileReader(); 
-
         reader.readAsDataURL(file); 
-
         reader.onload = async () => { 
-
             try { 
-
                 const base64Data = reader.result; 
-
                 const response = await fetch(DRIVE_WEB_APP_URL, { 
-
                     method: "POST", 
-
                     body: JSON.stringify({ 
-
                         room: currentRoomUser || "Admin", 
-
                         filename: `video_${Date.now()}.webm`, 
-
                         filedata: base64Data 
-
                     }) 
-
                 }); 
-
                 const result = await response.json(); 
-
                 if (result.status === "success") { 
-
                     resolve({ type: 'video', url: result.webViewUrl }); 
-
                 } else { 
-
                     reject(new Error(result.message || "ອັບໂຫລດບໍ່ສຳເລັດ")); 
-
                 } 
-
             } catch (err) { 
-
                 reject(err); 
-
             } 
-
         }; 
-
         reader.onerror = (error) => reject(error); 
-
     }); 
-
 }; 
 
- 
-
 function getWeekNumber(d) { 
-
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); 
-
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7)); 
-
     return `${d.getUTCFullYear()}-W${Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(),0,1))) / 86400000) + 1)/7)}`; 
-
 } 
-
- 
 
 function checkVideoDuration(file) { 
-
     return new Promise((resolve) => { 
-
         const video = document.createElement('video'); 
-
         video.preload = 'metadata'; 
-
         video.onloadedmetadata = function() { 
-
             window.URL.revokeObjectURL(video.src); 
-
             resolve(video.duration); 
-
         }; 
-
         video.onerror = function() { 
-
             resolve(0);  
-
         }; 
-
         video.src = URL.createObjectURL(file); 
-
     }); 
-
 } 
 
- 
-
 window.submitMemberReport = async () => { 
-
     if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) { 
-
         alert('ກະລຸນາລັອກອິນດ້ວຍໄອດີຫ້ອງພັກກ່ອນ!'); 
-
         document.getElementById('room-login-modal').classList.remove('hidden'); return; 
-
     } 
 
- 
-
     const now = new Date(); 
-
     if (now.getDay() !== 0) { alert('⚠️ ລະບົບອະນຸຍາດໃຫ້ສົ່ງສະເພາະມື້ວັນອາທິດເທົ່ານັ້ນ!'); return; } 
-
     const totalMinutesNow = now.getHours() * 60 + now.getMinutes(); 
-
     if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ ເວລາສົ່ງ: 16:00 - 19:00 ໂມງ!'); return; } 
 
- 
-
     const name = document.getElementById('member-name').value; 
-
     const description = document.getElementById('member-task-desc').value; 
-
     const fileInput = document.getElementById('member-media-files'); 
-
     const statusText = document.getElementById('member-upload-status'); 
-
     if (!name || !description) return alert('ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ'); 
 
- 
-
     const files = fileInput.files; 
-
     if (files.length === 0) return alert('ກະລຸນາເປີດກ້ອງຖ່າຍວິດີໂອສົດກ່ອນສົ່ງ!'); 
-
- 
 
     const videoFile = files[0]; 
 
- 
-
     statusText.innerText = `⏳ ກຳລັງກວດສອບຄວາມຍາວວິດີໂອ...`; 
-
     const duration = await checkVideoDuration(videoFile); 
-
     if (duration > 62) { 
-
-        alert(`❌ ວິດີໂະຍາວເກີນໄປ (${Math.round(duration)} ວິນາທີ)! ລະບົບກຳນົດໃຫ້ຖ່າຍວິດີໂອຄວາມຍາວສູງສຸດບໍ່ເກີນ 1 ນາທີ.`); 
-
-        statusText.innerText = '⚠️ ກະລຸນາຖ່າຍວິດີໂອໃໝ່ ຄວາມຍາວບໍ່ເກີນ 1 ນາທີ!'; 
-
+        alert(`❌ ວິດີໂະຍາວເກີນໄປ (${Math.round(duration)} ວິນາທີ)! ລະບົບກຳນົດໃຫ້ຖ່າຍວິດີໂອຄວາມຍາວສູງສຸດບໍ່ເກີນ 1 ນาที.`); 
+        statusText.innerText = '⚠️ ກະລຸນາຖ່າຍວິດີໂອໃໝ່ ຄວາມຍາວບໍ່ເກີນ 1 ນาที!'; 
         return; 
-
     } 
-
- 
 
     const currentWeekStr = getWeekNumber(now); 
-
     const reportsSnap = await getDocs(collection(db, "member_reports")); 
-
     let submitted = false; 
-
     reportsSnap.forEach(docSnap => { 
-
         if (docSnap.data().room === currentRoomUser && docSnap.data().weekTag === currentWeekStr) submitted = true; 
-
     }); 
-
     if (submitted) return alert('⚠️ ຫ້ອງຂອງທ່ານສົ່ງບົດລາຍງານສຳລັບອາທິດນີ້ໄປແລ້ວ!'); 
 
- 
-
     statusText.innerText = `⏳ ກຳລັງອັບໂຫລດວິດີໂອສົດຂຶ້ນ Google Drive...`; 
-
     try { 
-
         let mediaItems = []; 
-
         const uploadedMedia = await uploadMediaSmart(videoFile); 
-
         mediaItems.push(uploadedMedia); 
-
- 
 
         statusText.innerText = `⏳ ກຳລັງບັນທຶກບົດລາຍງານ...`; 
-
         await addDoc(collection(db, "member_reports"), { 
-
             room: currentRoomUser, name, description, mediaItems, date: new Date().toLocaleString('lo-LA'), weekTag: currentWeekStr, approved: false, createdAt: new Date() 
-
         }); 
-
         alert('🎉 ສົ່ງບົດລາຍງານວິດີໂອສຳເລັດ!'); 
-
         document.getElementById('member-name').value = ''; 
-
         document.getElementById('member-task-desc').value = ''; 
-
         fileInput.value = ''; 
-
         statusText.innerText = '⚠️ ລະບົບກວດສອບຄວາມຍາວວິດີໂອຕ້ອງບໍ່ເກີນ 60 ວິນາທີ ແລະ ຈະອັບໂຫລດຂຶ້ນ Google Drive ອັດຕະໂນມັດ'; 
-
         loadMemberReports(); loadFullScoreSummary(); 
-
     } catch (e) { alert(e.message); statusText.innerText = '❌ ອັບໂຫລດບໍ່ສຳເລັດ'; } 
-
 }; 
-
- 
 
 async function loadMemberReports() { 
-
     const container = document.getElementById('member-reports-container'); 
-
     if (!container) return; 
-
     try { 
-
         const snapshot = await getDocs(collection(db, "member_reports")); 
-
         allMemberReports = []; 
-
         snapshot.forEach(docSnap => allMemberReports.push({ id: docSnap.id, ...docSnap.data() })); 
-
         renderMemberReports(); 
-
     } catch (e) { container.innerHTML = `<div class="text-center py-6 text-red-400">ຜິດພາດ: ${e.message}</div>`; } 
-
 } 
-
- 
 
 function isImageItem(item) { 
-
     if (!item) return false; 
-
     if (typeof item === 'string') { 
-
         return item.startsWith('data:image/') || item.match(/\.(jpeg|jpg|png|gif|webp)$/i); 
-
     } 
-
     if (item.type === 'image') return true; 
-
     if (item.url && (item.url.startsWith('data:image/') || item.url.match(/\.(jpeg|jpg|png|gif|webp)$/i))) return true; 
-
     return false; 
-
 } 
-
- 
 
 function renderMemberReports() { 
-
     const container = document.getElementById('member-reports-container'); 
-
     if (!container) return; 
-
     if (allMemberReports.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">ຍັງບໍ່ມີບົດລາຍງານ</div>`; return; } 
-
     container.innerHTML = allMemberReports.map(rep => { 
-
         let items = rep.mediaItems || []; 
-
         if (items.length === 0 && rep.mediaUrls) { 
-
             items = rep.mediaUrls.map(u => ({ type: isImageItem(u) ? 'image' : 'video', url: u })); 
-
         } 
-
         return ` 
-
             <div class="bg-slate-900/85 border ${rep.approved ? 'border-emerald-600' : 'border-slate-700'} rounded-xl p-4 space-y-3 shadow-md animate-fade-in"> 
-
                 <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-2"> 
-
                     <span class="font-bold text-emerald-400">🏠 ຫ້ອງ: ${rep.room || ''} | 👤 ຜູ້ສົ່ງ: ${rep.name}</span> 
-
                     <div class="flex items-center space-x-2"> 
-
                         <span class="px-2 py-0.5 rounded text-[10px] ${rep.approved ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}"> 
-
                             ${rep.approved ? '✅ ອະນຸມັດແລ້ວ' : '⏳ ລໍຖ້າ Admin ອະນຸມັດ'} 
-
                         </span> 
-
                         <span class="text-slate-400">${rep.date || ''}</span> 
-
                     </div> 
-
                 </div> 
-
                 <p class="text-sm text-slate-200 whitespace-pre-line">${rep.description}</p> 
-
                 <div class="grid grid-cols-1 gap-2 pt-2"> 
-
                     ${items.map(item => { 
-
                         const isImg = isImageItem(item); 
-
                         const mediaUrl = item.url || item; 
-
                         if (isImg) { 
-
                             return ` 
-
                                 <div class="relative group bg-slate-950 p-2 rounded-xl border border-slate-700 text-center space-y-2"> 
-
                                     <span class="text-xs text-emerald-400 font-bold block">📷 ຮູບພາບການປະຕິບັດງານ</span> 
-
                                     <img src="${mediaUrl}" alt="Report Image" class="max-h-64 mx-auto rounded-lg object-contain cursor-pointer hover:opacity-95 transition" onclick="window.open('${mediaUrl}')"> 
-
                                 </div> 
-
                             `; 
-
                         } else { 
-
                             return ` 
-
                                 <div class="relative group bg-slate-950 p-3 rounded-xl border border-slate-700 text-center space-y-2"> 
-
                                     <span class="text-xs text-emerald-400 font-bold block">📁 ວິດີໂອບົນ Google Drive</span> 
-
                                     <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 ເປີດເບິ່ງວິດີໂອໃນ Google Drive</a> 
-
                                 </div> 
-
                             `; 
-
                         } 
-
                     }).join('')} 
-
                 </div> 
-
                 <div class="flex justify-end space-x-2 pt-2"> 
-
                     ${userRole === 'admin' ? ` 
-
                         ${!rep.approved ? `<button onclick="approveMemberReport('${rep.id}')" class="text-xs bg-emerald-600 px-3 py-1.5 rounded-lg text-white font-medium">✅ ອະນຸມັດ</button>` : ''} 
-
                         ${isSuperAdmin() ? `<button onclick="deleteMemberReport('${rep.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ລົບລາຍງານ</button>` : ''} 
-
                     ` : ''} 
-
                 </div> 
-
             </div> 
-
         `; 
-
     }).join(''); 
-
 } 
-
- 
 
 window.approveMemberReport = async (reportId) => { 
-
     if (userRole !== 'admin') { alert('⚠️ ສະເພາະ Admin ເທົ່ານັ້ນ!'); return; } 
-
     const report = allMemberReports.find(r => r.id === reportId); 
-
     if (!report) return; 
 
- 
-
     try { 
-
         await updateDoc(doc(db, "member_reports", reportId), { approved: true }); 
-
         await addDoc(collection(db, "cyber_tasks"), { 
-
             title: `${report.room || 'ຫ້ອງ'} - ໂດຍ: ${report.name}`, 
-
             description: report.description, 
-
             mediaItems: report.mediaItems || [], 
-
             date: report.date || new Date().toLocaleString('lo-LA') 
-
         }); 
-
         alert('ອະນຸມັດສຳເລັດ!'); 
-
         loadMemberReports(); loadCyberTasks(); loadFullScoreSummary(); 
-
     } catch (e) { alert('ຜິດພາດ: ' + e.message); } 
-
 }; 
-
- 
 
 window.deleteMemberReport = async (id) => { 
-
     if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } 
-
     if (confirm('ລົບລາຍງານນີ້ແທ້ບໍ?')) { await deleteDoc(doc(db, "member_reports", id)); loadMemberReports(); loadFullScoreSummary(); } 
-
 }; 
-
- 
 
 async function loadCyberTasks() { 
-
     const container = document.getElementById('cyber-container'); 
-
     if (!container) return; 
-
     try { 
-
         const snapshot = await getDocs(collection(db, "cyber_tasks")); 
-
         allCyberTasks = []; 
-
         snapshot.forEach(docSnap => allCyberTasks.push({ id: docSnap.id, ...docSnap.data() })); 
-
         document.getElementById('stat-cyber-done').innerText = `${allCyberTasks.length} / ${allCyberTasks.length}`; 
-
         renderCyberTasks(); 
-
     } catch (e) { container.innerHTML = `<div class="text-center py-12 text-red-400">ຜິດພາດ: ${e.message}</div>`; } 
-
 } 
-
- 
 
 function renderCyberTasks() { 
-
     const container = document.getElementById('cyber-container'); 
-
     if (!container) return; 
-
     if (allCyberTasks.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-500 bg-slate-800/85 rounded-2xl border border-slate-700">ຍັງບໍ່ມີລາຍການ</div>`; return; } 
-
     container.innerHTML = allCyberTasks.map(task => { 
-
         let items = task.mediaItems || []; 
-
         if (items.length === 0 && task.mediaUrls) { 
-
             items = task.mediaUrls.map(u => ({ type: isImageItem(u) ? 'image' : 'video', url: u })); 
-
         } 
-
         return ` 
-
             <div class="bg-slate-800/85 backdrop-blur border border-emerald-600 bg-emerald-950/25 rounded-2xl p-5 shadow-lg animate-fade-in space-y-3"> 
-
                 <div class="flex items-center justify-between"> 
-
                     <div class="flex items-center space-x-3"> 
-
                         <input type="checkbox" checked disabled class="w-5 h-5 accent-emerald-500"> 
-
                         <div> 
-
                             <h4 class="font-bold text-emerald-300 text-base">${task.title}</h4> 
-
                             <p class="text-[11px] text-emerald-400/90 mt-0.5">📅 ວັນເວລາ: ${task.date || ''}</p> 
-
                             <p class="text-xs text-slate-300 mt-1">${task.description || ''}</p> 
-
                         </div> 
-
                     </div> 
-
                     ${userRole === 'admin' && isSuperAdmin() ? `<button onclick="deleteCyberTask('${task.id}')" class="text-xs bg-red-950 px-3 py-1 rounded-lg text-red-300">ລົບ</button>` : ''} 
-
                 </div> 
-
                 <div class="grid grid-cols-1 gap-2 mt-3 pt-3 border-t border-slate-700"> 
-
                     ${items.map(item => { 
-
                         const isImg = isImageItem(item); 
-
                         const mediaUrl = item.url || item; 
-
                         if (isImg) { 
-
                             return ` 
-
                                 <div class="relative group bg-slate-950 p-2 rounded-xl border border-slate-700 text-center space-y-2"> 
-
                                     <span class="text-xs text-emerald-400 font-bold block">📷 ຮູບພາບການປະຕິບັດງານ</span> 
-
                                     <img src="${mediaUrl}" alt="Task Image" class="max-h-64 mx-auto rounded-lg object-contain cursor-pointer hover:opacity-95 transition" onclick="window.open('${mediaUrl}')"> 
-
                                 </div> 
-
                             `; 
-
                         } else { 
-
                             return ` 
-
                                 <div class="relative group bg-slate-950 p-3 rounded-xl border border-slate-700 text-center space-y-2"> 
-
                                     <span class="text-xs text-emerald-400 font-bold block">📁 ວິດີໂອບົນ Google Drive</span> 
-
                                     <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 ເປີດເບິ່ງວິດີໂອໃນ Google Drive</a> 
-
                                 </div> 
-
                             `; 
-
                         } 
-
                     }).join('')} 
-
                 </div> 
-
             </div> 
-
         `; 
-
     }).join(''); 
-
 } 
 
- 
-
 window.openCyberModal = () => { if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } document.getElementById('cyber-modal').classList.remove('hidden'); }; 
-
 window.closeCyberModal = () => document.getElementById('cyber-modal').classList.add('hidden'); 
 
- 
-
 window.saveCyberTaskVideo = async () => { 
-
     if (!isSuperAdmin()) return; 
-
     const title = document.getElementById('cyber-task-title').value; 
-
     const description = document.getElementById('cyber-task-desc').value; 
-
     const files = document.getElementById('cyber-media-files').files; 
-
     if (!title) return alert('ກະລຸນາໃສ່ຫົວຂໍ້'); 
-
     if (files.length === 0) return alert('ກະລຸນາເລືອກຮູບພາບ ຫຼື ວິດີໂອ'); 
 
- 
-
     const statusText = document.getElementById('upload-status'); 
-
     statusText.innerText = `⏳ ກຳລັງປະມວນຜົນໄຟລ໌...`; 
-
     try { 
-
         let mediaItems = []; 
-
         const uploadedMedia = await uploadMediaSmart(files[0]); 
-
         mediaItems.push(uploadedMedia); 
 
- 
-
         await addDoc(collection(db, "cyber_tasks"), { title, description, mediaItems, date: new Date().toLocaleString('lo-LA') }); 
-
         alert('ເພີ່ມລາຍການສຳເລັດ!'); 
-
         closeCyberModal(); loadCyberTasks(); switchTab('cyber'); 
-
     } catch (e) { alert(e.message); statusText.innerText = '❌ ອັບໂຫລດບໍ່ສຳເລັດ'; } 
-
 }; 
-
- 
 
 window.deleteCyberTask = async (id) => { 
-
     if (!isSuperAdmin()) return; 
-
     if (confirm('ລົບລາຍການນີ້ແທ້ບໍ?')) { await deleteDoc(doc(db, "cyber_tasks", id)); loadCyberTasks(); } 
-
 }; 
-
- 
 
 window.filterCategory = (cat) => { 
-
     if (cat === 'all') renderNews(allNews); 
-
     else renderNews(allNews.filter(n => n.category === cat)); 
-
 }; 
-
 window.searchNews = () => { 
-
     const kw = document.getElementById('search-input').value.toLowerCase(); 
-
     renderNews(allNews.filter(n => n.title.toLowerCase().includes(kw) || n.content.toLowerCase().includes(kw))); 
-
 };
