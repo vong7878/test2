@@ -117,24 +117,6 @@ function t(key) {
     return translations[lang] ? translations[lang][key] || key : key;
 }
 
-// 🔄 ຟັງຊັນອັບເດດຂໍ້ຄວາມທັງໜົດໃນໜ້າເວັບອັດຕະໂນມັດ (ລົບລ້າງຄຳຕາຍຕົວ)
-function applyDynamicTranslations() {
-    const currentLang = getCurrentLang();
-    const roomWord = translations[currentLang].room;
-
-    // 1. ປ່ຽນຊື່ຫ້ອງທັງໝົດໃນ DOM (ຕົວຢ່າງ: ປ່ຽນ "ຫ້ອງ 104" ເປັນ "Room 104" ຫລື "ห้อง 104")
-    const elements = document.querySelectorAll("*");
-    elements.forEach(el => {
-        // ກວດສອບ node ທີ່ເປັນข้อความแท้ๆ ແລະ ມີคำວ່າ ຫ້ອງ ຫລື Room อยู่
-        if (el.children.length === 0 && el.textContent) {
-            // ຄົ້ນຫາ pattern ເຊັ່ນ "ຫ້ອງ 104", "ห้อง 105" ແລ້ວປ່ຽນคำว่า ຫ້ອງ ໃຫ້ກົງກັບພາສາ
-            if (/ຫ້ອງ|ห้อง|Phòng|Room|房间|호실/i.test(el.textContent)) {
-                el.textContent = el.textContent.replace(/ຫ້ອງ|ห้อง|Phòng|Room|房间|호실/gi, roomWord);
-            }
-        }
-    });
-}
-
 // ເອີ້ນໃຊ້ງານທຸກຄັ້ງທີ່ DOM โหลดเสร็จ ແລະ ເມື່ອมีการປ່ຽນພາສາ
 document.addEventListener("DOMContentLoaded", () => {
     applyDynamicTranslations();
