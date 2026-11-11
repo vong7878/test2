@@ -3,11 +3,9 @@ function updateLiveClock() {
     if (!clockElement) return; 
     const now = new Date(); 
 
-    // 🌐 ตรวจสอบພາສາປັດຈຸບັນຈາກ URL (ຕົວຢ່າງ: ?lang=th, ?lang=vn, ?lang=en, ?lang=lo)
     const urlParams = new URLSearchParams(window.location.search);
-    const lang = urlParams.get('lang') || 'lo'; // ค่าเริ่มต้นเป็นลาว
+    const lang = urlParams.get('lang') || 'lo';
 
-    // Mapping ພາສາໃຫ້ตรงກັບ Locale ຂອງ JavaScript
     let localeMap = {
         'lo': 'lo-LA',
         'th': 'th-TH',
@@ -29,6 +27,31 @@ function updateLiveClock() {
         hour12: false 
     }); 
 }
+// ຕົວຢ່າງການດຶງພາສາປັດຈຸບັນມາໃຊ້ກັບ Alert/Confirm:
+const urlParams = new URLSearchParams(window.location.search);
+const currentLang = urlParams.get('lang') || 'lo';
+
+// ຂໍ້ຄວາມແຈ້ງເຕືອນຕາມພາສາ
+const messages = {
+    lo: {
+        confirmDelete: "ລົບຂ່າວນີ້ແທ້ບໍ?",
+        successDelete: "ລົບຂ່າວ ແລະ ການແຈ້ງເຕືອນທີ່ກ່ຽວຂ້ອງສຳເລັດ!"
+    },
+    vn: {
+        confirmDelete: "Bạn có chắc chắn muốn xóa tin tức này không?",
+        successDelete: "Đã xóa tin tức và thông báo liên quan thành công!"
+    },
+    th: {
+        confirmDelete: "คุณแน่ใจหรือไม่ว่าต้องการลบข่าวนี้?",
+        successDelete: "ลบข่าวและการแจ้งเตือนที่เกี่ยวข้องสำเร็จ!"
+    },
+    en: {
+        confirmDelete: "Are you sure you want to delete this news?",
+        successDelete: "News and related notifications deleted successfully!"
+    }
+};
+
+const tMsg = messages[currentLang] || messages['lo'];
 // 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
 const translations = {
     lo: {
