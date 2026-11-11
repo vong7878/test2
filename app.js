@@ -2273,7 +2273,7 @@ window.filterCategory = (cat) => {
 }; 
 // 🌍 ເປີດໃຫ້ HTML ສามารถເອີ້ນໃຊ້ຟັງຊັນເຫຼົ່ານີ້ໄດ້ແບບ Global
 window.switchTab = switchTab;
-window.searchNews = searchNews;
+
 window.confirmRoomLogin = confirmRoomLogin;
 window.handleLoginTypeChange = handleLoginTypeChange;
 window.submitSpecialPoint = submitSpecialPoint;
