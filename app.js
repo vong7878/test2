@@ -686,6 +686,15 @@ function checkRoomAuthUI() {
         if(superAdminSpecialPoints) superAdminSpecialPoints.classList.add('hidden'); 
     } 
 }
+const roomDisplays = ['member-room-display', 'feedback-room-display'];
+    roomDisplays.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && currentUser) {
+            // ດຶງເອົາສະເພາະເລກຫ້ອງ (ເຊັ່ນ: "105") ແລ້ວເອົາມາຕໍ່ກັບ t('room') ຕາມພາສາທີ່ເລືອກ
+            const roomNum = currentUser.replace(/[^0-9]/g, '');
+            el.value = roomNum ? `${t('room')} ${roomNum}` : currentUser;
+        }
+    });
 
 // 1. ຟັງຊັນຄົ້ນຫາຂ່າວ
 window.searchNews = () => { 
