@@ -726,12 +726,12 @@ const roomDisplays = ['member-room-display', 'feedback-room-display'];
     });
 
 // 1. ຟັງຊັນຄົ້ນຫາຂ່າວ
-
+window.searchNews = function searchNews() {
     const searchInput = document.getElementById('search-input');
     if (!searchInput) return;
-    const kw = searchInput.value.toLowerCase(); 
+    const kw = searchInput.value.toLowerCase();
     if (typeof renderNews !== 'undefined' && typeof allNews !== 'undefined') {
-        renderNews(allNews.filter(n => n.title.toLowerCase().includes(kw) || n.content.toLowerCase().includes(kw))); 
+        renderNews(allNews.filter(n => n.title.toLowerCase().includes(kw) || n.content.toLowerCase().includes(kw)));
     }
 };
 
