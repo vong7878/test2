@@ -54,14 +54,6 @@ const reportData = {
     approved: true
 };
 
-// ຕົວຢ່າງຕອນສ້າງ Object ຂໍ້ມູນສົ່ງລົງ Firebase
-const reportData = {
-    room: roomNum,
-    specialPoints: pointValue,
-    description: t('special_point_desc'), // ລະບົບຈະເລືອກພາສາຕາມທີ່ Admin ກໍາລັງເປີດຢູ່ອັດຕະໂນມັດ!
-    date: new Date().toLocaleString(),
-    approved: true
-};
 
 let currentShareData = { title: '', text: '', url: '' }; 
 let chatUnsubscribe = null; 
