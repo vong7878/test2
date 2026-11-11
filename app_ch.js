@@ -295,8 +295,8 @@ function drawSnakeGame() {
 function gameOver() { 
     clearInterval(snakeInterval); snakeInterval = null; 
     const overlay = document.getElementById('snake-overlay'); 
-    document.getElementById('snake-overlay-title').innerText = '💀 ເກມຈົບແນວ (Game Over)'; 
-    document.getElementById('snake-overlay-desc').innerHTML = `ຄະແນນຂອງທ່ານ: <strong class="text-amber-400 text-sm">${score}</strong><br>ກົດປຸ່ມລຸ່ມນີ້ເພື່ອເລີ່ມຫຼິ້ນໃໝ່!`; 
+    document.getElementById('snake-overlay-title').innerText = '💀 游戏已经结束了 (Game Over)'; 
+    document.getElementById('snake-overlay-desc').innerHTML = `您的得分: <strong class="text-amber-400 text-sm">${score}</strong><br>点击下方按钮重新开始!`; 
     overlay.classList.remove('hidden'); 
 } 
 
@@ -344,7 +344,7 @@ window.closeGuideModal = () => document.getElementById('guide-modal').classList.
 
 function initAntiCopyProtection() { 
     document.addEventListener('contextmenu', (e) => e.preventDefault()); 
-    document.addEventListener('copy', (e) => { e.preventDefault(); alert('⚠️ ຂໍອະໄພ, ລະບົບປ້ອງກັນການຄັດລອກຂໍ້ຄວາມ!'); }); 
+    document.addEventListener('copy', (e) => { e.preventDefault(); alert('⚠️ 抱歉，系统已启用文本防复制功能！'); }); 
 } 
 
 function initTouchGoldGlowEffect() { 
@@ -397,7 +397,7 @@ function updateNotificationUI() {
     if (unreadCount > 0) { badge.innerText = unreadCount; badge.classList.remove('hidden'); bellIcon.classList.add('animate-bell'); } 
     else { badge.classList.add('hidden'); bellIcon.classList.remove('animate-bell'); } 
 
-    if (notifications.length === 0) { list.innerHTML = `<div class="p-4 text-center text-slate-500">ຍັງບໍ່ມີການແຈ້ງເຕືອນ</div>`; return; } 
+    if (notifications.length === 0) { list.innerHTML = `<div class="p-4 text-center text-slate-500">暂无通知</div>`; return; } 
 
     list.innerHTML = notifications.map(n => ` 
         <div onclick="clickNotificationItem(${n.linkId ? `'${n.linkId}'` : 'null'})" class="p-3 hover:bg-slate-800 transition cursor-pointer ${n.read ? 'opacity-70' : 'bg-slate-800/60 font-semibold'}"> 
@@ -455,7 +455,7 @@ function initRealtimeListeners() {
                 if (change.type === "added") { 
                     const newPostData = change.doc.data(); 
                     // ສົ່ງແຈ້ງເຕືອນຂ່າວ/ແຈ້ງການໃໝ່ລົງຟີດ
-                    addNotification("📢 ແຈ້ງການ/ຂ່າວສານໃໝ່!", newPostData.title, change.doc.id); 
+                    addNotification("📢新公告/新消息！", newPostData.title, change.doc.id); 
                 } 
             }); 
         } 
@@ -471,14 +471,14 @@ function initRealtimeListeners() {
                 if (currentRoomUser && data.room === currentRoomUser) { 
                     // ກໍລະນີອະນຸມັດບົດລາຍງານ
                     if (data.approved && change.type === "modified") { 
-                        addNotification("🎉 ບົດລາຍງານຖືກອະນຸມັດແລ້ວ!", `ບົດລາຍງານອະນາໄມຫ້ອງຂອງທ່ານ (${data.room}) ໄດ້ຮັບການອະນຸມັດແລ້ວ!`); 
+                        addNotification("🎉 报告已批准!", `您的房间卫生报告 (${data.room}) 已获得批准!`); 
                         loadFullScoreSummary(); loadFullScoreboard(); 
                     } 
                     // ກໍລະນີປັບຄະແນນພິເສດ (ບວກ/ລົບ)
                     else if (data.specialPoints !== undefined && change.type === "added") { 
                         const pts = data.specialPoints; 
                         const signText = pts > 0 ? `+${pts}` : `${pts}`; 
-                        addNotification("⭐ ມີການປັບຄະແນນພິເສດ!", `ຫ້ອງຂອງທ່ານ (${data.room}) ຖືກປັບຄະແນນ ${signText} ຄະແນນ ຈາກຜູ້ສ້າງເວັບໄຊ!`); 
+                        addNotification("⭐ 有特别分数调整!", `您的房间 (${data.room}) 分数被调整 ${signText} 来自网站创建者的分数!`); 
                         loadFullScoreSummary(); loadFullScoreboard(); 
                     } 
                 } 
@@ -495,7 +495,7 @@ function initRealtimeListeners() {
                     const msgData = change.doc.data(); 
                     // ສະເພາະ Admin ເທົ່ານັ້ນທີ່ຈະເຫັນແຈ້ງເຕືອນແຊັດນີ້
                     if (userRole === 'admin' && msgData.sender !== currentRoomUser) { 
-                        addNotification("💬 ຂໍ້ຄວາມກຸ່ມ Admin", `${msgData.sender}: ${msgData.text}`); 
+                        addNotification("💬 群聊 Admin", `${msgData.sender}: ${msgData.text}`); 
                     } 
                 } 
             }); 
@@ -515,12 +515,12 @@ async function verifySubAdminSession() {
                 if (adminKey === 'SUB_ADMIN_1') { 
                     let devices = data.devices || []; 
                     if (!devices.includes(deviceSessionId)) { 
-                        alert('⚠️ ບັນຊີ Admin ຮອງ 1 ນີ້ ຖືກລັອກອິນເຕັມຈຳກັດ 2 ເຄື່ອງແລ້ວ!'); 
+                        alert('⚠️ 该副管理员 1 账号已达到 2 台设备的登录限制上限!'); 
                         await logoutSession(); 
                     } 
                 } else { 
                     if (data.deviceId !== deviceSessionId) { 
-                        alert('⚠️ ບັນຊີນີ້ຖືກລັອກອິນຈາກເຄື່ອງມືຖືເຄື່ອງອື່ນແລ້ວ!'); 
+                        alert('⚠️ 该账号已在其他移动设备上登录!'); 
                         await logoutSession(); 
                     } 
                 } 
@@ -530,7 +530,7 @@ async function verifySubAdminSession() {
 } 
 
 function isSuperAdmin() { 
-    return currentRoomUser && currentRoomUser.includes('ຜູ້ສ້າງ:'); 
+    return currentRoomUser && currentRoomUser.includes('创建者:'); 
 } 
 
 function updateLiveClock() { 
@@ -563,7 +563,7 @@ function checkRoomAuthUI() {
                 <span class="text-xs block text-emerald-400 font-bold">🏠 ${currentRoomUser}</span> 
                 <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-300 uppercase">${userRole}</span> 
             </div> 
-            <button onclick="logoutSession()" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg transition shadow">ອອກຈາກລະບົບ</button> 
+            <button onclick="logoutSession()" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg transition shadow">退出登录</button> 
         `; 
 
         if (userRole === 'admin') { 
@@ -579,7 +579,7 @@ function checkRoomAuthUI() {
         } 
     } else { 
         if (roomModal && !(getDeviceType() === 'desktop' && userRole !== 'admin')) { roomModal.classList.remove('hidden'); } 
-        if (authNav) authNav.innerHTML = `<span class="text-xs text-amber-400 font-semibold">⚠️ ກະລຸນາເລືອກຫ້ອງກ່ອນ</span>`; 
+        if (authNav) authNav.innerHTML = `<span class="text-xs text-amber-400 font-semibold">⚠️ 请先选择房间</span>`; 
         if (adminBox) adminBox.classList.add('hidden'); 
         if (adminChatLi) adminChatLi.classList.add('hidden'); 
         if(superAdminSpecialPoints) superAdminSpecialPoints.classList.add('hidden'); 
@@ -619,7 +619,7 @@ window.handleLoginTypeChange = (val) => {
         if (adminFields) adminFields.classList.remove('hidden'); 
     } else if (val.startsWith('SUB_ADMIN')) { 
         if (subAdminFields) subAdminFields.classList.remove('hidden'); 
-        if (hintElem) hintElem.innerText = (val === 'SUB_ADMIN_1') ? '* ໄອດີນີ້ ສາມາດລັອກອິນໄດ້ສູງສຸດ 2 ເຄື່ອງພ້ອມກັນ' : '* 1 ໄອດີ ສາມາດລັອກອິນໄດ້ພຽງ 1 ເຄື່ອງເທົ່ານັ້ນ'; 
+        if (hintElem) hintElem.innerText = (val === 'SUB_ADMIN_1') ? '* 该 ID 最多可同时登录 2 台设备' : '* 1 个 ID 只能登录 1 台设备'; 
     } 
 };
 
@@ -628,33 +628,33 @@ window.confirmRoomLogin = async () => {
     const select = document.getElementById('login-room-select'); 
     if (!select) return;
     const val = select.value; 
-    if (!val) { alert('ກະລຸນາເລືອກຫ້ອງພັກ ຫຼື ໂໝດ Admin!'); return; } 
+    if (!val) { alert('请选择房间或管理员 (Admin) 模式！'); return; } 
 
     if (val === 'SUPER_ADMIN') { 
         const email = document.getElementById('admin-email-input').value; 
         const password = document.getElementById('admin-password-input').value; 
-        if (!email || !password) { alert('ກະລຸນາປ້ອນອີເມວ ແລະ ລະຫັດຜ່ານຜູ້ສ້າງ!'); return; } 
+        if (!email || !password) { alert('请输入创建者的电子邮件和密码！'); return; } 
         try { 
             const userCredential = await signInWithEmailAndPassword(auth, email, password); 
-            currentRoomUser = `ຜູ້ສ້າງ: ${userCredential.user.email}`; 
+            currentRoomUser = `创建者: ${userCredential.user.email}`; 
             userRole = 'admin'; 
             localStorage.setItem('current_room_user', currentRoomUser); 
             localStorage.setItem('current_user_role', userRole); 
             document.getElementById('desktop-blocked-modal').classList.add('hidden'); 
             document.getElementById('location-blocked-modal').classList.add('hidden'); 
             if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
-        } catch (err) { alert('ລັອກອິນຜູ້ສ້າງບໍ່ສຳເລັດ: ' + err.message); } 
+        } catch (err) { alert('创建者登录失败: ' + err.message); } 
     } else if (val.startsWith('SUB_ADMIN')) { 
         const pinInput = document.getElementById('sub-admin-pin').value; 
-        if (pinInput !== subAdminPins[val]) { alert('❌ ລະຫັດຜ່ານ PIN ບໍ່ຖືກຕ້ອງ!'); return; } 
-        const adminName = val === 'SUB_ADMIN_1' ? 'Admin ຮອງ 1' : val === 'SUB_ADMIN_2' ? 'Admin ຮອງ 2' : 'Admin ຮອງ 3'; 
+        if (pinInput !== subAdminPins[val]) { alert('❌ PIN 密码不正确!'); return; } 
+        const adminName = val === 'SUB_ADMIN_1' ? 'Admin 副 1' : val === 'SUB_ADMIN_2' ? 'Admin 副 2' : 'Admin 副 3'; 
         try { 
             const docRef = doc(db, "admin_sessions", val); 
             const docSnap = await getDoc(docRef); 
             if (val === 'SUB_ADMIN_1') { 
                 let devices = docSnap.exists() ? (docSnap.data().devices || []) : []; 
                 if (!devices.includes(deviceSessionId)) { 
-                    if (devices.length >= 2) { alert(`⚠️ "${adminName}" ນີ້ ມີການລັອກອິນເຕັມຈຳກັດ 2 ເຄື່ອງແລ້ວ.`); return; } 
+                    if (devices.length >= 2) { alert(`⚠️ "${adminName}" 该账号已达到 2 台设备的登录限制上限.`); return; } 
                     devices.push(deviceSessionId); 
                 } 
                 await setDoc(docRef, { devices: devices, timestamp: new Date() }, { merge: true }); 
@@ -662,7 +662,7 @@ window.confirmRoomLogin = async () => {
                 if (docSnap.exists()) { 
                     const data = docSnap.data(); 
                     if (data.deviceId !== deviceSessionId && (Date.now() - (data.timestamp ? data.timestamp.toMillis() : 0) < 7200000)) { 
-                        alert(`⚠️ "${adminName}" ນີ້ ກຳລັງຖືກເປີດໃຊ້ງານຢູ່ເທິງມືຖືເຄື່ອງອື່ນແລ້ວ!`); 
+                        alert(`⚠️ "${adminName}" 且目前正在另一台移动设备上使用中!`); 
                         return; 
                     } 
                 } 
@@ -675,10 +675,10 @@ window.confirmRoomLogin = async () => {
             document.getElementById('desktop-blocked-modal').classList.add('hidden'); 
             document.getElementById('location-blocked-modal').classList.add('hidden'); 
             if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
-            alert(`🎉 ເຂົ້າສູ່ລະບົບ ${adminName} ສຳເລັດ!`); 
-        } catch (err) { alert('ຜິດພາດ: ' + err.message); } 
+            alert(`🎉 登录 ${adminName} 成功!`); 
+        } catch (err) { alert('错误: ' + err.message); } 
     } else { 
-        if (getDeviceType() === 'desktop') { alert('⚠️ ຫ້າມ User ເຂົ້າຜ່ານຄອມພິວເຕີ.'); return; } 
+        if (getDeviceType() === 'desktop') { alert('⚠️ 禁止用户通过电脑访问.'); return; } 
         currentRoomUser = val; 
         userRole = 'user'; 
         localStorage.setItem('current_room_user', currentRoomUser); 
@@ -689,8 +689,8 @@ window.confirmRoomLogin = async () => {
 
 window.logoutSession = async () => { 
     try { 
-        if (userRole === 'admin' && currentRoomUser.includes('ຜູ້ສ້າງ')) await signOut(auth); 
-        else if (userRole === 'admin' && currentRoomUser.includes('Admin ຮອງ 1')) { 
+        if (userRole === 'admin' && currentRoomUser.includes('创建者')) await signOut(auth); 
+        else if (userRole === 'admin' && currentRoomUser.includes('Admin 副 1')) { 
             const docRef = doc(db, "admin_sessions", "SUB_ADMIN_1"); 
             const docSnap = await getDoc(docRef); 
             if (docSnap.exists()) { 
@@ -708,23 +708,23 @@ window.logoutSession = async () => {
 }; 
 
 window.submitSpecialPoint = async () => { 
-    if (!isSuperAdmin()) { alert('⚠️ ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນທີ່ມີສິດປັບຄະແນນພິເສດ!'); return; } 
+    if (!isSuperAdmin()) { alert('⚠️只有网站创建者才有权调整特殊积分!'); return; } 
     const room = document.getElementById('special-room-select').value; 
     const pointInput = document.getElementById('special-point-value').value; 
-    if (!room) { alert('ກະລຸນາເລືອກຫ້ອງພັກ!'); return; } 
+    if (!room) { alert('请选择房间!'); return; } 
     const points = parseInt(pointInput); 
-    if (isNaN(points) || points === 0) { alert('ກະລຸນາໃສ່ຈຳນວນຄະແນນທີ່ຖືກຕ້ອງ (ເຊັ່ນ: 3, 5 ຫຼື -1)'); return; } 
+    if (isNaN(points) || points === 0) { alert('请输入正确的分数值（例如：3、5 或 -1)'); return; } 
 
     try { 
         const dateStr = new Date().toLocaleString('lo-LA'); 
-        const reasonText = points > 0 ? `➕ ຮັບຄະແນນພິເສດ (+${points} ຄະແນນ) ຈາກຜູ້ສ້າງເວັບໄຊ` : `➖ ຖືກຫັກຄະແນນ (${points} ຄະແນນ) ຈາກຜູ້ສ້າງເວັບໄຊ`; 
+        const reasonText = points > 0 ? `➕ 获得特殊积分 (+${points} 积分/分数) 来自网站创建者` : `➖ 被扣分 (${points} 积分/分数) 来自网站创建者`; 
         await addDoc(collection(db, "member_reports"), { 
-            room: room, name: "ຜູ້ສ້າງເວັບໄຊ (Super Admin)", description: reasonText, mediaItems: [], date: dateStr, weekTag: "special_adjustment_" + Date.now(), approved: true, specialPoints: points, createdAt: new Date() 
+            room: room, name: "网站创建者 (Super Admin)", description: reasonText, mediaItems: [], date: dateStr, weekTag: "special_adjustment_" + Date.now(), approved: true, specialPoints: points, createdAt: new Date() 
         }); 
-        alert(`🎉 ບັນທຶກການປັບຄະແນນໃຫ້ [${room}] ສຳເລັດແລ້ວ!`); 
+        alert(`🎉 已保存积分调整记录给 [${room}] 已完成!`); 
         document.getElementById('special-point-value').value = ''; 
         loadMemberReports(); loadFullScoreSummary(); loadFullScoreboard(); 
-    } catch (err) { alert('ຜິດພາດ: ' + err.message); } 
+    } catch (err) { alert('错误: ' + err.message); } 
 }; 
 
 window.switchTab = (tab) => { 
@@ -765,7 +765,7 @@ window.switchTab = (tab) => {
     else if (tab === 'snake-game') { if (snakeGameSec) snakeGameSec.classList.remove('hidden'); if (newsCategoriesBox) newsCategoriesBox.classList.add('hidden'); } 
     else if (tab === 'user-feedback') { if (feedbackSec) feedbackSec.classList.remove('hidden'); if (newsCategoriesBox) newsCategoriesBox.classList.add('hidden'); loadUserFeedbacks(); } 
     else if (tab === 'admin-chat') { 
-        if (userRole !== 'admin') { alert('⚠️ ສຳລັບ Admin ເທົ່ານັ້ນ!'); return; } 
+        if (userRole !== 'admin') { alert('⚠️仅限管理员 (Admin)!'); return; } 
         if (adminChatSec) adminChatSec.classList.remove('hidden'); 
         if (newsCategoriesBox) newsCategoriesBox.classList.add('hidden'); 
     } 
