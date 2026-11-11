@@ -42,18 +42,16 @@ function saveUserNotifications() {
     const key = currentRoomUser ? `user_notifications_${currentRoomUser}` : 'user_notifications_guest';
     localStorage.setItem(key, JSON.stringify(notifications));
 }
-// ດึงຄ່າເລກຫ້ອງຈາກ Input ຫຼື Element ທີ່ກ່ຽວຂ້ອງກ່ອນ
-const roomSelect = document.getElementById('room-select'); // ປ່ຽน id ຕາມ HTML ຂອງທ່ານ
-const roomNum = roomSelect ? roomSelect.value : '108'; // ກຳນົດຄ່າເລີ່ມຕົ້ນ ຫຼື ດຶງຄ່າທີ່ເລືອກ
+
+
+// ໃຫ້ເຫຼືອພຽງບລັອກດຽວແບບນີ້:
 const reportData = {
-    room: roomNum, // ຕອນນີ້ roomNum จะມີຄ່າແລ້ວ ແລະ ບໍ່ Error ອີກຕໍ່ໄປ
+    room: roomNum,
     specialPoints: pointValue,
     description: t('special_point_desc'),
     date: new Date().toLocaleString(),
     approved: true
 };
-
-
 let currentShareData = { title: '', text: '', url: '' }; 
 let chatUnsubscribe = null; 
 let globalNewsUnsubscribe = null; 
