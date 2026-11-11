@@ -1,20 +1,28 @@
-// ຕົວຢ່າງໃນ translations2.js
+// ຕົວຢ່າງການເພີ່ມໃນໄຟລ໌ແປພາສາຂອງທ່ານ
 const translations = {
     lo: {
         logout: "ອອກຈາກລະບົບ",
-        ...
+        // ... ພາສາລາວ
     },
     vn: {
         logout: "Đăng xuất",
-        ...
+        // ... ພາສາຫວຽດນາມ
     },
     th: {
         logout: "ออกจากระบบ",
-        ...
+        // ... ພາສາໄທ
     },
     en: {
         logout: "Logout",
-        ...
+        // ... ພາສາອັງກິດ
+    },
+    ch: {
+        logout: "退出登录",
+        // ... ພາສາຈີນ
+    },
+    kr: {
+        logout: "로그아웃",
+        // ... ພາສາເກົາຫຼີ
     }
 };
 function updateLiveClock() { 
