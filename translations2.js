@@ -1,3 +1,22 @@
+// ຕົວຢ່າງໃນ translations2.js
+const translations = {
+    lo: {
+        logout: "ອອກຈາກລະບົບ",
+        ...
+    },
+    vn: {
+        logout: "Đăng xuất",
+        ...
+    },
+    th: {
+        logout: "ออกจากระบบ",
+        ...
+    },
+    en: {
+        logout: "Logout",
+        ...
+    }
+};
 function updateLiveClock() { 
     const clockElement = document.getElementById('live-clock'); 
     if (!clockElement) return; 
