@@ -809,20 +809,20 @@ window.switchSummaryPeriod = (period) => {
 };
 
 window.submitUserFeedback = async () => { 
-    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) { 
-        alert('ກະລຸນາລັອກອິນດ້ວຍໄອດີຫ້ອງພັກກ່ອນສົ່ງຄຳຄິດຄຳເຫັນ!'); 
+    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ผู้สร้าง')) { 
+        alert('กรุณาล็อกอินด้วยไอดีห้องพักก่อนส่งความคิดเห็น!'); 
         document.getElementById('room-login-modal').classList.remove('hidden'); return; 
     } 
     const commentText = document.getElementById('feedback-text-input').value.trim(); 
-    if (!commentText) { alert('ກະລຸນາປ້ອນຂໍ້ຄວາມຄຳຄິດຄຳເຫັນ!'); return; } 
+    if (!commentText) { alert('กรุณากรอกข้อความความคิดเห็น!'); return; } 
 
     try { 
         await addDoc(collection(db, "user_feedbacks"), { room: currentRoomUser, comment: commentText, date: new Date().toLocaleString('lo-LA'), timestamp: new Date() }); 
-        await addDoc(collection(db, "admin_chats"), { sender: `💬 ຄວາມຄິດຄຳເຫັນຈາກ [${currentRoomUser}]`, text: commentText, time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }), timestamp: new Date() }); 
-        alert('🎉 ສົ່ງຄຳຄິດຄຳເຫັນສຳເລັດ!'); 
+        await addDoc(collection(db, "admin_chats"), { sender: `💬 ความคิดเห็นจาก [${currentRoomUser}]`, text: commentText, time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }), timestamp: new Date() }); 
+        alert('🎉  ส่งความคิดเห็นสำเร็จ!'); 
         document.getElementById('feedback-text-input').value = ''; 
         loadUserFeedbacks(); 
-    } catch (err) { alert('ຜິດພາດ: ' + err.message); } 
+    } catch (err) { alert('ผิดพลาด: ' + err.message); } 
 }; 
 
 async function loadUserFeedbacks() { 
@@ -830,7 +830,7 @@ async function loadUserFeedbacks() {
     if (!container) return; 
     try { 
         const snapshot = await getDocs(query(collection(db, "user_feedbacks"), orderBy("timestamp", "desc"))); 
-        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-6 text-slate-500">ຍັງບໍ່ມີປະຫວັດຄຳຄິດຄຳເຫັນ.</div>`; return; } 
+        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-6 text-slate-500">ยังไม่มีประวัติความคิดเห็น.</div>`; return; } 
         let html = ''; 
         snapshot.forEach(docSnap => { 
             const fb = docSnap.data(); 
@@ -847,8 +847,8 @@ async function loadUserFeedbacks() {
                 `; 
             } 
         }); 
-        container.innerHTML = html || `<div class="text-center py-6 text-slate-500">ຍັງບໍ່ມີປະຫວັດສຳລັບຫ້ອງຂອງທ່ານ.</div>`; 
-    } catch (err) { container.innerHTML = `<div class="text-center py-6 text-red-400">ຜິດພາດ: ${err.message}</div>`; } 
+        container.innerHTML = html || `<div class="text-center py-6 text-slate-500">ยังไม่มีประวัติสำหรับห้องของคุณ.</div>`; 
+    } catch (err) { container.innerHTML = `<div class="text-center py-6 text-red-400">ผิดพลาด: ${err.message}</div>`; } 
 } 
 
 function listenAdminChat() { 
@@ -856,12 +856,12 @@ function listenAdminChat() {
     chatUnsubscribe = onSnapshot(query(collection(db, "admin_chats"), orderBy("timestamp", "asc")), (snapshot) => { 
         const container = document.getElementById('admin-chat-messages'); 
         if (!container) return; 
-        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-12 text-slate-500">ຍັງບໍ່ມີຂໍ້ຄວາມສົນທະນາ.</div>`; return; } 
+        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-12 text-slate-500">ยังไม่มีข้อความสนทนา.</div>`; return; } 
         let html = ''; 
         snapshot.forEach((docSnap) => { 
             const msg = docSnap.data(); 
             const isMe = msg.sender === currentRoomUser; 
-            const isFeedback = msg.sender.includes('ຄວາມຄິດຄຳເຫັນ'); 
+            const isFeedback = msg.sender.includes('ความคิดเห็น'); 
             html += ` 
                 <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} animate-fade-in"> 
                     <span class="text-[10px] text-slate-400 mb-1 px-1">${msg.sender} (${msg.time || ''})</span> 
@@ -882,7 +882,7 @@ window.sendAdminMessage = async () => {
     try { 
         input.value = ''; 
         await addDoc(collection(db, "admin_chats"), { sender: currentRoomUser, text: text, time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }), timestamp: new Date() }); 
-    } catch (err) { alert('ຜິດພາດ: ' + err.message); } 
+    } catch (err) { alert('ผิดพลาด: ' + err.message); } 
 }; 
 
 let selectedWeekHistory = null; // 👈 ຕົວແปรເກັບອາທິດທີ່ຜູ້ໃຊ້ເລືອກເບິ່ງຢ້ອນຫຼັງ
@@ -926,10 +926,10 @@ async function loadFullScoreSummary() {
 
         if (currentSummaryPeriod === 'weekly') { 
             selectedFilterText = weekPicker ? weekPicker.value : getCurrentWeekInputString(now);
-            if (topRoomLabel) topRoomLabel.innerText = `ຫ້ອງອັນດັບ 1 (${selectedFilterText})`; 
-            if (totalPtsLabel) totalPtsLabel.innerText = `ຄະແນນລວມ (${selectedFilterText})`; 
-            if (appCountLabel) appCountLabel.innerText = `ບົດລາຍງານທີ່ອະນຸມັດ (${selectedFilterText})`; 
-            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>ກຣາຟສະຫຼຸບຄະແນນປະຈຳອາທິດ (${selectedFilterText})</span>`; 
+            if (topRoomLabel) topRoomLabel.innerText = `ห้องอันดับ 1 (${selectedFilterText})`; 
+            if (totalPtsLabel) totalPtsLabel.innerText = `คะแนนรวม (${selectedFilterText})`; 
+            if (appCountLabel) appCountLabel.innerText = `รายงานที่อนุมัติ (${selectedFilterText})`; 
+            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>กราฟสรุปคะแนนประจำสัปดาห์ (${selectedFilterText})</span>`; 
 
             let scores = {}; let totalPts = 0; let approvedReportsCount = 0; 
             rooms.forEach(r => { scores[r] = 0; }); 
@@ -953,12 +953,12 @@ async function loadFullScoreSummary() {
             }); 
 
             totalPts = Object.values(scores).reduce((a, b) => a + b, 0); 
-            let maxPts = -1; let topRoom = 'ຍັງບໍ່ມີຂໍ້ມູນ'; 
+            let maxPts = -1; let topRoom = 'ยังไม่มีข้อมูล'; 
             rooms.forEach(r => { if (scores[r] > maxPts) { maxPts = scores[r]; topRoom = r; } }); 
 
-            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} ຄະແນນ)`; 
-            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalPts} ຄະແນນ`; 
-            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${approvedReportsCount} ບົດລາຍງານ`; 
+            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} คะแนน)`; 
+            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalPts} คะแนน`; 
+            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${approvedReportsCount} รายงาน`; 
 
             const highestPoint = Math.max(...Object.values(scores), 1); 
             container.innerHTML = rooms.map(room => { 
@@ -968,7 +968,7 @@ async function loadFullScoreSummary() {
                     <div class="space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 animate-fade-in"> 
                         <div class="flex justify-between items-center text-xs font-semibold"> 
                             <span class="text-slate-200">🏠 ${room}</span> 
-                            <span class="text-amber-400 font-bold">${pts} ຄະແນນ (${percent}%)</span> 
+                            <span class="text-amber-400 font-bold">${pts} คะแนน (${percent}%)</span> 
                         </div> 
                         <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700"> 
                             <div class="bg-gradient-to-r from-emerald-500 to-amber-400 h-3 rounded-full transition-all duration-500" style="width: ${percent}%"></div> 
@@ -982,10 +982,10 @@ async function loadFullScoreSummary() {
             selectedFilterText = monthPicker ? monthPicker.value : ''; // ຕົວຢ່າງ: 2026-11
             const [selYear, selMonth] = selectedFilterText.split('-').map(Number);
 
-            if (topRoomLabel) topRoomLabel.innerText = `ຫ້ອງອັນດັບ 1 (ເດືອນ ${selectedFilterText})`; 
-            if (totalPtsLabel) totalPtsLabel.innerText = `ຄະແນນລວມທັງເດືອນ`; 
-            if (appCountLabel) appCountLabel.innerText = `ບົດລາຍງານທັງໝົດໃນເດືອນ`; 
-            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>ກຣາຟຄະແນນແຕ່ລະຫ້ອງ ປະຈຳເດືອນ (${selectedFilterText})</span>`; 
+            if (topRoomLabel) topRoomLabel.innerText = `ห้องอันดับ 1 (เดือน ${selectedFilterText})`; 
+            if (totalPtsLabel) totalPtsLabel.innerText = `คะแนนรวมทั้งเดือน`; 
+            if (appCountLabel) appCountLabel.innerText = `รายงานทั้งหมดในเดือน`; 
+            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>กราฟคะแนนแต่ละห้องประจำเดือน (${selectedFilterText})</span>`; 
 
             let scores = {}; let totalMonthPts = 0; let monthReportsCount = 0;
             rooms.forEach(r => { scores[r] = 0; });
@@ -1008,12 +1008,12 @@ async function loadFullScoreSummary() {
                 } 
             }); 
 
-            let maxPts = -1; let topRoom = 'ຍັງບໍ່ມີຂໍ້ມູນ';
+            let maxPts = -1; let topRoom = 'ยังไม่มีข้อมูล';
             rooms.forEach(r => { if (scores[r] > maxPts) { maxPts = scores[r]; topRoom = r; } });
 
-            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} ຄະແນນ)`; 
-            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalMonthPts} ຄະແນນ`; 
-            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${monthReportsCount} ບົດລາຍງານ`; 
+            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} คะแนน)`; 
+            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalMonthPts} คะแนน`; 
+            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${monthReportsCount} รายงาน`; 
 
             const highestPoint = Math.max(...Object.values(scores), 1); 
             container.innerHTML = rooms.map(room => { 
@@ -1023,7 +1023,7 @@ async function loadFullScoreSummary() {
                     <div class="space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 animate-fade-in"> 
                         <div class="flex justify-between items-center text-xs font-semibold"> 
                             <span class="text-amber-300 font-bold">🏠 ${room}</span> 
-                            <span class="text-emerald-400 font-bold">${pts} ຄະແນນ (${percent}%)</span> 
+                            <span class="text-emerald-400 font-bold">${pts} คะแนน (${percent}%)</span> 
                         </div> 
                         <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700"> 
                             <div class="bg-gradient-to-r from-sky-500 to-emerald-400 h-3 rounded-full transition-all duration-500" style="width: ${percent}%"></div> 
@@ -1037,10 +1037,10 @@ async function loadFullScoreSummary() {
             selectedFilterText = yearPicker ? yearPicker.value : String(now.getFullYear());
             const selYear = Number(selectedFilterText);
 
-            if (topRoomLabel) topRoomLabel.innerText = `ຫ້ອງອັນດັບ 1 (ປີ ${selectedFilterText})`; 
-            if (totalPtsLabel) totalPtsLabel.innerText = `ຄະແນນລວມທັງປີ (${selectedFilterText})`; 
-            if (appCountLabel) appCountLabel.innerText = `ບົດລາຍງານທັງໝົດໃນປີ`; 
-            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>ກຣາຟຄະແນນແຕ່ລະຫ້ອງ ປະຈຳປີ (${selectedFilterText})</span>`; 
+            if (topRoomLabel) topRoomLabel.innerText = `ห้องอันดับ 1 (ปี ${selectedFilterText})`; 
+            if (totalPtsLabel) totalPtsLabel.innerText = `คะแนนรวมทั้งปี (${selectedFilterText})`; 
+            if (appCountLabel) appCountLabel.innerText = `รายงานทั้งหมดในปี`; 
+            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>กราฟคะแนนแต่ละห้องประจำปี (${selectedFilterText})</span>`; 
             
             let scores = {}; let totalYearPts = 0; let yearReportsCount = 0;
             rooms.forEach(r => { scores[r] = 0; });
