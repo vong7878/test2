@@ -726,7 +726,7 @@ const roomDisplays = ['member-room-display', 'feedback-room-display'];
     });
 
 // 1. ຟັງຊັນຄົ້ນຫາຂ່າວ
-window.searchNews = () => { 
+
     const searchInput = document.getElementById('search-input');
     if (!searchInput) return;
     const kw = searchInput.value.toLowerCase(); 
@@ -2273,15 +2273,13 @@ window.filterCategory = (cat) => {
 }; 
 // 🌍 ເປີດໃຫ້ HTML ສามารถເອີ້ນໃຊ້ຟັງຊັນເຫຼົ່ານີ້ໄດ້ແບບ Global
 window.switchTab = switchTab;
-
+window.searchNews = searchNews;
 window.confirmRoomLogin = confirmRoomLogin;
 window.handleLoginTypeChange = handleLoginTypeChange;
 window.submitSpecialPoint = submitSpecialPoint;
 window.closeCyberModal = closeCyberModal;
 window.saveCyberTaskVideo = saveCyberTaskVideo;
 // (ເພີ່ມຊື່ຟັງຊັນອື່ນໆ ທີ່ HTML ຂອງທ່ານເອີ້ນໃຊ້ ຜ່ານ onclick ຫລື oninput ໄວ້ບ່ອນນີ້)
-
-
 
 
 
