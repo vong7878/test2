@@ -2242,7 +2242,15 @@ window.filterCategory = (cat) => {
     else renderNews(allNews.filter(n => n.category === cat)); 
 
 }; 
-
+// 🌍 ເປີດໃຫ້ HTML ສามารถເອີ້ນໃຊ້ຟັງຊັນເຫຼົ່ານີ້ໄດ້ແບບ Global
+window.switchTab = switchTab;
+window.searchNews = searchNews;
+window.confirmRoomLogin = confirmRoomLogin;
+window.handleLoginTypeChange = handleLoginTypeChange;
+window.submitSpecialPoint = submitSpecialPoint;
+window.closeCyberModal = closeCyberModal;
+window.saveCyberTaskVideo = saveCyberTaskVideo;
+// (ເພີ່ມຊື່ຟັງຊັນອື່ນໆ ທີ່ HTML ຂອງທ່ານເອີ້ນໃຊ້ ຜ່ານ onclick ຫລື oninput ໄວ້ບ່ອນນີ້)
 
 
 
