@@ -689,8 +689,8 @@ function checkRoomAuthUI() {
 const roomDisplays = ['member-room-display', 'feedback-room-display'];
     roomDisplays.forEach(id => {
         const el = document.getElementById(id);
-        // ກວດສອບກ່ອນວ່າຕົວແປ user/room ມີຢູ່ຈິງບໍ (ປ້ອງກັນ Error is not defined)
-        const activeUser = (typeof currentUser !== 'undefined') ? currentUser : (typeof roomName !== 'undefined' ? roomName : '');
+        // ກວດສອບຄວາມປອດໄພ ປ້ອງກັນ Error is not defined
+        const activeUser = (typeof currentUser !== 'undefined' && currentUser) ? currentUser : '';
         
         if (el && activeUser) {
             const roomNum = String(activeUser).replace(/[^0-9]/g, '');
