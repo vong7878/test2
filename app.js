@@ -44,14 +44,7 @@ function saveUserNotifications() {
 }
 
 
-// ໃຫ້ເຫຼືອພຽງບລັອກດຽວແບບນີ້:
-const reportData = {
-    room: roomNum,
-    specialPoints: pointValue,
-    description: t('special_point_desc'),
-    date: new Date().toLocaleString(),
-    approved: true
-};
+
 let currentShareData = { title: '', text: '', url: '' }; 
 let chatUnsubscribe = null; 
 let globalNewsUnsubscribe = null; 
