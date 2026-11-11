@@ -1,3 +1,34 @@
+function updateLiveClock() { 
+    const clockElement = document.getElementById('live-clock'); 
+    if (!clockElement) return; 
+    const now = new Date(); 
+
+    // 🌐 ตรวจสอบພາສາປັດຈຸບັນຈາກ URL (ຕົວຢ່າງ: ?lang=th, ?lang=vn, ?lang=en, ?lang=lo)
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get('lang') || 'lo'; // ค่าเริ่มต้นเป็นลาว
+
+    // Mapping ພາສາໃຫ້ตรงກັບ Locale ຂອງ JavaScript
+    let localeMap = {
+        'lo': 'lo-LA',
+        'th': 'th-TH',
+        'vn': 'vi-VN',
+        'en': 'en-US',
+        'ch': 'zh-CN',
+        'kr': 'ko-KR'
+    };
+    let currentLocale = localeMap[lang] || 'lo-LA';
+
+    clockElement.innerText = now.toLocaleDateString(currentLocale, { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false 
+    }); 
+}
 // 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
 const translations = {
     lo: {
