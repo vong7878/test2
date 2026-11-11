@@ -1050,7 +1050,7 @@ async function loadFullScoreSummary() {
 
     try { 
         const querySnapshot = await getDocs(collection(db, "member_reports")); 
-        const rooms = ["ຫ້ອງ 104", "ຫ້ອງ 105", "ຫ້ອງ 108", "ຫ້ອງ 109", "ຫ້ອງ 110", "ຫ້ອງ 111", "ຫ້ອງ 112", "ຫ້ອງ 113", "ຫ້ອງ 114"]; 
+        const rooms = ["104", "105", "108", "109", "110", "111", "112", "113", "114"]; 
 
         if (currentSummaryPeriod === 'weekly') { 
             selectedFilterText = weekPicker ? weekPicker.value : getCurrentWeekInputString(now);
@@ -1267,7 +1267,7 @@ async function loadFullScoreboard() {
 
         let scores = {}; 
 
-        const rooms = ["ຫ້ອງ 104", "ຫ້ອງ 105", "ຫ້ອງ 108", "ຫ້ອງ 109", "ຫ້ອງ 110", "ຫ້ອງ 111", "ຫ້ອງ 112", "ຫ້ອງ 113", "ຫ້ອງ 114"]; 
+        const rooms = ["104", "105", "108", "109", "110", "111", "112", "113", "114"]; 
 
         rooms.forEach(room => { scores[room] = 0; }); 
 
@@ -2056,7 +2056,7 @@ window.approveMemberReport = async (reportId) => {
 
         await addDoc(collection(db, "cyber_tasks"), { 
 
-            title: `${report.room || 'ຫ້ອງ'} - ໂດຍ: ${report.name}`, 
+            title: `${report.room || ''} - ໂດຍ: ${report.name}`, 
 
             description: report.description, 
 
