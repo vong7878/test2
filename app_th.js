@@ -1063,12 +1063,12 @@ async function loadFullScoreSummary() {
                 } 
             }); 
 
-            let maxPts = -1; let topRoom = 'ຍັງບໍ່ມີຂໍ້ມູນ';
+            let maxPts = -1; let topRoom = 'ยังไม่มีข้อมูล';
             rooms.forEach(r => { if (scores[r] > maxPts) { maxPts = scores[r]; topRoom = r; } });
 
-            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} ຄະແນນ)`; 
-            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalYearPts} ຄະແນນ`; 
-            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${yearReportsCount} ບົດລາຍງານ`; 
+            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} คะแนน)`; 
+            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalYearPts} คะแนน`; 
+            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${yearReportsCount} รายงาน`; 
 
             const highestPoint = Math.max(...Object.values(scores), 1); 
             container.innerHTML = rooms.map(room => { 
@@ -1090,7 +1090,7 @@ async function loadFullScoreSummary() {
 
     } catch (err) { 
         console.error("Dashboard error:", err);
-        container.innerHTML = `<div class="text-center py-6 text-red-400">ເກີດຂໍ້ຜິດພາດ: ${err.message}</div>`; 
+        container.innerHTML = `<div class="text-center py-6 text-red-400">เกิดข้อผิดพลาด: ${err.message}</div>`; 
     } 
 }
 
@@ -1181,7 +1181,7 @@ async function loadFullScoreboard() {
 
                             <h4 class="font-bold text-slate-100 text-base">${room}</h4> 
 
-                            <p class="text-xs text-slate-400">ສະຖານະ: ພ້ອມປະຕິບັດງານ</p> 
+                            <p class="text-xs text-slate-400">สถานะ: พร้อมปฏิบัติงาน</p> 
 
                         </div> 
 
@@ -1191,7 +1191,7 @@ async function loadFullScoreboard() {
 
                         <span class="text-2xl font-extrabold text-amber-400">${pts}</span> 
 
-                        <span class="block text-[10px] text-slate-400 uppercase">ຄະແນນສະສົມ</span> 
+                        <span class="block text-[10px] text-slate-400 uppercase">คะแนนสะสม</span> 
 
                     </div> 
 
@@ -1201,7 +1201,7 @@ async function loadFullScoreboard() {
 
         }).join(''); 
 
-    } catch (err) { container.innerHTML = `<div class="text-center py-12 text-red-400 col-span-full">ຜິດພາດ: ${err.message}</div>`; } 
+    } catch (err) { container.innerHTML = `<div class="text-center py-12 text-red-400 col-span-full">ผิดพลาด: ${err.message}</div>`; } 
 
 } 
 
@@ -1309,7 +1309,7 @@ function renderNews(newsList) {
 
     if (!container) return; 
 
-    if (newsList.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-500 bg-slate-800/85 rounded-2xl border border-slate-700">ຍັງບໍ່ມີຂ່າວສານ</div>`; return; } 
+    if (newsList.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-500 bg-slate-800/85 rounded-2xl border border-slate-700">ยังไม่มีข่าวสาร</div>`; return; } 
 
     container.innerHTML = newsList.map(item => { 
 
@@ -1325,7 +1325,7 @@ function renderNews(newsList) {
 
                     <span class="text-xs px-3 py-1 rounded-full font-medium ${item.category === 'notice' ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'}"> 
 
-                        ${item.category === 'notice' ? '📢 ແຈ້ງການດ່ວນ' : '🎖️ ພາວະກິດ/ກິດຈະກຳ'} 
+                        ${item.category === 'notice' ? '📢 แจ้งเตือนด่วน' : '🎖️ ภารกิจ/กิจกรรม'} 
 
                     </span> 
 
@@ -1345,11 +1345,11 @@ function renderNews(newsList) {
 
                         <button onclick="toggleLike('${item.id}')" class="text-xs px-3.5 py-1.5 rounded-xl border transition flex items-center space-x-1.5 ${hasLiked ? 'bg-pink-600/30 text-pink-400 border-pink-500/50' : 'bg-slate-900/60 text-slate-300 border-slate-700'}"> 
 
-                            <span>${hasLiked ? '❤️' : '🤍'}</span> <span>${hasLiked ? 'ຖືກໃຈແນວ' : 'ຖືກໃຈ'} (${likes.length})</span> 
+                            <span>${hasLiked ? '❤️' : '🤍'}</span> <span>${hasLiked ? 'กดไลກ์แล้ว' : 'กดไลก์'} (${likes.length})</span> 
 
                         </button> 
 
-                        <button onclick="handleShare('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, ' ').substring(0, 100)}...')" class="text-xs bg-emerald-900/60 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-700/60 transition flex items-center space-x-1"><span>🔗</span> <span>ແຊ</span></button> 
+                        <button onclick="handleShare('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, ' ').substring(0, 100)}...')" class="text-xs bg-emerald-900/60 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-700/60 transition flex items-center space-x-1"><span>🔗</span> <span>แชร์</span></button> 
 
                     </div> 
 
@@ -1357,9 +1357,9 @@ function renderNews(newsList) {
 
                         <div class="flex space-x-2"> 
 
-                            <button onclick="openEditNewsModal('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.category}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="text-xs bg-amber-600 px-3 py-1.5 rounded-lg text-white">ແກ້ໄຂ</button> 
+                            <button onclick="openEditNewsModal('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.category}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="text-xs bg-amber-600 px-3 py-1.5 rounded-lg text-white">แก้ไข</button> 
 
-                            <button onclick="deleteNewsItem('${item.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ລົບ</button> 
+                            <button onclick="deleteNewsItem('${item.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ลบ</button> 
 
                         </div> 
 
@@ -1379,7 +1379,7 @@ function renderNews(newsList) {
 
 window.toggleLike = async (newsId) => { 
 
-    if (!currentRoomUser) { alert('ກະລຸນາເລືອກຫ້ອງພັກກ່ອນ!'); document.getElementById('room-login-modal').classList.remove('hidden'); return; } 
+    if (!currentRoomUser) { alert('กรุณาเลือกห้องพักก่อน!'); document.getElementById('room-login-modal').classList.remove('hidden'); return; } 
 
     const newsRef = doc(db, "news", newsId); 
 
@@ -1389,7 +1389,7 @@ window.toggleLike = async (newsId) => {
 
             const docSnap = await transaction.get(newsRef); 
 
-            if (!docSnap.exists()) throw "ບໍ່ພົບຂ່າວສານ!"; 
+            if (!docSnap.exists()) throw "ไม่พบข่าวสาร!"; 
 
             let likes = docSnap.data().likes || []; 
 
@@ -1403,7 +1403,7 @@ window.toggleLike = async (newsId) => {
 
         loadNews(); 
 
-    } catch (e) { alert('ຜິດພາດ: ' + e); } 
+    } catch (e) { alert('ผิดพลาด: ' + e); } 
 
 }; 
 
@@ -1444,7 +1444,7 @@ window.shareToPlatform = (platform) => {
 
     else if (platform === 'copy') { 
 
-        navigator.clipboard.writeText(`${currentShareData.title}\n${currentShareData.url}`).then(() => { alert('ກ໊ອບປີ້ລິ້ງສຳເລັດ!'); closeShareModal(); }); 
+        navigator.clipboard.writeText(`${currentShareData.title}\n${currentShareData.url}`).then(() => { alert('คัดลอกลิงก์แล้ว!'); closeShareModal(); }); 
 
     } 
 
@@ -1452,13 +1452,13 @@ window.shareToPlatform = (platform) => {
 
  
 
-window.openNewsModal = () => { if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } document.getElementById('news-modal').classList.remove('hidden'); }; 
+window.openNewsModal = () => { if (!isSuperAdmin()) { alert('เฉพาะผู้สร้างเว็บไซต์เท่านั้น!'); return; } document.getElementById('news-modal').classList.remove('hidden'); }; 
 
 window.closeNewsModal = () => document.getElementById('news-modal').classList.add('hidden'); 
 
 window.openEditNewsModal = (id, title, category, content) => { 
 
-    if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } 
+    if (!isSuperAdmin()) { alert('เฉพาะผู้สร้างเว็บไซต์เท่านั้น!'); return; } 
 
     document.getElementById('edit-news-id').value = id; 
 
@@ -1486,11 +1486,11 @@ window.saveNews = async () => {
 
     const content = document.getElementById('news-content').value; 
 
-    if (!title || !content) return alert('ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!title || !content) return alert('กรุณากรอกข้อมูลให้ครบถ้วน'); 
 
     await addDoc(collection(db, "news"), { title, category, content, date: new Date().toLocaleString('lo-LA'), likes: [] }); 
 
-    alert('ເພີ່ມຂ່າວສຳເລັດ!'); closeNewsModal(); loadNews(); 
+    alert('เพิ่มข่าวสำเร็จ!'); closeNewsModal(); loadNews(); 
 
 }; 
 
@@ -1508,11 +1508,11 @@ window.updateNews = async () => {
 
     const content = document.getElementById('edit-news-content').value; 
 
-    if (!title || !content) return alert('ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!title || !content) return alert('กรุณากรอกข้อมูลให้ครบถ้วน'); 
 
     await updateDoc(doc(db, "news", id), { title, category, content }); 
 
-    alert('ແກ້ໄຂຂ່າວສຳເລັດ!'); closeEditNewsModal(); loadNews(); 
+    alert('แก้ไขข่าวสารสำเร็จ!'); closeEditNewsModal(); loadNews(); 
 
 }; 
 
@@ -1520,7 +1520,7 @@ window.updateNews = async () => {
 
 window.deleteNewsItem = async (id) => { 
     if (!isSuperAdmin()) return; 
-    if (confirm('ລົບຂ່າວນີ້ແທ້ບໍ?')) { 
+    if (confirm('คุณต้องการลบข่าวนี้ใช่หรือไม่?')) { 
         try {
             // 1. ລົບໂພສออกจาก Firestore Database
             await deleteDoc(doc(db, "news", id)); 
@@ -1542,9 +1542,9 @@ window.deleteNewsItem = async (id) => {
             updateNotificationUI();
             loadNews(); 
             
-            alert('ລົບຂ່າວ ແລະ ການແຈ້ງເຕືອນທີ່ກ່ຽວຂ້ອງສຳເລັດ!');
+            alert('ลบข่าวสารและการแจ้งเตือนที่เกี่ยวข้องสำเร็จ!');
         } catch (e) {
-            alert('ເກີດຂໍ້ຜິດພາດໃນການລົບ: ' + e.message);
+            alert('เกิดข้อผิดพลาดในการลบ: ' + e.message);
         }
     } 
 };
@@ -1588,7 +1588,7 @@ const uploadMediaSmart = (file) => {
 
                 } else { 
 
-                    reject(new Error(result.message || "ອັບໂຫລດບໍ່ສຳເລັດ")); 
+                    reject(new Error(result.message || "อัปโหลดไม่สำเร็จ")); 
 
                 } 
 
@@ -1652,9 +1652,9 @@ function checkVideoDuration(file) {
 
 window.submitMemberReport = async () => { 
 
-    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) { 
+    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ผู้สร้าง')) { 
 
-        alert('ກະລຸນາລັອກອິນດ້ວຍໄອດີຫ້ອງພັກກ່ອນ!'); 
+        alert('กรุณาเข้าสู่ระบบด้วยไอดีห้องพักก่อน!'); 
 
         document.getElementById('room-login-modal').classList.remove('hidden'); return; 
 
@@ -1664,11 +1664,11 @@ window.submitMemberReport = async () => {
 
     const now = new Date(); 
 
-    if (now.getDay() !== 0) { alert('⚠️ ລະບົບອະນຸຍາດໃຫ້ສົ່ງສະເພາະມື້ວັນອາທິດເທົ່ານັ້ນ!'); return; } 
+    if (now.getDay() !== 0) { alert('⚠️ ระบบอนุญาตให้ส่งเฉพาะวันอาทิตย์เท่านั้น!'); return; } 
 
     const totalMinutesNow = now.getHours() * 60 + now.getMinutes(); 
 
-    if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ ເວລາສົ່ງ: 16:00 - 19:00 ໂມງ!'); return; } 
+    if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ เวลาส่ง: 16:00 - 19:00 น!'); return; } 
 
  
 
@@ -1680,13 +1680,13 @@ window.submitMemberReport = async () => {
 
     const statusText = document.getElementById('member-upload-status'); 
 
-    if (!name || !description) return alert('ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!name || !description) return alert('กรุณากรอกข้อมูลให้ครบ'); 
 
  
 
     const files = fileInput.files; 
 
-    if (files.length === 0) return alert('ກະລຸນາເປີດກ້ອງຖ່າຍວິດີໂອສົດກ່ອນສົ່ງ!'); 
+    if (files.length === 0) return alert('กรุณาเปิดกล้องถ่ายวิดีโอสดก่อนส่ง!'); 
 
  
 
@@ -1694,15 +1694,15 @@ window.submitMemberReport = async () => {
 
  
 
-    statusText.innerText = `⏳ ກຳລັງກວດສອບຄວາມຍາວວິດີໂອ...`; 
+    statusText.innerText = `⏳ กำลังตรวจสอบความยาววิดีโอ...`; 
 
     const duration = await checkVideoDuration(videoFile); 
 
     if (duration > 62) { 
 
-        alert(`❌ ວິດີໂະຍາວເກີນໄປ (${Math.round(duration)} ວິນາທີ)! ລະບົບກຳນົດໃຫ້ຖ່າຍວິດີໂອຄວາມຍາວສູງສຸດບໍ່ເກີນ 1 ນາທີ.`); 
+        alert(`❌ วิดีโอยาวเกินไป (${Math.round(duration)} วินาที)! ระบบกำหนดให้ถ่ายวิดีโอความยาวสูงสุดไม่เกิน 1 นาที (หรือ วินาที)! ระบบจำกัดความยาววิดีโอไม่เกิน 1 นาที.`); 
 
-        statusText.innerText = '⚠️ ກະລຸນາຖ່າຍວິດີໂອໃໝ່ ຄວາມຍາວບໍ່ເກີນ 1 ນາທີ!'; 
+        statusText.innerText = '⚠️ กรุณาถ่ายวิดีโอใหม่ ความยาวไม่เกิน 1 นาที!'; 
 
         return; 
 
@@ -1722,11 +1722,11 @@ window.submitMemberReport = async () => {
 
     }); 
 
-    if (submitted) return alert('⚠️ ຫ້ອງຂອງທ່ານສົ່ງບົດລາຍງານສຳລັບອາທິດນີ້ໄປແລ້ວ!'); 
+    if (submitted) return alert('⚠️ ห้องของคุณส่งรายงานสำหรับสัปดาห์นี้ไปแล้ว!'); 
 
  
 
-    statusText.innerText = `⏳ ກຳລັງອັບໂຫລດວິດີໂອສົດຂຶ້ນ Google Drive...`; 
+    statusText.innerText = `⏳ กำลังอัปโหลดวิดีโอสดขึ้น Google Drive...`; 
 
     try { 
 
@@ -1738,7 +1738,7 @@ window.submitMemberReport = async () => {
 
  
 
-        statusText.innerText = `⏳ ກຳລັງບັນທຶກບົດລາຍງານ...`; 
+        statusText.innerText = `⏳ กำลังบันทึกรายงาน...`; 
 
         await addDoc(collection(db, "member_reports"), { 
 
@@ -1746,7 +1746,7 @@ window.submitMemberReport = async () => {
 
         }); 
 
-        alert('🎉 ສົ່ງບົດລາຍງານວິດີໂອສຳເລັດ!'); 
+        alert('🎉 ส่งรายงานวิดีโอเรียบร้อยแล้ว!'); 
 
         document.getElementById('member-name').value = ''; 
 
@@ -1754,11 +1754,11 @@ window.submitMemberReport = async () => {
 
         fileInput.value = ''; 
 
-        statusText.innerText = '⚠️ ລະບົບກວດສອບຄວາມຍາວວິດີໂອຕ້ອງບໍ່ເກີນ 60 ວິນາທີ ແລະ ຈະອັບໂຫລດຂຶ້ນ Google Drive ອັດຕະໂນມັດ'; 
+        statusText.innerText = '⚠️ ระบบตรวจสอบความยาววิดีโอต้องไม่เกิน 60 วินาที และจะอัปโหลดขึ้น Google Drive ให้อัตโนมัติ'; 
 
         loadMemberReports(); loadFullScoreSummary(); 
 
-    } catch (e) { alert(e.message); statusText.innerText = '❌ ອັບໂຫລດບໍ່ສຳເລັດ'; } 
+    } catch (e) { alert(e.message); statusText.innerText = '❌ อัปโหลดล้มเหลว'; } 
 
 }; 
 
@@ -1780,7 +1780,7 @@ async function loadMemberReports() {
 
         renderMemberReports(); 
 
-    } catch (e) { container.innerHTML = `<div class="text-center py-6 text-red-400">ຜິດພາດ: ${e.message}</div>`; } 
+    } catch (e) { container.innerHTML = `<div class="text-center py-6 text-red-400">ผิดพลาด: ${e.message}</div>`; } 
 
 } 
 
@@ -1812,7 +1812,7 @@ function renderMemberReports() {
 
     if (!container) return; 
 
-    if (allMemberReports.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">ຍັງບໍ່ມີບົດລາຍງານ</div>`; return; } 
+    if (allMemberReports.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">ยังไม่มีรายงาน</div>`; return; } 
 
     container.innerHTML = allMemberReports.map(rep => { 
 
@@ -1830,13 +1830,13 @@ function renderMemberReports() {
 
                 <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-2"> 
 
-                    <span class="font-bold text-emerald-400">🏠 ຫ້ອງ: ${rep.room || ''} | 👤 ຜູ້ສົ່ງ: ${rep.name}</span> 
+                    <span class="font-bold text-emerald-400">🏠 ห้อง: ${rep.room || ''} | 👤 ผู้ส่ง: ${rep.name}</span> 
 
                     <div class="flex items-center space-x-2"> 
 
                         <span class="px-2 py-0.5 rounded text-[10px] ${rep.approved ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}"> 
 
-                            ${rep.approved ? '✅ ອະນຸມັດແລ້ວ' : '⏳ ລໍຖ້າ Admin ອະນຸມັດ'} 
+                            ${rep.approved ? '✅ ได้รับการอนุมัติแล้ว' : '⏳ รอผู้ดูแลระบบอนุมัติ'} 
 
                         </span> 
 
@@ -1862,7 +1862,7 @@ function renderMemberReports() {
 
                                 <div class="relative group bg-slate-950 p-2 rounded-xl border border-slate-700 text-center space-y-2"> 
 
-                                    <span class="text-xs text-emerald-400 font-bold block">📷 ຮູບພາບການປະຕິບັດງານ</span> 
+                                    <span class="text-xs text-emerald-400 font-bold block">📷 ภาพการปฏิบัติงาน</span> 
 
                                     <img src="${mediaUrl}" alt="Report Image" class="max-h-64 mx-auto rounded-lg object-contain cursor-pointer hover:opacity-95 transition" onclick="window.open('${mediaUrl}')"> 
 
@@ -1876,9 +1876,9 @@ function renderMemberReports() {
 
                                 <div class="relative group bg-slate-950 p-3 rounded-xl border border-slate-700 text-center space-y-2"> 
 
-                                    <span class="text-xs text-emerald-400 font-bold block">📁 ວິດີໂອບົນ Google Drive</span> 
+                                    <span class="text-xs text-emerald-400 font-bold block">📁 วิดีโอบน Google Drive</span> 
 
-                                    <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 ເປີດເບິ່ງວິດີໂອໃນ Google Drive</a> 
+                                    <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 ดูวิดีโอใน Google Drive</a> 
 
                                 </div> 
 
@@ -1894,9 +1894,9 @@ function renderMemberReports() {
 
                     ${userRole === 'admin' ? ` 
 
-                        ${!rep.approved ? `<button onclick="approveMemberReport('${rep.id}')" class="text-xs bg-emerald-600 px-3 py-1.5 rounded-lg text-white font-medium">✅ ອະນຸມັດ</button>` : ''} 
+                        ${!rep.approved ? `<button onclick="approveMemberReport('${rep.id}')" class="text-xs bg-emerald-600 px-3 py-1.5 rounded-lg text-white font-medium">✅ อนุมัติ</button>` : ''} 
 
-                        ${isSuperAdmin() ? `<button onclick="deleteMemberReport('${rep.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ລົບລາຍງານ</button>` : ''} 
+                        ${isSuperAdmin() ? `<button onclick="deleteMemberReport('${rep.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ลบรายงาน</button>` : ''} 
 
                     ` : ''} 
 
@@ -1914,7 +1914,7 @@ function renderMemberReports() {
 
 window.approveMemberReport = async (reportId) => { 
 
-    if (userRole !== 'admin') { alert('⚠️ ສະເພາະ Admin ເທົ່ານັ້ນ!'); return; } 
+    if (userRole !== 'admin') { alert('⚠️ เฉพาะผู้ดูแลระบบเท่านั้น!'); return; } 
 
     const report = allMemberReports.find(r => r.id === reportId); 
 
