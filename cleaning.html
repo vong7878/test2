@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ຕິດຕາມການອະນາໄມ - ລະບົບຕິດຕາມ</title>
+    <!-- ໂຫຼດ Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 flex h-screen overflow-hidden">
+
+    <!-- ໂຄງສ້າງ Sidebar ເມນູດ້ານຂ້າງ (ເຊື່ອມຕໍ່ທຸກໜ້າ) -->
+    <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col">
+        <div class="p-5 text-xl font-bold text-emerald-400 border-b border-slate-700">
+            🛡️ ລະບົບຈັດການ
+        </div>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-700 transition font-medium">
+                📰 <span>ຂ່າວສານ & แจ้งການ</span>
+            </a>
+            <a href="summary.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-700 transition font-medium">
+                📊 <span>ສະຫຼຸບຄະແນນ (Summary)</span>
+            </a>
+            <a href="table.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-700 transition font-medium">
+                🏆 <span>ຕາຕະລາງຄະແນນ</span>
+            </a>
+            <!-- ໜ້າປັດຈຸບັນ (ເນັ້ນສີພິເສດ) -->
+            <a href="cleaning.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-700 text-emerald-400 transition font-medium">
+                🧹 <span>ຕິດຕາມການອະນາໄມ</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ເນື້ອຫາຫຼັກຂອງໜ້າ Cleaning -->
+    <main class="flex-1 flex flex-col overflow-y-auto p-8">
+        <header class="mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-white">🧹 ຕິດຕາມການອະນາໄມ ແລະ ກວດສອບ</h1>
+                <p class="text-slate-400 text-sm">ສົ່ງຜົນກວດສອບຄວາມສະອາດພື້ນທີ່ ແລະ ຕິດຕາມສະຖານະປະຈຳວັນ</p>
+            </div>
+        </header>
+
+        <!-- ສ່ວນຟອມສຳລັບສົ່ງການກວດສອບ ຫຼື ອັບໂหลดຮູບ -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- ຟອມສົ່ງຂໍ້ມູນ -->
+            <section class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-lg lg:col-span-1">
+                <h2 class="text-lg font-semibold text-white mb-4">📝 ส่งແບບຟອມກວດສອບ</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">ເລືອກຫ້ອງພັກ</label>
+                        <select id="cleaning-room-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500">
+                            <option value="">-- ເລືອກຫ້ອງ --</option>
+                            <option value="room-301">ຫ້ອງ 301</option>
+                            <option value="room-302">ຫ້ອງ 302</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">ອັບໂຫຼດຮູບພາບຫຼັກຖານ</label>
+                        <input type="file" id="cleaning-file-input" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer">
+                    </div>
+                    <button onclick="alert('ສົ່ງຂໍ້ມູນສຳເລັດ!')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 px-4 rounded-xl transition text-sm shadow-lg">
+                        ✅ ຢືນຢັນສົ່ງຜົນກວດສອບ
+                    </button>
+                </div>
+            </section>
+
+            <!-- ຕາຕະລາງສະແດງປະຫວັດການສົ່ງ -->
+            <section class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-lg lg:col-span-2">
+                <h2 class="text-lg font-semibold text-white mb-4">📋 ประຫວັດການກວດສອບລ่าສຸດ</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-700 text-slate-400 text-sm">
+                                <th class="py-3 px-4">ຫ້ອງ</th>
+                                <th class="py-3 px-4">ຜູ້ກວດສອບ</th>
+                                <th class="py-3 px-4">ເວລາ</th>
+                                <th class="py-3 px-4">ສະຖານະ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/50 text-sm">
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">ຫ້ອງ 301</td>
+                                <td class="py-3 px-4 text-slate-300">Admin ຮອງ 1</td>
+                                <td class="py-3 px-4 text-slate-400">ວັນນີ້, 10:30</td>
+                                <td class="py-3 px-4"><span class="bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full text-xs font-medium">ສຳເລັດ</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ໂຫຼດ JavaScript ຫຼັກຂອງລະບົບ -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

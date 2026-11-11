@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ເລືອກພາສາ - Select Language</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans Lao) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans Lao', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-3xl shadow-2xl w-full max-w-md text-center text-white">
+        
+        <!-- Logo ຫຼື ຮູບສັນຍາລັກ -->
+        <div class="mb-6">
+            <div class="w-16 h-16 bg-blue-500 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/50 mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round5" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                </svg>
+            </div>
+            <h1 id="title" class="text-2xl font-bold mb-2">ກະລຸນາເລືອກພາສາຂອງທ່ານ</h1>
+            <p id="subtitle" class="text-gray-300 text-sm">Please select your preferred language</p>
+        </div>
+
+        <!-- ປຸ່ມເລືອກພາສາ -->
+        <div class="grid grid-cols-1 gap-3 mb-8">
+            <!-- ພາສາລາວ -->
+            <button onclick="selectLanguage('lo')" class="lang-btn flex items-center p-3 rounded-xl bg-white/5 hover:bg-white/20 border border-white/10 transition-all duration-300 group">
+                <span class="text-2xl mr-4">🇱🇦</span>
+                <span class="font-semibold text-lg flex-1 text-left">ພາສາລາວ</span>
+                <span class="text-xs text-gray-400 group-hover:text-white">Lao</span>
+            </button>
+
+            <!-- ພາສາໄທ -->
+            <button onclick="selectLanguage('th')" class="lang-btn flex items-center p-3 rounded-xl bg-white/5 hover:bg-white/20 border border-white/10 transition-all duration-300 group">
+                <span class="text-2xl mr-4">🇹🇭</span>
+                <span class="font-semibold text-lg flex-1 text-left">ภาษาไทย</span>
+                <span class="text-xs text-gray-400 group-hover:text-white">Thai</span>
+            </button>
+
+            <!-- ພາສາຫວຽດນາມ -->
+            <button onclick="selectLanguage('vi')" class="lang-btn flex items-center p-3 rounded-xl bg-white/5 hover:bg-white/20 border border-white/10 transition-all duration-300 group">
+                <span class="text-2xl mr-4">🇻🇳</span>
+                <span class="font-semibold text-lg flex-1 text-left">Tiếng Việt</span>
+                <span class="text-xs text-gray-400 group-hover:text-white">Vietnamese</span>
+            </button>
+
+            <!-- ພາສາຈີນ -->
+            <button onclick="selectLanguage('zh')" class="lang-btn flex items-center p-3 rounded-xl bg-white/5 hover:bg-white/20 border border-white/10 transition-all duration-300 group">
+                <span class="text-2xl mr-4">🇨🇳</span>
+                <span class="font-semibold text-lg flex-1 text-left">中文</span>
+                <span class="text-xs text-gray-400 group-hover:text-white">Chinese</span>
+            </button>
+
+            <!-- ພາສາອັງກິດ -->
+            <button onclick="selectLanguage('en')" class="lang-btn flex items-center p-3 rounded-xl bg-white/5 hover:bg-white/20 border border-white/10 transition-all duration-300 group">
+                <span class="text-2xl mr-4">🇬🇧</span>
+                <span class="font-semibold text-lg flex-1 text-left">English</span>
+                <span class="text-xs text-gray-400 group-hover:text-white">English</span>
+            </button>
+
+            <!-- ພາສາເກົາຫລີ -->
+            <button onclick="selectLanguage('ko')" class="lang-btn flex items-center p-3 rounded-xl bg-white/5 hover:bg-white/20 border border-white/10 transition-all duration-300 group">
+                <span class="text-2xl mr-4">🇰🇷</span>
+                <span class="font-semibold text-lg flex-1 text-left">한국어</span>
+                <span class="text-xs text-gray-400 group-hover:text-white">Korean</span>
+            </button>
+        </div>
+
+        <!-- ປຸ່ມຢືນຢັນໄປໜ້າຕໍ່ໄປ -->
+        <button onclick="proceedToLogin()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold shadow-lg shadow-blue-600/30 transition-all duration-300">
+            ສືບຕໍ່ / Continue
+        </button>
+
+    </div>
+
+    <script>
+        let currentLang = 'lo'; // ຄ່າເລີ່ມຕົ້ນ
+
+        function selectLanguage(lang) {
+            currentLang = lang;
+            // ບັນທຶກພາສາທີ່ເລືອກໄວ້ໃນ LocalStorage ເພື່ອເອົາໄປໃຊ້ຕໍ່ໜ້າເຂົ້າສູ່ລະບົບ
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // ເພີ່ມເອັບເຟັກສີຂອບໃຫ້ຮູ້ວ່າເລືອກແລ້ວ
+            event.currentTarget.classList.add('border-blue-500', 'bg-white/20');
+            
+            // ປ່ຽນຂໍ້ຄວາມຫົວຂໍ້ຕາມພາສາທີ່ເລືອກ (ຕົວຢ່າງ)
+            updateUIText(lang);
+        }
+
+        function updateUIText(lang) {
+            const texts = {
+                lo: { title: "ກະລຸນາເລືອກພາສາຂອງທ່ານ", subtitle: "ກະລຸນາເລືອກພາສາທີ່ທ່ານຕ້ອງການໃຊ້ງານ" },
+                th: { title: "กรุณาเลือกภาษาของคุณ", subtitle: "โปรดเลือกภาษาที่คุณต้องการใช้งาน" },
+                vi: { title: "Vui lòng chọn ngôn ngữ của bạn", subtitle: "Vui lòng chọn ngôn ngữ ưa thích của bạn" },
+                zh: { title: "请选择您的语言", subtitle: "请选择您偏好的语言" },
+                en: { title: "Please select your language", subtitle: "Please select your preferred language" },
+                ko: { title: "언어를 선택해 주세요", subtitle: "선호하는 언어를 선택해 주세요" }
+            };
+
+            if (texts[lang]) {
+                document.getElementById('title').innerText = texts[lang].title;
+                document.getElementById('subtitle').innerText = texts[lang].subtitle;
+            }
+        }
+
+      function proceedToLogin() {
+            // ເເນວທາງການປ່ຽນໜ້າຕາມພາສາທີ່ເລືອກ
+            switch (currentLang) {
+                case 'lo':
+                    window.location.href = `index.html?lang=${currentLang}`;
+                    break;
+                case 'th':
+                    window.location.href = `index_th.html?lang=${currentLang}`;
+                    break;
+                case 'zh':
+                    window.location.href = `index_ch.html?lang=${currentLang}`;
+                    break;
+                case 'vi':
+                    window.location.href = `index_vn.html?lang=${currentLang}`;
+                    break;
+                case 'en':
+                    window.location.href = `index_en.html?lang=${currentLang}`;
+                    break;
+                case 'ko':
+                    window.location.href = `index_kr.html?lang=${currentLang}`;
+                    break;
+                default:
+                    // ກໍລະນີສຸກເສີນ ຖ້າບໍ່ົງກ່ຽວຫຍັງເລີຍ ໃຫ້ກັບໄປໜ້າຫຼັກ (ລາວ)
+                    window.location.href = `index.html?lang=lo`;
+                    break;
+            }
+        }
+        // ດຶງຄ່າພາສາທີ່ສົ່ງມາຈາກ URL ຫຼື LocalStorage
+const urlParams = new URLSearchParams(window.location.search);
+const lang = urlParams.get('lang') || localStorage.getItem('selectedLanguage') || 'lo';
+
+
+    </script>
+</body>
+</html>
