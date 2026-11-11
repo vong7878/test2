@@ -11,7 +11,11 @@ const firebaseConfig = {
     appId: "1:55873751006:web:b7e9b971ae94a1f5d93f4f", 
     measurementId: "G-YYM4JLS1L2" 
 }; 
-
+// ຕົວຢ່າງການກວດສອບ weekTag ໃຫ້ລວມເອົາຄະແນນພິເສດນຳ
+if (data.weekTag === currentWeek || data.weekTag.startsWith('special_adjustment')) {
+    // ບວກຄະແນນເຂົ້າໄປ
+    totalPoints += Number(data.specialPoints) || 0;
+}
 const app = initializeApp(firebaseConfig); 
 const auth = getAuth(app); 
 const db = getFirestore(app); 
