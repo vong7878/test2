@@ -145,7 +145,34 @@ window.changeAppLanguage = function(lang) {
     localStorage.setItem("app_lang", lang);
     location.reload(); // ໂຫຼດໜ້າເວັບໃໝ່ເພື່ອໃຫ້ Apply ພາສາໃໝ່ທັນທີ
 };
-
+const translations = {
+    lo: {
+        special_point_desc: "+ ຮັບຄະແນນພິເສດ (+1 ຄະແນນ) ຈາກຜູ້ສ້າງເວັບໄຊ"
+    },
+    th: {
+        special_point_desc: "+ ได้รับคะแนนพิเศษ (+1 คะแนน) จากผู้สร้างเว็บไซต์"
+    },
+    en: {
+        special_point_desc: "+ Received special points (+1 point) from the website creator"
+    },
+    vn: {
+        special_point_desc: "+ Đã nhận điểm đặc biệt (+1 điểm) từ người tạo trang web"
+    },
+    ch: {
+        special_point_desc: "+ 获得网站创作者的特殊加分 (+1分)"
+    },
+    kr: {
+        special_point_desc: "+ 웹사이트 제작자로부터 특별 점수를 받았습니다 (+1점)"
+    }
+};
+// ຕົວຢ່າງຕອນສ້າງ Object ຂໍ້ມູນສົ່ງລົງ Firebase
+const reportData = {
+    room: roomNum,
+    specialPoints: pointValue,
+    description: t('special_point_desc'), // ລະບົບຈະເລືອກພາສາຕາມທີ່ Admin ກໍາລັງເປີດຢູ່ອັດຕະໂນມັດ!
+    date: new Date().toLocaleString(),
+    approved: true
+};
 
 let currentShareData = { title: '', text: '', url: '' }; 
 let chatUnsubscribe = null; 
