@@ -11,9 +11,7 @@ const firebaseConfig = {
     appId: "1:55873751006:web:b7e9b971ae94a1f5d93f4f", 
     measurementId: "G-YYM4JLS1L2" 
 }; 
-const elem = document.getElementById('your-id');
-if (elem) {
-    elem.classList.add('hidden'); // ປ້ອງກັນບໍ່ໃຫ້ Error ເວລາຫາ Element ບໍ່ພົບ
+
 }
 
 const app = initializeApp(firebaseConfig); 
