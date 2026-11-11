@@ -1,3 +1,4 @@
+// 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
 const translations = {
     lo: {
         app_title: "ຈຸປ້ອງກັນຂ່າວສານ",
@@ -7,7 +8,6 @@ const translations = {
         recent_notif: "🔔 ການແຈ້ງເຕືອນລ້າສຸດ",
         clear_all: "ລ້າງທັງໝົດ",
         no_notif: "ຍັງບໍ່ມີການແຈ້ງເຕືອນ",
-        
         main_menu: "ເມນູຫຼັກ",
         menu_news: "📰 ຂ່າວສານ & ແຈ້ງການ",
         menu_score_summary: "📊 ໜ້າສະຫຼຸບຄະແນນ (Summary)",
@@ -19,7 +19,6 @@ const translations = {
         game_desc: "ຫຼິ້ນເກມງູ, ຈັບຄູ່ ແລະ ຕີຕຸ່ນ ຂັ້ນເວລາລະຫວ່າງລໍຖ້າ",
         play_now: "ເຂົ້າຫຼິ້ນ ➔",
         admin_chat_btn: "💬 ແຊັດລົມວຽກ Admin (4 ຄົນ)",
-        
         tab_snake: "🐍 ງູກິນຂຽດ",
         tab_match: "🍓 ຈັບຄູ່",
         tab_mole: "🐹 ຕີຕຸ່ນ",
@@ -36,7 +35,6 @@ const translations = {
         medium: "ປານກາງ",
         hard: "🔥 ຍາກ",
         unlimited: "ບໍ່ຈຳກັດ",
-        
         news_categories: "ໝວດໝູ່ຂ່າວສານ",
         cat_all: "ທັງໝົດ",
         cat_notice: "📢 ແຈ້ງການດ່ວນ",
@@ -46,7 +44,6 @@ const translations = {
         desktop_users: "💻 ຄອມພິວເຕີ (Desktop):",
         mobile_users: "📱 ມືຖື / ແທັບເລັດ (Mobile):",
         total_users: "📊 ລວມທັງໝົດ:",
-        
         summary_title: "📊 ໜ້າສະຫຼຸບຄະແນນການອະນາໄມ (Dashboard)",
         summary_desc: "ເລືອກມຸມມອງການສະຫຼຸບຄະແນນ ແລະ ຄົ້ນຫາຕາມ ອາທິດ, ເດືອນ ຫຼື ປີ",
         period_weekly: "📅 ອາທິດ",
@@ -56,13 +53,11 @@ const translations = {
         total_points_label: "ຄະແນນລວມ",
         approved_count_label: "ບົດລາຍງານທີ່ອະນຸມັດ",
         chart_title: "📈 ກຣາຟສະຫຼຸບຄະແນນ",
-        
         news_summary_title: "📊 ບົດສະຫຼຸບຂ່າວສານ ແລະ ແຈ້ງການ",
         recent_news: "ລາຍການຫຼ້າສຸດ",
         search_news_ph: "ຄົ້ນຫາຫົວຂໍ້ຂ່າວ...",
         scoreboard_title: "🏆 ຕາຕະລາງຄະແນນການອະນາໄມປະຈຳຫ້ອງ",
         hygiene_summary_title: "📊 ບົດສະຫຼຸບຄວາມຄືບໜ້າການອະນາໄມ",
-        
         member_form_title: "👤 ຟອມສະມາຊິກ: ລາຍງານຜົນການອະນາໄມ & ຢືນຢັນຕົວຕົນ",
         sender_name: "ຊື່-ນາມສະກຸນ ຜູ້ສົ່ງ:",
         your_room: "🏠 ຫ້ອງພັກຂອງທ່ານ (ລັອກອິນຢູ່):",
@@ -71,31 +66,36 @@ const translations = {
         task_desc_ph: "ອະທິບາຍຜົນການປະຕິບັດງານ...",
         live_video_label: "📹 ຖ່າຍວິດີໂອສົດຜ່ານກ້ອງ (ຄວາມຍາວສູງສຸດ 1 ນາທີ):",
         submit_report_btn: "🚀 ສົ່ງບົດລາຍງານຮັບຄະແນນ (ວັນອາທິດ 16:00 - 19:00)",
-        
         feedback_title: "💬 ປະກອບຄຳຄິດຄຳເຫັນຕໍ່ການປະຕິບັດງານຂອງຈຸປ້ອງກັນ",
         feedback_desc: "ຄຳຄິດຄຳເຫັນຂອງທ່ານຈະຖືກສົ່ງຕົງເຖິງຫ້ອງແຊັດ Admin ທັງ 4 ຄົນທັນທີ",
         feedback_input_ph: "ພິມຄຳຄິດຄຳເຫັນ ຫຼື ຂໍ້ສະເໜີແນະຕໍ່ການປະຕິບັດງານຂອງຈຸປ້ອງກັນ...",
         send_feedback_btn: "🚀 ສົ່ງຄຳຄິດຄຳເຫັນໃຫ້ Admin ທັງ 4 ຄົນ",
         feedback_history: "📜 ປະຫວັດຄຳຄິດຄຳເຫັນທີ່ເຄີຍສົ່ງ",
-        
         login_title: "ເຂົ້າສູ່ລະບົບ",
         login_subtitle: "ເລືອກຫ້ອງພັກສຳລັບ User ຫຼື ເລືອກໂໝດ Admin",
         select_room_ph: "-- ກະລຸນາເລືອກຫ້ອງພັກ ຫຼື Admin --",
         creator_login: "👑 ຜູ້ສ້າງເວັບໄຊ (ເຂົ້າດ້ວຍອີເມວ)",
-        sub_admin_1: "⚙️ Admin ຮອງ 1 (ໄອດີພໍ)",
-        sub_admin_2: "⚙️ Admin ຮອງ 2 (ໄອດີພໍ)",
-        sub_admin_3: "⚙️ Admin ຮອງ 3 (ໄອດີພໍ)",
+        sub_admin_1: "⚙️ Admin ຮອງ 1",
+        sub_admin_2: "⚙️ Admin ຮອງ 2",
+        sub_admin_3: "⚙️ Admin ຮອງ 3",
         confirm_login_btn: "✅ ເຂົ້າສູ່ລະບົບ",
-        
         footer_text: "ລະບົບຂ່າວສານ ແລະ ຕິດຕາມການອະນາໄມ ຈຸປ້ອງກັນ © 2026",
-        
-        // ⚙️ Admin Panel Keys
         admin_panel_title: "⚙️ ຈັດການລະບົບ (Admin)",
         btn_add_news: "ເພີ່ມຂ່າວ/ແຈ້ງການ",
         btn_add_cyber: "ເພີ່ມຮູບ/ວິດີໂອອະນາໄມ (Admin)",
         special_points_title: "⭐ ປັບຄະແນນພິເສດ (ບວກ/ລົບ)",
         select_room_default: "-- ເລືອກຫ້ອງພັກ --",
-        btn_save: "ບັນທຶກ"
+        btn_save: "ບັນທຶກ",
+        room: "ຫ້ອງ",
+        like: "ຖືກໃຈ",
+        share: "ແຊ",
+        points: "ຄະແນນ",
+        reports: "ບົດລາຍງານ",
+        topRoom: "ຫ້ອງອັນດັບ 1",
+        totalPoints: "ຄະແນນລວມ",
+        approvedReports: "ບົດລາຍງານທີ່ອະນຸມັດ",
+        logout: "ອອກຈາກລະບົບ",
+        special_point_desc: "+ ຮັບຄະແນນພິເສດ (+1 ຄະແນນ) ຈາກຜູ້ສ້າງເວັບໄຊ"
     },
     th: {
         app_title: "หน่วยป้องกันข่าวสาร",
@@ -105,7 +105,6 @@ const translations = {
         recent_notif: "🔔 การแจ้งเตือนล่าสุด",
         clear_all: "ล้างทั้งหมด",
         no_notif: "ยังไม่มีการแจ้งเตือน",
-        
         main_menu: "เมนูหลัก",
         menu_news: "📰 ข่าวสาร & ประกาศ",
         menu_score_summary: "📊 สรุปคะแนน (Summary)",
@@ -117,7 +116,6 @@ const translations = {
         game_desc: "เล่นเกมงู, จับคู่ และ ตีตัวตุ่น คลายเครียด",
         play_now: "เข้าเล่น ➔",
         admin_chat_btn: "💬 แชตพูดคุยงาน Admin (4 คน)",
-        
         tab_snake: "🐍 งูกินกบ",
         tab_match: "🍓 จับคู่",
         tab_mole: "🐹 ตีตุ่น",
@@ -134,7 +132,6 @@ const translations = {
         medium: "ปานกลาง",
         hard: "🔥 ยาก",
         unlimited: "ไม่จำกัด",
-        
         news_categories: "หมวดหมู่ข่าวสาร",
         cat_all: "ทั้งหมด",
         cat_notice: "📢 ประกาศด่วน",
@@ -144,7 +141,6 @@ const translations = {
         desktop_users: "💻 คอมพิวเตอร์ (Desktop):",
         mobile_users: "📱 มือถือ / แท็บเล็ต (Mobile):",
         total_users: "📊 รวมทั้งหมด:",
-        
         summary_title: "📊 หน้าสรุปคะแนนการทำความสะอาด (Dashboard)",
         summary_desc: "เลือกมุมมองการสรุปคะแนน และค้นหาตาม สัปดาห์, เดือน หรือ ปี",
         period_weekly: "📅 สัปดาห์",
@@ -154,13 +150,11 @@ const translations = {
         total_points_label: "คะแนนรวม",
         approved_count_label: "รายงานที่อนุมัติแล้ว",
         chart_title: "📈 กราฟสรุปคะแนน",
-        
         news_summary_title: "📊 สรุปข่าวสาร และ ประกาศ",
         recent_news: "รายการล่าสุด",
         search_news_ph: "ค้นหาหัวข้อข่าว...",
         scoreboard_title: "🏆 ตารางคะแนนการทำความสะอาดประจำห้อง",
         hygiene_summary_title: "📊 สรุปความก้าวหน้าการทำความสะอาด",
-        
         member_form_title: "👤 ฟอร์มสมาชิก: รายงานการทำความสะอาด & ยืนยันตัวตน",
         sender_name: "ชื่อ-นามสกุล ผู้ส่ง:",
         your_room: "🏠 ห้องพักของคุณ (เข้าสู่ระบบอยู่):",
@@ -169,13 +163,11 @@ const translations = {
         task_desc_ph: "อธิบายผลการปฏิบัติงาน...",
         live_video_label: "📹 ถ่ายวิดีโอสดผ่านกล้อง (ความยาวไม่เกิน 1 นาที):",
         submit_report_btn: "🚀 ส่งรายงานรับคะแนน (วันอาทิตย์ 16:00 - 19:00)",
-        
         feedback_title: "💬 แสดงความคิดเห็นต่อการทำงานของหน่วยป้องกัน",
         feedback_desc: "ความคิดเห็นของคุณจะถูกส่งตรงถึงแชต Admin ทั้ง 4 คนทันที",
         feedback_input_ph: "พิมพ์ความคิดเห็น หรือ ข้อเสนอแนะ...",
         send_feedback_btn: "🚀 ส่งความคิดเห็นถึง Admin ทั้ง 4 คน",
         feedback_history: "📜 ประวัติความคิดเห็นที่เคยส่ง",
-        
         login_title: "เข้าสู่ระบบ",
         login_subtitle: "เลือกห้องพักสำหรับ User หรือ เลือกโหมด Admin",
         select_room_ph: "-- กรุณาเลือกห้องพัก หรือ Admin --",
@@ -184,16 +176,23 @@ const translations = {
         sub_admin_2: "⚙️ Admin ผู้ช่วย 2",
         sub_admin_3: "⚙️ Admin ผู้ช่วย 3",
         confirm_login_btn: "✅ เข้าสู่ระบบ",
-        
         footer_text: "ระบบข่าวสาร และ ติดตามการทำความสะอาด หน่วยป้องกัน © 2026",
-        
-        // ⚙️ Admin Panel Keys
         admin_panel_title: "⚙️ จัดการระบบ (Admin)",
         btn_add_news: "เพิ่มข่าว/ประกาศ",
         btn_add_cyber: "เพิ่มรูป/วิดีโอทำความสะอาด (Admin)",
         special_points_title: "⭐ ปรับคะแนนพิเศษ (บวก/ลบ)",
         select_room_default: "-- เลือกห้องพัก --",
-        btn_save: "บันทึก"
+        btn_save: "บันทึก",
+        room: "ห้อง",
+        like: "ถูกใจ",
+        share: "แชร์",
+        points: "คะแนน",
+        reports: "บทรายงาน",
+        topRoom: "ห้องอันดับ 1",
+        totalPoints: "คะแนนรวม",
+        approvedReports: "บทรายงานที่อนุมัติ",
+        logout: "ออกจากระบบ",
+        special_point_desc: "+ ได้รับคะแนนพิเศษ (+1 คะแนน) จากผู้สร้างเว็บไซต์"
     },
     vi: {
         app_title: "Đội Bảo vệ Tin tức",
@@ -203,7 +202,6 @@ const translations = {
         recent_notif: "🔔 Thông báo mới nhất",
         clear_all: "Xóa tất cả",
         no_notif: "Chưa có thông báo",
-        
         main_menu: "Menu chính",
         menu_news: "📰 Tin tức & Thông báo",
         menu_score_summary: "📊 Tổng hợp điểm (Summary)",
@@ -215,7 +213,6 @@ const translations = {
         game_desc: "Chơi game rắn, ghép hình và đập chuột",
         play_now: "Chơi ngay ➔",
         admin_chat_btn: "💬 Trò chuyện Admin (4 người)",
-        
         tab_snake: "🐍 Rắn săn mồi",
         tab_match: "🍓 Ghép cặp",
         tab_mole: "🐹 Đập chuột",
@@ -232,7 +229,6 @@ const translations = {
         medium: "Trung bình",
         hard: "🔥 Khó",
         unlimited: "Không giới hạn",
-        
         news_categories: "Danh mục tin tức",
         cat_all: "Tất cả",
         cat_notice: "📢 Thông báo khẩn",
@@ -242,7 +238,6 @@ const translations = {
         desktop_users: "💻 Máy tính (Desktop):",
         mobile_users: "📱 Di động (Mobile):",
         total_users: "📊 Tổng cộng:",
-        
         summary_title: "📊 Bảng tổng hợp điểm vệ sinh (Dashboard)",
         summary_desc: "Chọn chế độ xem điểm và tìm kiếm theo Tuần, Tháng hoặc Năm",
         period_weekly: "📅 Tuần",
@@ -252,13 +247,11 @@ const translations = {
         total_points_label: "Tổng điểm",
         approved_count_label: "Báo cáo đã duyệt",
         chart_title: "📈 Biểu đồ tổng hợp điểm",
-        
         news_summary_title: "📊 Tóm tắt tin tức và thông báo",
         recent_news: "Mới nhất",
         search_news_ph: "Tìm kiếm tiêu đề tin...",
         scoreboard_title: "🏆 Bảng điểm vệ sinh theo phòng",
         hygiene_summary_title: "📊 Tiến độ vệ sinh",
-        
         member_form_title: "👤 Mẫu báo cáo vệ sinh & Xác minh",
         sender_name: "Họ và tên người gửi:",
         your_room: "🏠 Phòng của bạn (Đã đăng nhập):",
@@ -267,13 +260,11 @@ const translations = {
         task_desc_ph: "Mô tả kết quả thực hiện...",
         live_video_label: "📹 Quay video trực tiếp (Tối đa 1 phút):",
         submit_report_btn: "🚀 Gửi báo cáo nhận điểm (Chủ nhật 16:00 - 19:00)",
-        
         feedback_title: "💬 Đóng góp ý kiến về công tác vệ sinh",
         feedback_desc: "Ý kiến của bạn sẽ gửi trực tiếp đến 4 Admin",
         feedback_input_ph: "Nhập ý kiến hoặc đề xuất...",
         send_feedback_btn: "🚀 Gửi ý kiến cho 4 Admin",
         feedback_history: "📜 Lịch sử ý kiến đã gửi",
-        
         login_title: "Đăng nhập",
         login_subtitle: "Chọn phòng cho User hoặc chọn Admin",
         select_room_ph: "-- Vui lòng chọn phòng hoặc Admin --",
@@ -282,16 +273,23 @@ const translations = {
         sub_admin_2: "⚙️ Admin phụ 2",
         sub_admin_3: "⚙️ Admin phụ 3",
         confirm_login_btn: "✅ Đăng nhập",
-        
         footer_text: "Hệ thống tin tức & Theo dõi vệ sinh Đội Bảo vệ © 2026",
-        
-        // ⚙️ Admin Panel Keys
         admin_panel_title: "⚙️ Quản lý hệ thống (Admin)",
         btn_add_news: "Thêm tin tức/Thông báo",
         btn_add_cyber: "Thêm ảnh/Video vệ sinh (Admin)",
         special_points_title: "⭐ Điều chỉnh điểm đặc biệt (Cộng/Trừ)",
         select_room_default: "-- Chọn phòng --",
-        btn_save: "Lưu"
+        btn_save: "Lưu",
+        room: "Phòng",
+        like: "Thích",
+        share: "Chia sẻ",
+        points: "điểm",
+        reports: "báo cáo",
+        topRoom: "Phòng Top 1",
+        totalPoints: "Tổng điểm",
+        approvedReports: "Báo cáo đã duyệt",
+        logout: "Đăng xuất",
+        special_point_desc: "+ Đã nhận điểm đặc biệt (+1 điểm) từ người tạo trang web"
     },
     en: {
         app_title: "Defense Unit News",
@@ -301,7 +299,6 @@ const translations = {
         recent_notif: "🔔 Recent Notifications",
         clear_all: "Clear All",
         no_notif: "No notifications yet",
-        
         main_menu: "Main Menu",
         menu_news: "📰 News & Announcements",
         menu_score_summary: "📊 Score Summary",
@@ -313,7 +310,6 @@ const translations = {
         game_desc: "Play snake, matching, and whack-a-mole games",
         play_now: "Play Now ➔",
         admin_chat_btn: "💬 Admin Private Chat (4 Admins)",
-        
         tab_snake: "🐍 Snake Game",
         tab_match: "🍓 Match Fruits",
         tab_mole: "🐹 Whack-a-Mole",
@@ -330,7 +326,6 @@ const translations = {
         medium: "Medium",
         hard: "🔥 Hard",
         unlimited: "Unlimited",
-        
         news_categories: "News Categories",
         cat_all: "All",
         cat_notice: "📢 Urgent Notice",
@@ -340,7 +335,6 @@ const translations = {
         desktop_users: "💻 Desktop Users:",
         mobile_users: "📱 Mobile Users:",
         total_users: "📊 Total Visitors:",
-        
         summary_title: "📊 Hygiene Score Summary (Dashboard)",
         summary_desc: "View summary scores and search by Week, Month, or Year",
         period_weekly: "📅 Weekly",
@@ -350,13 +344,11 @@ const translations = {
         total_points_label: "Total Score",
         approved_count_label: "Approved Reports",
         chart_title: "📈 Score Summary Chart",
-        
         news_summary_title: "📊 News & Announcements Overview",
         recent_news: "Recent Posts",
         search_news_ph: "Search news title...",
         scoreboard_title: "🏆 Room Hygiene Scoreboard",
         hygiene_summary_title: "📊 Hygiene Progress Summary",
-        
         member_form_title: "👤 Member Report Form: Submit & Verify",
         sender_name: "Full Name:",
         your_room: "🏠 Your Room (Logged in):",
@@ -365,13 +357,11 @@ const translations = {
         task_desc_ph: "Describe task results...",
         live_video_label: "📹 Record Live Video (Max 1 minute):",
         submit_report_btn: "🚀 Submit Report for Score (Sun 16:00 - 19:00)",
-        
         feedback_title: "💬 Feedback on Defense Unit Operations",
         feedback_desc: "Your feedback will be sent directly to all 4 Admins",
         feedback_input_ph: "Type your feedback or suggestions...",
         send_feedback_btn: "🚀 Send Feedback to 4 Admins",
         feedback_history: "📜 Sent Feedback History",
-        
         login_title: "System Login",
         login_subtitle: "Select room for User or Admin mode",
         select_room_ph: "-- Select Room or Admin --",
@@ -380,129 +370,13 @@ const translations = {
         sub_admin_2: "⚙️ Sub-Admin 2",
         sub_admin_3: "⚙️ Sub-Admin 3",
         confirm_login_btn: "✅ Login",
-        
         footer_text: "News & Hygiene Tracking System - Defense Unit © 2026",
-        
-        // ⚙️ Admin Panel Keys
         admin_panel_title: "⚙️ System Management (Admin)",
         btn_add_news: "Add News/Notice",
         btn_add_cyber: "Add Hygiene Media (Admin)",
         special_points_title: "⭐ Special Score Adjustment (+/-)",
         select_room_default: "-- Select Room --",
-        btn_save: "Save"
-    }
-};
-// 1. ຟັງຊັນໂຫຼດ Google Translate Widget ໂດຍອັດຕະໂນມັດ
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        pageLanguage: 'lo', // ພາສາເລີ່ມຕົ້ນຂອງເວັບ (ລາວ)
-        includedLanguages: 'lo,th,en,vi,zh-CN,ko', // ພາສາທີ່ຕ້ອງການຮອງຮັບ: ລາວ, ไทย, ອັງກິດ, ຫວຽດນາມ, ຈີນ, เกาหลี
-        autoDisplay: false
-    }, 'google_translate_element');
-}
-
-// 2. โหลด Script Google Translate ຈາກ Server ຂອງ Google
-(function() {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    document.getElementsByTagName('head')[0].appendChild(script);
-})();
-
-// 3. ຟັງຊັນປ່ຽນພາສາເມື່ອຜູ້ໃຊ້ເລືອກຈາກ Dropdown
-function changeLanguage(langCode) {
-    // ຊອກຫາ Select box ທີ່ Google Translate สร้างຂຶ້ນມາຊົ່ວຄາວ
-    var interval = setInterval(function() {
-        var iframe = document.querySelector('.goog-te-combo');
-        if (iframe) {
-            iframe.value = langCode;
-            iframe.dispatchEvent(new Event('change')); // ສັ່ງให้ Google Translate ປ່ຽນພາສາ
-            clearInterval(interval);
-        }
-    }, 100);
-}
-const translations = {
-    lo: {
-        like: "ຖືກໃຈ",
-        share: "ແຊ",
-        news: "ຂ່າວສານ & ແຈ້ງການ",
-        guide: "ວິທີໃຊ້ງານ",
-        logout: "ອອກຈາກລະບົບ"
-    },
-    th: {
-        like: "ถูกใจ",
-        share: "แชร์",
-        news: "ข่าวสาร & ประกาศ",
-        guide: "วิธีใช้งาน",
-        logout: "ออกจากระบบ"
-    },
-    vi: {
-        like: "Thích",
-        share: "Chia sẻ",
-        news: "Tin tức & Thông báo",
-        guide: "Hướng dẫn",
-        logout: "Đăng xuất"
-    },
-    en: {
-        like: "Like",
-        share: "Share",
-        news: "News & Announcements",
-        guide: "User Guide",
-        logout: "Logout"
-    },
-    zh: {
-        like: "赞",
-        share: "分享",
-        news: "新闻与公告",
-        guide: "使用指南",
-        logout: "退出登录"
-    },
-    ko: {
-        like: "좋아요",
-        share: "공유",
-        news: "뉴스 및 공지사항",
-        guide: "사용 가이드",
-        logout: "로그아웃"
-    }
-};
-
-// ຟັງຊັນດຶງພາສາທີ່ເລືອກປັດຈຸບັນ (Default: 'lo')
-function getCurrentLang() {
-    return localStorage.getItem("app_lang") || "lo";
-}
-// 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທັງຊື່ຫ້ອງ ແລະ ຂໍ້ຄວາມຕ່າງໆ)
-const translations = {
-    lo: {
-        room: "ຫ້ອງ",
-        like: "ຖືກໃຈ",
-        share: "ແຊ",
-        points: "ຄະແນນ",
-        reports: "ບົດລາຍງານ",
-        topRoom: "ຫ້ອງອັນດັບ 1",
-        totalPoints: "ຄະແນນລວມ",
-        approvedReports: "ບົດລາຍງານທີ່ອະນຸມັດ"
-    },
-    th: {
-        room: "ห้อง",
-        like: "ถูกใจ",
-        share: "แชร์",
-        points: "คะแนน",
-        reports: "บทรายงาน",
-        topRoom: "ห้องอันดับ 1",
-        totalPoints: "คะแนนรวม",
-        approvedReports: "บทรายงานที่อนุมัติ"
-    },
-    vi: {
-        room: "Phòng",
-        like: "Thích",
-        share: "Chia sẻ",
-        points: "điểm",
-        reports: "báo cáo",
-        topRoom: "Phòng Top 1",
-        totalPoints: "Tổng điểm",
-        approvedReports: "Báo cáo đã duyệt"
-    },
-    en: {
+        btn_save: "Save",
         room: "Room",
         like: "Like",
         share: "Share",
@@ -510,9 +384,96 @@ const translations = {
         reports: "Reports",
         topRoom: "Top Ranked Room",
         totalPoints: "Total Points",
-        approvedReports: "Approved Reports"
+        approvedReports: "Approved Reports",
+        logout: "Logout",
+        special_point_desc: "+ Received special points (+1 point) from the website creator"
     },
     zh: {
+        app_title: "防务部新闻",
+        app_subtitle: "Defense Unit News & Hygiene Tracking",
+        guide_btn: "使用指南",
+        loading_time: "加载时间...",
+        recent_notif: "🔔 最新通知",
+        clear_all: "全部清除",
+        no_notif: "暂无通知",
+        main_menu: "主菜单",
+        menu_news: "📰 新闻与公告",
+        menu_score_summary: "📊 积分汇总",
+        menu_scoreboard: "🏆 房间排行榜",
+        menu_cyber: "🧹 卫生追踪",
+        menu_member: "👤 卫生报告 (成员)",
+        menu_feedback: "💬 用户反馈",
+        menu_game: "游戏专区 (15关)",
+        game_desc: "畅玩贪吃蛇、配对和打地鼠游戏",
+        play_now: "立即开始 ➔",
+        admin_chat_btn: "💬 管理员私密聊天 (4人)",
+        tab_snake: "🐍 贪吃蛇",
+        tab_match: "🍓 水果配对",
+        tab_mole: "🐹 打地鼠",
+        home_btn: "🏠 首页",
+        target_label: "🎯 目标:",
+        speed_label: "⚡ 速度:",
+        start_level_btn: "🎮 开始关卡",
+        moves_label: "🔄 剩余步数:",
+        pairs_label: "🏆 剩余配对:",
+        reset_btn: "🔄 重新开始",
+        score_label: "🎯 得分:",
+        time_label: "⏱️ 时间:",
+        easy: "简单",
+        medium: "中等",
+        hard: "🔥 困难",
+        unlimited: "不限制",
+        news_categories: "新闻分类",
+        cat_all: "全部",
+        cat_notice: "📢 紧急通知",
+        cat_activity: "🎖️ 任务/活动",
+        cat_security: "🔒 安全",
+        visitor_stats: "👥 访问统计",
+        desktop_users: "💻 电脑用户:",
+        mobile_users: "📱 手机用户:",
+        total_users: "📊 总访客数:",
+        summary_title: "📊 卫生积分汇总 (看板)",
+        summary_desc: "按周、月或年查看和搜索汇总积分",
+        period_weekly: "📅 每周",
+        period_monthly: "📆 每月",
+        period_yearly: "🗓️ 每年",
+        top_room_label: "第一名房间",
+        total_points_label: "总积分",
+        approved_count_label: "已批准报告",
+        chart_title: "📈 积分汇总图表",
+        news_summary_title: "📊 新闻与公告概览",
+        recent_news: "最新动态",
+        search_news_ph: "搜索新闻标题...",
+        scoreboard_title: "🏆 房间卫生排行榜",
+        hygiene_summary_title: "📊 卫生进度汇总",
+        member_form_title: "👤 成员报告表: 提交与验证",
+        sender_name: "姓名:",
+        your_room: "🏠 您的房间 (已登录):",
+        no_room_selected: "未选择房间",
+        task_desc: "卫生详情:",
+        task_desc_ph: "描述任务结果...",
+        live_video_label: "📹 录制直播视频 (最长1分钟):",
+        submit_report_btn: "🚀 提交报告获取积分 (周日 16:00 - 19:00)",
+        feedback_title: "💬 防务部工作意见反馈",
+        feedback_desc: "您的意见将直接发送给所有4位管理员",
+        feedback_input_ph: "输入您的意见或建议...",
+        send_feedback_btn: "🚀 发送意见给4位管理员",
+        feedback_history: "📜 发送的历史意见",
+        login_title: "系统登录",
+        login_subtitle: "选择用户房间或管理员模式",
+        select_room_ph: "-- 请选择房间或管理员 --",
+        creator_login: "👑 网站创作者 (邮箱)",
+        sub_admin_1: "⚙️ 子管理员 1",
+        sub_admin_2: "⚙️ 子管理员 2",
+        sub_admin_3: "⚙️ 子管理员 3",
+        confirm_login_btn: "✅ 登录",
+        footer_text: "防务部新闻与卫生追踪系统 © 2026",
+        admin_panel_title: "⚙️ 系统管理 (Admin)",
+        btn_add_news: "添加新闻/公告",
+        btn_add_cyber: "添加卫生媒体 (Admin)",
+        special_points_title: "⭐ 特殊积分调整 (+/-)",
+        select_room_default: "-- 选择房间 --",
+        btn_save: "保存",
         room: "房间",
         like: "赞",
         share: "分享",
@@ -520,9 +481,96 @@ const translations = {
         reports: "份报告",
         topRoom: "排名第一的房间",
         totalPoints: "总积分",
-        approvedReports: "已批准报告"
+        approvedReports: "已批准报告",
+        logout: "退出登录",
+        special_point_desc: "+ 获得网站创作者的特殊加分 (+1分)"
     },
     ko: {
+        app_title: "방위부 뉴스",
+        app_subtitle: "Defense Unit News & Hygiene Tracking",
+        guide_btn: "사용 가이드",
+        loading_time: "시간 로딩 중...",
+        recent_notif: "🔔 최근 알림",
+        clear_all: "모두 지우기",
+        no_notif: "알림이 없습니다",
+        main_menu: "메인 메뉴",
+        menu_news: "📰 뉴스 및 공지사항",
+        menu_score_summary: "📊 점수 요약",
+        menu_scoreboard: "🏆 호실별 리더보드",
+        menu_cyber: "🧹 위생 추적",
+        menu_member: "👤 위생 보고 (회원)",
+        menu_feedback: "💬 사용자 피드백",
+        menu_game: "게임 존 (15 레벨)",
+        game_desc: "스네이크, 매칭, 두더지 잡기 게임 플레이",
+        play_now: "지금 플레이 ➔",
+        admin_chat_btn: "💬 관리자 비공개 채팅 (4명)",
+        tab_snake: "🐍 스네이크 게임",
+        tab_match: "🍓 과일 맞추기",
+        tab_mole: "🐹 두더지 잡기",
+        home_btn: "🏠 홈",
+        target_label: "🎯 목표:",
+        speed_label: "⚡ 속도:",
+        start_level_btn: "🎮 레벨 시작",
+        moves_label: "🔄 남은 횟수:",
+        pairs_label: "🏆 남은 쌍:",
+        reset_btn: "🔄 레벨 재시작",
+        score_label: "🎯 점수:",
+        time_label: "⏱️ 시간:",
+        easy: "쉬움",
+        medium: "보통",
+        hard: "🔥 어려움",
+        unlimited: "무제한",
+        news_categories: "뉴스 카테고리",
+        cat_all: "전체",
+        cat_notice: "📢 긴급 공지",
+        cat_activity: "🎖️ 임무/활동",
+        cat_security: "🔒 보안",
+        visitor_stats: "👥 방문자 통계",
+        desktop_users: "💻 데스크톱 사용자:",
+        mobile_users: "📱 모바일 사용자:",
+        total_users: "📊 총 방문자:",
+        summary_title: "📊 위생 점수 요약 (대시보드)",
+        summary_desc: "주별, 월별, 연도별로 요약 점수 조회 및 검색",
+        period_weekly: "📅 주간",
+        period_monthly: "📆 월간",
+        period_yearly: "🗓️ 연간",
+        top_room_label: "1위 호실",
+        total_points_label: "총점",
+        approved_count_label: "승인된 보고서",
+        chart_title: "📈 점수 요약 차트",
+        news_summary_title: "📊 뉴스 및 공지사항 개요",
+        recent_news: "최근 게시물",
+        search_news_ph: "뉴스 제목 검색...",
+        scoreboard_title: "🏆 호실 위생 리더보드",
+        hygiene_summary_title: "📊 위생 진행 상황 요약",
+        member_form_title: "👤 회원 보고서 양식: 제출 및 확인",
+        sender_name: "이름:",
+        your_room: "🏠 내 호실 (로그인됨):",
+        no_room_selected: "선택된 호실 없음",
+        task_desc: "위생 세부정보:",
+        task_desc_ph: "작업 결과 설명...",
+        live_video_label: "📹 라이브 비디오 녹화 (최대 1분):",
+        submit_report_btn: "🚀 점수 보고서 제출 (일요일 16:00 - 19:00)",
+        feedback_title: "💬 방위부 운영 피드백",
+        feedback_desc: "피드백은 4명의 관리자에게 직접 전달됩니다.",
+        feedback_input_ph: "피드백이나 제안을 입력하세요...",
+        send_feedback_btn: "🚀 4명의 관리자에게 피드백 전송",
+        feedback_history: "📜 보낸 피드백 기록",
+        login_title: "시스템 로그인",
+        login_subtitle: "사용자 호실 선택 또는 관리자 모드",
+        select_room_ph: "-- 호실 또는 관리자 선택 --",
+        creator_login: "👑 사이트 제작자 (이메일)",
+        sub_admin_1: "⚙️ 서브 관리자 1",
+        sub_admin_2: "⚙️ 서브 관리자 2",
+        sub_admin_3: "⚙️ 서브 관리자 3",
+        confirm_login_btn: "✅ 로그인",
+        footer_text: "뉴스 및 위생 추적 시스템 - 방위부 © 2026",
+        admin_panel_title: "⚙️ 시스템 관리 (Admin)",
+        btn_add_news: "뉴스/공지 추가",
+        btn_add_cyber: "위생 미디어 추가 (Admin)",
+        special_points_title: "⭐ 특별 점수 조정 (+/-)",
+        select_room_default: "-- 호실 선택 --",
+        btn_save: "저장",
         room: "호실",
         like: "좋아요",
         share: "공유",
@@ -530,53 +578,23 @@ const translations = {
         reports: "건",
         topRoom: "1위 방",
         totalPoints: "총점",
-        approvedReports: "승인된 보고서"
+        approvedReports: "승인된 보고서",
+        logout: "로그아웃",
+        special_point_desc: "+ 웹사이트 제작자로부터 특별 점수를 받았습니다 (+1점)"
     }
 };
 
-// ດຶງພາສາປັດຈຸບັນ (Default: 'lo')
+// ⚙️ ຟັງຊັນຊ່ວຍດຶງຄຳສັບ ແລະ ຈັດການພາສາ
 function getCurrentLang() {
     return localStorage.getItem("app_lang") || "lo";
 }
 
-// ຟັງຊັນແປຄຳສັບ
 function t(key) {
     const lang = getCurrentLang();
     return translations[lang] ? translations[lang][key] || key : key;
 }
 
-// ເອີ້ນໃຊ້ງານທຸກຄັ້ງທີ່ DOM โหลดเสร็จ ແລະ ເມື່ອมีการປ່ຽນພາສາ
-document.addEventListener("DOMContentLoaded", () => {
-    applyDynamicTranslations();
-});
-
-// ຟັງຊັນສຳລັບປ່ຽນພາສາ (ຜ່ານ Dropdown ຫລື ປຸ່ມເລືອກພາສາ)
 window.changeAppLanguage = function(lang) {
     localStorage.setItem("app_lang", lang);
-    location.reload(); // ໂຫຼດໜ້າເວັບໃໝ່ເພື່ອໃຫ້ Apply ພາສາໃໝ່ທັນທີ
+    location.reload();
 };
-const translations = {
-    lo: {
-        special_point_desc: "+ ຮັບຄະແນນພິເສດ (+1 ຄະແນນ) ຈາກຜູ້ສ້າງເວັບໄຊ"
-    },
-    th: {
-        special_point_desc: "+ ได้รับคะแนนพิเศษ (+1 คะแนน) จากผู้สร้างเว็บไซต์"
-    },
-    en: {
-        special_point_desc: "+ Received special points (+1 point) from the website creator"
-    },
-    vn: {
-        special_point_desc: "+ Đã nhận điểm đặc biệt (+1 điểm) từ người tạo trang web"
-    },
-    ch: {
-        special_point_desc: "+ 获得网站创作者的特殊加分 (+1分)"
-    },
-    kr: {
-        special_point_desc: "+ 웹사이트 제작자로부터 특별 점수를 받았습니다 (+1점)"
-    }
-};
-// ຟັງຊັນດຶງຄໍາສັບຕາມ Key ແລະ ພາສາ
-function t(key) {
-    const lang = getCurrentLang();
-    return translations[lang] ? translations[lang][key] || key : key;
-}
