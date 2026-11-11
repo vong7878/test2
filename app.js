@@ -15,6 +15,18 @@ const elem = document.getElementById('your-id');
 if (elem) {
     elem.classList.add('hidden'); // ປ້ອງກັນບໍ່ໃຫ້ Error ເວລາຫາ Element ບໍ່ພົບ
 }
+// ໃຫ້ເພີ່ມການປະກາດຕົວແປ roomNum ໄວ້ກ່ອນແບບนี้:
+const roomSelect = document.getElementById('room-select');
+const roomNum = roomSelect ? roomSelect.value : '108'; 
+
+// ຈາກນັ້ນຈຶ່ງຕາມດ້ວຍ Object reportData:
+const reportData = {
+    room: roomNum, 
+    specialPoints: pointValue,
+    description: t('special_point_desc'),
+    date: new Date().toLocaleString(),
+    approved: true
+};
 const app = initializeApp(firebaseConfig); 
 const auth = getAuth(app); 
 const db = getFirestore(app); 
