@@ -42,6 +42,110 @@ function saveUserNotifications() {
     const key = currentRoomUser ? `user_notifications_${currentRoomUser}` : 'user_notifications_guest';
     localStorage.setItem(key, JSON.stringify(notifications));
 }
+// 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທັງຊື່ຫ້ອງ ແລະ ຂໍ້ຄວາມຕ່າງໆ)
+const translations = {
+    lo: {
+        room: "ຫ້ອງ",
+        like: "ຖືກໃຈ",
+        share: "ແຊ",
+        points: "ຄະແນນ",
+        reports: "ບົດລາຍງານ",
+        topRoom: "ຫ້ອງອັນດັບ 1",
+        totalPoints: "ຄະແນນລວມ",
+        approvedReports: "ບົດລາຍງານທີ່ອະນຸມັດ"
+    },
+    th: {
+        room: "ห้อง",
+        like: "ถูกใจ",
+        share: "แชร์",
+        points: "คะแนน",
+        reports: "บทรายงาน",
+        topRoom: "ห้องอันดับ 1",
+        totalPoints: "คะแนนรวม",
+        approvedReports: "บทรายงานที่อนุมัติ"
+    },
+    vi: {
+        room: "Phòng",
+        like: "Thích",
+        share: "Chia sẻ",
+        points: "điểm",
+        reports: "báo cáo",
+        topRoom: "Phòng Top 1",
+        totalPoints: "Tổng điểm",
+        approvedReports: "Báo cáo đã duyệt"
+    },
+    en: {
+        room: "Room",
+        like: "Like",
+        share: "Share",
+        points: "Points",
+        reports: "Reports",
+        topRoom: "Top Ranked Room",
+        totalPoints: "Total Points",
+        approvedReports: "Approved Reports"
+    },
+    zh: {
+        room: "房间",
+        like: "赞",
+        share: "分享",
+        points: "分",
+        reports: "份报告",
+        topRoom: "排名第一的房间",
+        totalPoints: "总积分",
+        approvedReports: "已批准报告"
+    },
+    ko: {
+        room: "호실",
+        like: "좋아요",
+        share: "공유",
+        points: "점",
+        reports: "건",
+        topRoom: "1위 방",
+        totalPoints: "총점",
+        approvedReports: "승인된 보고서"
+    }
+};
+
+// ດຶງພາສາປັດຈຸບັນ (Default: 'lo')
+function getCurrentLang() {
+    return localStorage.getItem("app_lang") || "lo";
+}
+
+// ຟັງຊັນແປຄຳສັບ
+function t(key) {
+    const lang = getCurrentLang();
+    return translations[lang] ? translations[lang][key] || key : key;
+}
+
+// 🔄 ຟັງຊັນອັບເດດຂໍ້ຄວາມທັງໜົດໃນໜ້າເວັບອັດຕະໂນມັດ (ລົບລ້າງຄຳຕາຍຕົວ)
+function applyDynamicTranslations() {
+    const currentLang = getCurrentLang();
+    const roomWord = translations[currentLang].room;
+
+    // 1. ປ່ຽນຊື່ຫ້ອງທັງໝົດໃນ DOM (ຕົວຢ່າງ: ປ່ຽນ "ຫ້ອງ 104" ເປັນ "Room 104" ຫລື "ห้อง 104")
+    const elements = document.querySelectorAll("*");
+    elements.forEach(el => {
+        // ກວດສອບ node ທີ່ເປັນข้อความแท้ๆ ແລະ ມີคำວ່າ ຫ້ອງ ຫລື Room อยู่
+        if (el.children.length === 0 && el.textContent) {
+            // ຄົ້ນຫາ pattern ເຊັ່ນ "ຫ້ອງ 104", "ห้อง 105" ແລ້ວປ່ຽນคำว่า ຫ້ອງ ໃຫ້ກົງກັບພາສາ
+            if (/ຫ້ອງ|ห้อง|Phòng|Room|房间|호실/i.test(el.textContent)) {
+                el.textContent = el.textContent.replace(/ຫ້ອງ|ห้อง|Phòng|Room|房间|호실/gi, roomWord);
+            }
+        }
+    });
+}
+
+// ເອີ້ນໃຊ້ງານທຸກຄັ້ງທີ່ DOM โหลดเสร็จ ແລະ ເມື່ອมีการປ່ຽນພາສາ
+document.addEventListener("DOMContentLoaded", () => {
+    applyDynamicTranslations();
+});
+
+// ຟັງຊັນສຳລັບປ່ຽນພາສາ (ຜ່ານ Dropdown ຫລື ປຸ່ມເລືອກພາສາ)
+window.changeAppLanguage = function(lang) {
+    localStorage.setItem("app_lang", lang);
+    location.reload(); // ໂຫຼດໜ້າເວັບໃໝ່ເພື່ອໃຫ້ Apply ພາສາໃໝ່ທັນທີ
+};
+
 
 let currentShareData = { title: '', text: '', url: '' }; 
 let chatUnsubscribe = null; 
