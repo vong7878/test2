@@ -689,10 +689,12 @@ function checkRoomAuthUI() {
 const roomDisplays = ['member-room-display', 'feedback-room-display'];
     roomDisplays.forEach(id => {
         const el = document.getElementById(id);
-        if (el && currentUser) {
-            // ດຶງເອົາສະເພາະເລກຫ້ອງ (ເຊັ່ນ: "105") ແລ້ວເອົາມາຕໍ່ກັບ t('room') ຕາມພາສາທີ່ເລືອກ
-            const roomNum = currentUser.replace(/[^0-9]/g, '');
-            el.value = roomNum ? `${t('room')} ${roomNum}` : currentUser;
+        // ກວດສອບກ່ອນວ່າຕົວແປ user/room ມີຢູ່ຈິງບໍ (ປ້ອງກັນ Error is not defined)
+        const activeUser = (typeof currentUser !== 'undefined') ? currentUser : (typeof roomName !== 'undefined' ? roomName : '');
+        
+        if (el && activeUser) {
+            const roomNum = String(activeUser).replace(/[^0-9]/g, '');
+            el.value = roomNum ? `${t('room')} ${roomNum}` : activeUser;
         }
     });
 
