@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html lang="lo">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ມຸມເກມ 15 ດ່ານ - Game Zone</title>
+    <title>มุมเกม 15 ด่าน - Game Zone</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-950 min-h-screen flex flex-col items-center justify-center p-4">
 
-
-
     <div class="w-full max-w-sm space-y-4">
         <!-- ປຸ່ມສະຫຼັບ 3 ເກມ (Tabs) -->
         <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 text-[11px] font-bold text-slate-400">
             <button id="tab-snake" onclick="switchGame('snake')" class="flex-1 py-2 rounded-lg bg-amber-500 text-slate-950 transition-all flex items-center justify-center gap-1" data-i18n="tab_snake">
-                🐍 ງູກິນຂຽດ
+                🐍 งูกินเหยื่อ
             </button>
             <button id="tab-match" onclick="switchGame('match')" class="flex-1 py-2 rounded-lg transition-all flex items-center justify-center gap-1 hover:text-white" data-i18n="tab_match">
-                🍓 ຈັບຄູ່
+                🍓 จับคู่
             </button>
             <button id="tab-mole" onclick="switchGame('mole')" class="flex-1 py-2 rounded-lg transition-all flex items-center justify-center gap-1 hover:text-white" data-i18n="tab_mole">
-                🐹 ຕີຕຸ່ນ
+                🐹 ตีตุ่น
             </button>
         </div>
 
@@ -29,13 +27,13 @@
         <div id="section-snake" class="game-container">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
                 <h2 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                    <span data-i18n="tab_snake">🐍 ງູກິນຂຽດ</span> <span id="snake-level-badge" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">ດ່ານ 1/15</span>
+                    <span data-i18n="tab_snake">🐍 งูกินเหยื่อ</span> <span id="snake-level-badge" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">ด่าน 1/15</span>
                 </h2>
-                <a href="index_lo.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all" data-i18n="home_btn">🏠 ໜ້າຫຼັກ</a>
+                <a href="index_th.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all" data-i18n="home_btn">🏠 หน้าหลัก</a>
             </div>
             <div class="flex justify-between text-xs text-slate-400 mb-3 px-1">
-                <span><span data-i18n="target_label">🎯 ເປົ້າໝາຍ:</span> <span id="snake-target" class="text-amber-400 font-bold">0/3</span></span>
-                <span><span data-i18n="speed_label">⚡ ຄວາມໄວ:</span> <span id="snake-speed" class="text-emerald-400 font-bold" data-i18n="easy">ງ່າຍ</span></span>
+                <span><span data-i18n="target_label">🎯 เป้าหมาย:</span> <span id="snake-target" class="text-amber-400 font-bold">0/3</span></span>
+                <span><span data-i18n="speed_label">⚡ ความเร็ว:</span> <span id="snake-speed" class="text-emerald-400 font-bold" data-i18n="easy">ง่าย</span></span>
             </div>
             <canvas id="snakeCanvas" width="300" height="300"></canvas>
             <div class="mt-4 grid grid-cols-3 gap-2 max-w-[200px] mx-auto">
@@ -47,7 +45,7 @@
                 <button id="btn-right" class="snake-btn">➡️</button>
             </div>
             <button id="snake-start-btn" class="w-full mt-4 py-2 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold rounded-xl transition-all shadow-lg text-xs" data-i18n="start_level_btn">
-                🎮 ເລີ່ມດ່ານນີ້
+                🎮 เริ่มด่านนี้
             </button>
         </div>
 
@@ -55,17 +53,17 @@
         <div id="section-match" class="game-container hidden">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
                 <h2 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                    <span data-i18n="tab_match">🍓 ຈັບຄູ່ໝາກໄມ້</span> <span id="match-level-badge" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">ດ່ານ 1/15</span>
+                    <span data-i18n="tab_match">🍓 จับคู่ผลไม้</span> <span id="match-level-badge" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">ด่าน 1/15</span>
                 </h2>
-                <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all" data-i18n="home_btn">🏠 ໜ້າຫຼັກ</a>
+                <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all" data-i18n="home_btn">🏠 หน้าหลัก</a>
             </div>
             <div class="flex justify-between text-xs text-slate-400 mb-3 px-1">
-                <span><span data-i18n="moves_label">🔄 ໂຄຕ້າກົດ:</span> <span id="match-moves-left" class="text-white font-bold" data-i18n="unlimited">ບໍ່ຈຳກັດ</span></span>
-                <span><span data-i18n="pairs_label">🏆 ຄູ່ທີ່ເຫຼືອ:</span> <span id="match-pairs" class="text-emerald-400 font-bold">0</span></span>
+                <span><span data-i18n="moves_label">🔄 จำนวนครั้งที่กด:</span> <span id="match-moves-left" class="text-white font-bold" data-i18n="unlimited">ไม่จำกัด</span></span>
+                <span><span data-i18n="pairs_label">🏆 คู่ที่เหลือ:</span> <span id="match-pairs" class="text-emerald-400 font-bold">0</span></span>
             </div>
             <div id="match-board" class="grid gap-2 mb-4"></div>
             <button id="match-reset-btn" class="w-full py-2 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold rounded-xl transition-all shadow-lg text-xs" data-i18n="reset_btn">
-                🔄 ເລີ່ມດ່ານນີ້ໃໝ່
+                🔄 เริ่มด่านนี้ใหม่
             </button>
         </div>
 
@@ -73,13 +71,13 @@
         <div id="section-mole" class="game-container hidden">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
                 <h2 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                    <span data-i18n="tab_mole">🐹 ຕີຕຸ່ນ</span> <span id="mole-level-badge" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">ດ່ານ 1/15</span>
+                    <span data-i18n="tab_mole">🐹 ตีตุ่น</span> <span id="mole-level-badge" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">ด่าน 1/15</span>
                 </h2>
-                <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all" data-i18n="home_btn">🏠 ໜ້າຫຼັກ</a>
+                <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all" data-i18n="home_btn">🏠 หน้าหลัก</a>
             </div>
             <div class="flex justify-between text-xs text-slate-400 mb-3 px-1">
-                <span><span data-i18n="score_label">🎯 ຄະແນນ:</span> <span id="mole-score" class="text-amber-400 font-bold">0/5</span></span>
-                <span><span data-i18n="time_label">⏱️ ເວລາ:</span> <span id="mole-time" class="text-emerald-400 font-bold">20s</span></span>
+                <span><span data-i18n="score_label">🎯 คะแนน:</span> <span id="mole-score" class="text-amber-400 font-bold">0/5</span></span>
+                <span><span data-i18n="time_label">⏱️ เวลา:</span> <span id="mole-time" class="text-emerald-400 font-bold">20s</span></span>
             </div>
 
             <div id="mole-board" class="grid grid-cols-3 gap-3 my-4">
@@ -95,12 +93,12 @@
             </div>
 
             <button id="mole-start-btn" class="w-full py-2 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold rounded-xl transition-all shadow-lg text-xs" data-i18n="start_level_btn">
-                🎮 ເລີ່ມດ່ານນີ້
+                🎮 เริ่มด่านนี้
             </button>
         </div>
     </div>
 
-    <!-- 🔗 ເຊື່ອມຕໍ່ໄຟລ໌ແປພາສາ ແລະ ໄຟລ໌ເກມ -->
+    <!-- 🔗 ໄຟລ໌ JavaScript -->
     <script src="translations.js"></script>
     <script src="game.js"></script>
 </body>
