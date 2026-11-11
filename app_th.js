@@ -295,8 +295,8 @@ function drawSnakeGame() {
 function gameOver() { 
     clearInterval(snakeInterval); snakeInterval = null; 
     const overlay = document.getElementById('snake-overlay'); 
-    document.getElementById('snake-overlay-title').innerText = '💀 ເກມຈົບແນວ (Game Over)'; 
-    document.getElementById('snake-overlay-desc').innerHTML = `ຄະແນນຂອງທ່ານ: <strong class="text-amber-400 text-sm">${score}</strong><br>ກົດປຸ່ມລຸ່ມນີ້ເພື່ອເລີ່ມຫຼິ້ນໃໝ່!`; 
+    document.getElementById('snake-overlay-title').innerText = '💀 เกมส์จบแล้ว (Game Over)'; 
+    document.getElementById('snake-overlay-desc').innerHTML = `คะแนนของคุณ: <strong class="text-amber-400 text-sm">${score}</strong><br>ກົດປຸ່ມລຸ່ມນີ້ເພື່ອເລີ່ມຫຼິ້ນໃໝ່!`; 
     overlay.classList.remove('hidden'); 
 } 
 
