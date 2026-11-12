@@ -639,7 +639,7 @@ window.confirmRoomLogin = async () => {
     const email = document.getElementById('admin-email-input').value; 
     const password = document.getElementById('admin-password-input').value; 
     if (!email || !password) { 
-        alert("Please enter the creator's email and password!"); 
+      alert("Please enter the creator's email and password!") 
         return; 
     } 
     try { 
