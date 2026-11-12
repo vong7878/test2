@@ -568,7 +568,7 @@ if (authNav) {
                 <button onclick="logoutSession()" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg transition shadow">
                     ${typeof t === 'function' ? t('logout') : 'Sign out'}
                 </button> 
-            `;
+            `
         }
 
         if (userRole === 'admin') { 
