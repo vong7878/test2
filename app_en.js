@@ -629,71 +629,72 @@ window.handleLoginTypeChange = (val) => {
 };
 
 // 3. ຟັງຊັນກົດຢືນຢັນເຂົ້າສູ່ລະບົບ
-window.confirmRoomLogin = async () => { 
-    const select = document.getElementById('login-room-select'); 
+window.confirmRoomLogin = async () => {  
+    const select = document.getElementById('login-room-select');  
     if (!select) return;
-    const val = select.value; 
-    if (!val) { alert('Please select a room or Admin mode!'); return; } 
+    const val = select.value;  
+    if (!val) { alert('Please select a room or Admin mode!'); return; }  
 
-   if (val === 'SUPER_ADMIN') { 
-    const email = document.getElementById('admin-email-input').value; 
-    const password = document.getElementById('admin-password-input').value; 
-    if (!email || !password) { 
-      alert("Please enter the creator's email and password!");
-        return; 
-    } 
-    try { 
-        const userCredential = await signInWithEmailAndPassword(auth, email, password); 
-        currentRoomUser = `Creator: ${userCredential.user.email}`; 
-        userRole = 'admin'; 
-        localStorage.setItem('current_room_user', currentRoomUser); 
-        localStorage.setItem('current_user_role', userRole); 
-        document.getElementById('desktop-blocked-modal').classList.add('hidden'); 
-        document.getElementById('location-blocked-modal').classList.add('hidden'); 
-        if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
-    } catch (err) { alert('Developer login failed: ' + err.message); } 
-}
-    } else if (val.startsWith('SUB_ADMIN')) { 
-        const pinInput = document.getElementById('sub-admin-pin').value; 
-        if (pinInput !== subAdminPins[val]) { alert('❌ Invalid PIN!'); return; } 
-        const adminName = val === 'SUB_ADMIN_1' ? 'Admin Deputy 1' : val === 'SUB_ADMIN_2' ? 'Admin Deputy 2' : 'Admin Deputy 3'; 
-        try { 
-            const docRef = doc(db, "admin_sessions", val); 
-            const docSnap = await getDoc(docRef); 
-            if (val === 'SUB_ADMIN_1') { 
-                let devices = docSnap.exists() ? (docSnap.data().devices || []) : []; 
-                if (!devices.includes(deviceSessionId)) { 
-                    if (devices.length >= 2) { alert(`⚠️ "${adminName}" This account has reached the maximum login limit of 2 devices.`); return; } 
-                    devices.push(deviceSessionId); 
-                } 
-                await setDoc(docRef, { devices: devices, timestamp: new Date() }, { merge: true }); 
-            } else { 
-                if (docSnap.exists()) { 
-                    const data = docSnap.data(); 
-                    if (data.deviceId !== deviceSessionId && (Date.now() - (data.timestamp ? data.timestamp.toMillis() : 0) < 7200000)) { 
-                        alert(`⚠️ "${adminName}" it is currently active on another mobile device!`); 
-                        return; 
-                    } 
-                } 
-                await setDoc(docRef, { deviceId: deviceSessionId, timestamp: new Date() }); 
-            } 
-            currentRoomUser = adminName; 
-            userRole = 'admin'; 
-            localStorage.setItem('current_room_user', currentRoomUser); 
-            localStorage.setItem('current_user_role', userRole); 
-            document.getElementById('desktop-blocked-modal').classList.add('hidden'); 
-            document.getElementById('location-blocked-modal').classList.add('hidden'); 
-            if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
-            alert(`🎉 Log in ${adminName} Success!`); 
-        } catch (err) { alert('Error (Failed): ' + err.message); } 
-    } else { 
-        if (getDeviceType() === 'desktop') { alert('⚠️Users are restricted from access via computer.'); return; } 
-        currentRoomUser = val; 
-        userRole = 'user'; 
-        localStorage.setItem('current_room_user', currentRoomUser); 
-        localStorage.setItem('current_user_role', userRole); 
-        if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
-    } 
+    if (val === 'SUPER_ADMIN') {  
+        const email = document.getElementById('admin-email-input').value;  
+        const password = document.getElementById('admin-password-input').value;  
+        if (!email || !password) {  
+            alert("Please enter the creator's email and password!");
+            return;  
+        }  
+        try {  
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);  
+            currentRoomUser = `Creator: ${userCredential.user.email}`;  
+            userRole = 'admin';  
+            localStorage.setItem('current_room_user', currentRoomUser);  
+            localStorage.setItem('current_user_role', userRole);  
+            document.getElementById('desktop-blocked-modal').classList.add('hidden');  
+            document.getElementById('location-blocked-modal').classList.add('hidden');  
+            if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI();  
+        } catch (err) { 
+            alert('Developer login failed: ' + err.message); 
+        }  
+    } else if (val.startsWith('SUB_ADMIN')) {  
+        const pinInput = document.getElementById('sub-admin-pin').value;  
+        if (pinInput !== subAdminPins[val]) { alert('❌ Invalid PIN!'); return; }  
+        const adminName = val === 'SUB_ADMIN_1' ? 'Admin Deputy 1' : val === 'SUB_ADMIN_2' ? 'Admin Deputy 2' : 'Admin Deputy 3';  
+        try {  
+            const docRef = doc(db, "admin_sessions", val);  
+            const docSnap = await getDoc(docRef);  
+            if (val === 'SUB_ADMIN_1') {  
+                let devices = docSnap.exists() ? (docSnap.data().devices || []) : [];  
+                if (!devices.includes(deviceSessionId)) {  
+                    if (devices.length >= 2) { alert(`⚠️ "${adminName}" This account has reached the maximum login limit of 2 devices.`); return; }  
+                    devices.push(deviceSessionId);  
+                }  
+                await setDoc(docRef, { devices: devices, timestamp: new Date() }, { merge: true });  
+            } else {  
+                if (docSnap.exists()) {  
+                    const data = docSnap.data();  
+                    if (data.deviceId !== deviceSessionId && (Date.now() - (data.timestamp ? data.timestamp.toMillis() : 0) < 7200000)) {  
+                        alert(`⚠️ "${adminName}" it is currently active on another mobile device!`);  
+                        return;  
+                    }  
+                }  
+                await setDoc(docRef, { deviceId: deviceSessionId, timestamp: new Date() });  
+            }  
+            currentRoomUser = adminName;  
+            userRole = 'admin';  
+            localStorage.setItem('current_room_user', currentRoomUser);  
+            localStorage.setItem('current_user_role', userRole);  
+            document.getElementById('desktop-blocked-modal').classList.add('hidden');  
+            document.getElementById('location-blocked-modal').classList.add('hidden');  
+            if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI();  
+            alert(`🎉 Log in ${adminName} Success!`);  
+        } catch (err) { alert('Error (Failed): ' + err.message); }  
+    } else {  
+        if (getDeviceType() === 'desktop') { alert('⚠️Users are restricted from access via computer.'); return; }  
+        currentRoomUser = val;  
+        userRole = 'user';  
+        localStorage.setItem('current_room_user', currentRoomUser);  
+        localStorage.setItem('current_user_role', userRole);  
+        if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI();  
+    }  
 };
 
 window.logoutSession = async () => { 
