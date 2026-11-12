@@ -1490,7 +1490,7 @@ window.saveNews = async () => {
 
     await addDoc(collection(db, "news"), { title, category, content, date: new Date().toLocaleString('lo-LA'), likes: [] }); 
 
-    alert('ເພີ່ມຂ່າວສຳເລັດ!'); closeNewsModal(); loadNews(); 
+    alert('Thêm tin tức thành công!'); closeNewsModal(); loadNews(); 
 
 }; 
 
@@ -1512,7 +1512,7 @@ window.updateNews = async () => {
 
     await updateDoc(doc(db, "news", id), { title, category, content }); 
 
-    alert('ແກ້ໄຂຂ່າວສຳເລັດ!'); closeEditNewsModal(); loadNews(); 
+    alert('Sửa tin tức thành công!'); closeEditNewsModal(); loadNews(); 
 
 }; 
 
@@ -1520,7 +1520,7 @@ window.updateNews = async () => {
 
 window.deleteNewsItem = async (id) => { 
     if (!isSuperAdmin()) return; 
-    if (confirm('ລົບຂ່າວນີ້ແທ້ບໍ?')) { 
+    if (confirm('Bạn có chắc chắn muốn xóa tin tức này không?')) { 
         try {
             // 1. ລົບໂພສออกจาก Firestore Database
             await deleteDoc(doc(db, "news", id)); 
@@ -1542,9 +1542,9 @@ window.deleteNewsItem = async (id) => {
             updateNotificationUI();
             loadNews(); 
             
-            alert('ລົບຂ່າວ ແລະ ການແຈ້ງເຕືອນທີ່ກ່ຽວຂ້ອງສຳເລັດ!');
+            alert('Xóa tin tức và thông báo liên quan thành công!');
         } catch (e) {
-            alert('ເກີດຂໍ້ຜິດພາດໃນການລົບ: ' + e.message);
+            alert('Lỗi khi xóa: ' + e.message);
         }
     } 
 };
@@ -1588,7 +1588,7 @@ const uploadMediaSmart = (file) => {
 
                 } else { 
 
-                    reject(new Error(result.message || "ອັບໂຫລດບໍ່ສຳເລັດ")); 
+                    reject(new Error(result.message || "Tải lên thất bại")); 
 
                 } 
 
@@ -1652,9 +1652,9 @@ function checkVideoDuration(file) {
 
 window.submitMemberReport = async () => { 
 
-    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) { 
+    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('Người tạo')) { 
 
-        alert('ກະລຸນາລັອກອິນດ້ວຍໄອດີຫ້ອງພັກກ່ອນ!'); 
+        alert('Vui lòng đăng nhập bằng ID phòng trước!'); 
 
         document.getElementById('room-login-modal').classList.remove('hidden'); return; 
 
@@ -1664,11 +1664,11 @@ window.submitMemberReport = async () => {
 
     const now = new Date(); 
 
-    if (now.getDay() !== 0) { alert('⚠️ ລະບົບອະນຸຍາດໃຫ້ສົ່ງສະເພາະມື້ວັນອາທິດເທົ່ານັ້ນ!'); return; } 
+    if (now.getDay() !== 0) { alert('⚠️ Hệ thống chỉ cho phép gửi vào Chủ Nhật!'); return; } 
 
     const totalMinutesNow = now.getHours() * 60 + now.getMinutes(); 
 
-    if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ ເວລາສົ່ງ: 16:00 - 19:00 ໂມງ!'); return; } 
+    if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ Thời gian gửi: 16:00 - 19:00!'); return; } 
 
  
 
@@ -1680,13 +1680,13 @@ window.submitMemberReport = async () => {
 
     const statusText = document.getElementById('member-upload-status'); 
 
-    if (!name || !description) return alert('ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!name || !description) return alert('Vui lòng điền đầy đủ thông tin'); 
 
  
 
     const files = fileInput.files; 
 
-    if (files.length === 0) return alert('ກະລຸນາເປີດກ້ອງຖ່າຍວິດີໂອສົດກ່ອນສົ່ງ!'); 
+    if (files.length === 0) return alert('Vui lòng bật camera quay video trước khi gửi!'); 
 
  
 
@@ -1694,15 +1694,15 @@ window.submitMemberReport = async () => {
 
  
 
-    statusText.innerText = `⏳ ກຳລັງກວດສອບຄວາມຍາວວິດີໂອ...`; 
+    statusText.innerText = `⏳ Đang kiểm tra độ dài video...`; 
 
     const duration = await checkVideoDuration(videoFile); 
 
     if (duration > 62) { 
 
-        alert(`❌ ວິດີໂະຍາວເກີນໄປ (${Math.round(duration)} ວິນາທີ)! ລະບົບກຳນົດໃຫ້ຖ່າຍວິດີໂອຄວາມຍາວສູງສຸດບໍ່ເກີນ 1 ນາທີ.`); 
+        alert(`❌ Video quá dài (${Math.round(duration)} giây)! Hệ thống quy định độ dài video tối đa không quá 1 phút.`); 
 
-        statusText.innerText = '⚠️ ກະລຸນາຖ່າຍວິດີໂອໃໝ່ ຄວາມຍາວບໍ່ເກີນ 1 ນາທີ!'; 
+        statusText.innerText = '⚠️ Vui lòng quay lại video có độ dài không quá 1 phút!'; 
 
         return; 
 
@@ -1722,11 +1722,11 @@ window.submitMemberReport = async () => {
 
     }); 
 
-    if (submitted) return alert('⚠️ ຫ້ອງຂອງທ່ານສົ່ງບົດລາຍງານສຳລັບອາທິດນີ້ໄປແລ້ວ!'); 
+    if (submitted) return alert('⚠️ Phòng của bạn đã gửi báo cáo cho tuần này rồi!'); 
 
  
 
-    statusText.innerText = `⏳ ກຳລັງອັບໂຫລດວິດີໂອສົດຂຶ້ນ Google Drive...`; 
+    statusText.innerText = `⏳Đang tải video trực tiếp lên Google Drive...`; 
 
     try { 
 
@@ -1738,7 +1738,7 @@ window.submitMemberReport = async () => {
 
  
 
-        statusText.innerText = `⏳ ກຳລັງບັນທຶກບົດລາຍງານ...`; 
+        statusText.innerText = `⏳ Đang lưu báo cáo...`; 
 
         await addDoc(collection(db, "member_reports"), { 
 
@@ -1746,7 +1746,7 @@ window.submitMemberReport = async () => {
 
         }); 
 
-        alert('🎉 ສົ່ງບົດລາຍງານວິດີໂອສຳເລັດ!'); 
+        alert('🎉 Gửi báo cáo video thành công!'); 
 
         document.getElementById('member-name').value = ''; 
 
@@ -1754,7 +1754,7 @@ window.submitMemberReport = async () => {
 
         fileInput.value = ''; 
 
-        statusText.innerText = '⚠️ ລະບົບກວດສອບຄວາມຍາວວິດີໂອຕ້ອງບໍ່ເກີນ 60 ວິນາທີ ແລະ ຈະອັບໂຫລດຂຶ້ນ Google Drive ອັດຕະໂນມັດ'; 
+        statusText.innerText = '⚠️Hệ thống kiểm tra độ dài video không được vượt quá 60 giây và sẽ tự động tải lên Google Drive'; 
 
         loadMemberReports(); loadFullScoreSummary(); 
 
