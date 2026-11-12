@@ -1,6 +1,50 @@
-// ຕົວຢ່າງການເພີ່ມໃນໄຟລ໌ແປພາສາຂອງທ່ານ
-const translations = {
+
+// 🌐 ຟັງຊັນກວດສອບພາສາປັດຈຸບັນຈາກ URL (ຕົວຢ່າງ: ?lang=vn, ?lang=th, ?lang=en)
+function getCurrentLanguage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('lang') || 'lo'; // ค่าเริ่มต้นเป็นลาว
+}
+
+// 💬 ຂໍ້ຄວາມແຈ້ງເຕືອນ (Alert & Confirm) ແຍກຕາມພາສາ
+const uiMessages = {
     lo: {
+        confirmDeleteNews: "ລົບຂ່າວນີ້ແທ້ບໍ?",
+        successDeleteNews: "ລົບຂ່າວ ແລະ ການແຈ້ງເຕືອນທີ່ກ່ຽວຂ້ອງສຳເລັດ!",
+        confirmDeleteReport: "ລົບລາຍງານນີ້ແທ້ບໍ?",
+        selectRoomAlert: "ກະລຸນາເລືອກຫ້ອງພັກກ່ອນ!",
+        loginSuccess: "🎉 ເຂົ້າສູ່ລະບົບສຳເລັດ!"
+    },
+    vn: {
+        confirmDeleteNews: "Bạn có chắc chắn muốn xóa tin tức này không?",
+        successDeleteNews: "Đã xóa tin tức và thông báo liên quan thành công!",
+        confirmDeleteReport: "Bạn có chắc chắn muốn xóa báo cáo này không?",
+        selectRoomAlert: "Vui lòng chọn phòng trước!",
+        loginSuccess: "🎉 Đăng nhập thành công!"
+    },
+    th: {
+        confirmDeleteNews: "คุณแน่ใจหรือไม่ว่าต้องการลบข่าวนี้?",
+        successDeleteNews: "ลบข่าวและการแจ้งเตือนที่เกี่ยวข้องสำเร็จ!",
+        confirmDeleteReport: "คุณแน่ใจหรือไม่ว่าต้องการลบรายงานนี้?",
+        selectRoomAlert: "กรุณาเลือกห้องพักก่อน!",
+        loginSuccess: "🎉 เข้าสู่ระบบสำเร็จ!"
+    },
+    en: {
+        confirmDeleteNews: "Are you sure you want to delete this news?",
+        successDeleteNews: "News and related notifications deleted successfully!",
+        confirmDeleteReport: "Are you sure you want to delete this report?",
+        selectRoomAlert: "Please select a room first!",
+        loginSuccess: "🎉 Login successful!"
+    }
+};
+
+// ດຶງຂໍ້ຄວາມຕາມພາສາທີ່ກຳລັງເປີດຢູ່
+function getMessage(key) {
+    const lang = getCurrentLanguage();
+    return (uiMessages[lang] && uiMessages[lang][key]) ? uiMessages[lang][key] : uiMessages['lo'][key];
+}
+// 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
+const translations = {
+     lo: {
         logout: "ອອກຈາກລະບົບ",
         // ... ພາສາລາວ
     },
@@ -53,52 +97,7 @@ function updateLiveClock() {
         second: '2-digit', 
         hour12: false 
     }); 
-}
-// 🌐 ຟັງຊັນກວດສອບພາສາປັດຈຸບັນຈາກ URL (ຕົວຢ່າງ: ?lang=vn, ?lang=th, ?lang=en)
-function getCurrentLanguage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('lang') || 'lo'; // ค่าเริ่มต้นเป็นลาว
-}
 
-// 💬 ຂໍ້ຄວາມແຈ້ງເຕືອນ (Alert & Confirm) ແຍກຕາມພາສາ
-const uiMessages = {
-    lo: {
-        confirmDeleteNews: "ລົບຂ່າວນີ້ແທ້ບໍ?",
-        successDeleteNews: "ລົບຂ່າວ ແລະ ການແຈ້ງເຕືອນທີ່ກ່ຽວຂ້ອງສຳເລັດ!",
-        confirmDeleteReport: "ລົບລາຍງານນີ້ແທ້ບໍ?",
-        selectRoomAlert: "ກະລຸນາເລືອກຫ້ອງພັກກ່ອນ!",
-        loginSuccess: "🎉 ເຂົ້າສູ່ລະບົບສຳເລັດ!"
-    },
-    vn: {
-        confirmDeleteNews: "Bạn có chắc chắn muốn xóa tin tức này không?",
-        successDeleteNews: "Đã xóa tin tức và thông báo liên quan thành công!",
-        confirmDeleteReport: "Bạn có chắc chắn muốn xóa báo cáo này không?",
-        selectRoomAlert: "Vui lòng chọn phòng trước!",
-        loginSuccess: "🎉 Đăng nhập thành công!"
-    },
-    th: {
-        confirmDeleteNews: "คุณแน่ใจหรือไม่ว่าต้องการลบข่าวนี้?",
-        successDeleteNews: "ลบข่าวและการแจ้งเตือนที่เกี่ยวข้องสำเร็จ!",
-        confirmDeleteReport: "คุณแน่ใจหรือไม่ว่าต้องการลบรายงานนี้?",
-        selectRoomAlert: "กรุณาเลือกห้องพักก่อน!",
-        loginSuccess: "🎉 เข้าสู่ระบบสำเร็จ!"
-    },
-    en: {
-        confirmDeleteNews: "Are you sure you want to delete this news?",
-        successDeleteNews: "News and related notifications deleted successfully!",
-        confirmDeleteReport: "Are you sure you want to delete this report?",
-        selectRoomAlert: "Please select a room first!",
-        loginSuccess: "🎉 Login successful!"
-    }
-};
-
-// ດຶງຂໍ້ຄວາມຕາມພາສາທີ່ກຳລັງເປີດຢູ່
-function getMessage(key) {
-    const lang = getCurrentLanguage();
-    return (uiMessages[lang] && uiMessages[lang][key]) ? uiMessages[lang][key] : uiMessages['lo'][key];
-}
-// 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
-const translations = {
     lo: {
         app_title: "ຈຸປ້ອງກັນຂ່າວສານ",
         app_subtitle: "Defense Unit News & Hygiene Tracking",
