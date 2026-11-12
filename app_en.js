@@ -635,20 +635,24 @@ window.confirmRoomLogin = async () => {
     const val = select.value; 
     if (!val) { alert('Please select a room or Admin mode!'); return; } 
 
-    if (val === 'SUPER_ADMIN') { 
-        const email = document.getElementById('admin-email-input').value; 
-        const password = document.getElementById('admin-password-input').value; 
-        if (!email || !password) { alert('Please enter the creator's email and password!'); return; } 
-        try { 
-            const userCredential = await signInWithEmailAndPassword(auth, email, password); 
-            currentRoomUser = `Creator: ${userCredential.user.email}`; 
-            userRole = 'admin'; 
-            localStorage.setItem('current_room_user', currentRoomUser); 
-            localStorage.setItem('current_user_role', userRole); 
-            document.getElementById('desktop-blocked-modal').classList.add('hidden'); 
-            document.getElementById('location-blocked-modal').classList.add('hidden'); 
-            if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
-        } catch (err) { alert('Developer login failed: ' + err.message); } 
+   if (val === 'SUPER_ADMIN') { 
+    const email = document.getElementById('admin-email-input').value; 
+    const password = document.getElementById('admin-password-input').value; 
+    if (!email || !password) { 
+        alert("Please enter the creator's email and password!"); 
+        return; 
+    } 
+    try { 
+        const userCredential = await signInWithEmailAndPassword(auth, email, password); 
+        currentRoomUser = `Creator: ${userCredential.user.email}`; 
+        userRole = 'admin'; 
+        localStorage.setItem('current_room_user', currentRoomUser); 
+        localStorage.setItem('current_user_role', userRole); 
+        document.getElementById('desktop-blocked-modal').classList.add('hidden'); 
+        document.getElementById('location-blocked-modal').classList.add('hidden'); 
+        if (typeof checkRoomAuthUI === 'function') checkRoomAuthUI(); 
+    } catch (err) { alert('Developer login failed: ' + err.message); } 
+}
     } else if (val.startsWith('SUB_ADMIN')) { 
         const pinInput = document.getElementById('sub-admin-pin').value; 
         if (pinInput !== subAdminPins[val]) { alert('❌ Invalid PIN!'); return; } 
