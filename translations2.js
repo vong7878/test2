@@ -44,31 +44,7 @@ function getMessage(key) {
 }
 // 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
 const translations = {
-     lo: {
-        logout: "ອອກຈາກລະບົບ",
-        // ... ພາສາລາວ
-    },
-    vn: {
-        logout: "Đăng xuất",
-        // ... ພາສາຫວຽດນາມ
-    },
-    th: {
-        logout: "ออกจากระบบ",
-        // ... ພາສາໄທ
-    },
-    en: {
-        logout: "Logout",
-        // ... ພາສາອັງກິດ
-    },
-    ch: {
-        logout: "退出登录",
-        // ... ພາສາຈີນ
-    },
-    kr: {
-        logout: "로그아웃",
-        // ... ພາສາເກົາຫຼີ
-    }
-};
+    
 function updateLiveClock() { 
     const clockElement = document.getElementById('live-clock'); 
     if (!clockElement) return; 
@@ -679,6 +655,26 @@ function updateLiveClock() {
         approvedReports: "승인된 보고서",
         logout: "로그아웃",
         special_point_desc: "+ 웹사이트 제작자로부터 특별 점수를 받았습니다 (+1점)"
+    }
+};
+const translations = {
+    lo: {
+        logout: "ອອກຈາກລະບົບ"
+    }, // 👈 ຕ້ອງມີ comma (,) ັ້ນກາງແຕ່ລະພາສາ
+    vn: {
+        logout: "Đăng xuất"
+    },
+    th: {
+        logout: "ออกจากระบบ"
+    },
+    en: {
+        logout: "Logout"
+    },
+    ch: {
+        logout: "退出登录"
+    },
+    kr: {
+        logout: "로그아웃"
     }
 };
 
