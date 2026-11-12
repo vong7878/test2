@@ -1,8 +1,7 @@
-
-// 🌐 ຟັງຊັນກວດສອບພາສາປັດຈຸບັນຈາກ URL (ຕົວຢ່າງ: ?lang=vn, ?lang=th, ?lang=en)
+// 🌐 ຟັງຊັນກວດສອບພາສາປັດຈຸບັນຈາກ URL (ຕົວຢ່າງ: ?lang=vn, ?lang=th, ?lang=en) ຫຼື localStorage
 function getCurrentLanguage() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('lang') || 'lo'; // ค่าเริ่มต้นเป็นลาว
+    return urlParams.get('lang') || localStorage.getItem("app_lang") || 'lo'; 
 }
 
 // 💬 ຂໍ້ຄວາມແຈ້ງເຕືອນ (Alert & Confirm) ແຍກຕາມພາສາ
@@ -34,6 +33,20 @@ const uiMessages = {
         confirmDeleteReport: "Are you sure you want to delete this report?",
         selectRoomAlert: "Please select a room first!",
         loginSuccess: "🎉 Login successful!"
+    },
+    ch: {
+        confirmDeleteNews: "您确定要删除这条新闻吗？",
+        successDeleteNews: "新闻及相关通知已成功删除！",
+        confirmDeleteReport: "您确定要删除此报告吗？",
+        selectRoomAlert: "请先选择房间！",
+        loginSuccess: "🎉 登录成功！"
+    },
+    kr: {
+        confirmDeleteNews: "이 뉴스를 정말 삭제하시겠습니까?",
+        successDeleteNews: "뉴스 및 관련 알림이 성공적으로 삭제되었습니다!",
+        confirmDeleteReport: "이 보고서를 정말 삭제하시겠습니까?",
+        selectRoomAlert: "먼저 방을 선택해 주세요!",
+        loginSuccess: "🎉 로그인 성공!"
     }
 };
 
@@ -42,38 +55,9 @@ function getMessage(key) {
     const lang = getCurrentLanguage();
     return (uiMessages[lang] && uiMessages[lang][key]) ? uiMessages[lang][key] : uiMessages['lo'][key];
 }
-// 🌐 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທຸກພາສາ ແລະ ທຸກ Key ໄວ້ບ່ອນດຽວ)
+
+// 🌍 ຄັງຄຳສັບທັງໝົດໃນລະບົບ (ລວມທັງ 6 ພາສາ ແລະ Key 'logout' ໄວ້ບ່ອນດຽວຢ່າງສົມບູນ)
 const translations = {
-    
-function updateLiveClock() { 
-    const clockElement = document.getElementById('live-clock'); 
-    if (!clockElement) return; 
-    const now = new Date(); 
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const lang = urlParams.get('lang') || 'lo';
-
-    let localeMap = {
-        'lo': 'lo-LA',
-        'th': 'th-TH',
-        'vn': 'vi-VN',
-        'en': 'en-US',
-        'ch': 'zh-CN',
-        'kr': 'ko-KR'
-    };
-    let currentLocale = localeMap[lang] || 'lo-LA';
-
-    clockElement.innerText = now.toLocaleDateString(currentLocale, { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit', 
-        hour12: false 
-    }); 
-
     lo: {
         app_title: "ຈຸປ້ອງກັນຂ່າວສານ",
         app_subtitle: "Defense Unit News & Hygiene Tracking",
@@ -268,7 +252,7 @@ function updateLiveClock() {
         logout: "ออกจากระบบ",
         special_point_desc: "+ ได้รับคะแนนพิเศษ (+1 คะแนน) จากผู้สร้างเว็บไซต์"
     },
-    vi: {
+    vn: {
         app_title: "Đội Bảo vệ Tin tức",
         app_subtitle: "Defense Unit News & Hygiene Tracking",
         guide_btn: "Hướng dẫn",
@@ -462,7 +446,7 @@ function updateLiveClock() {
         logout: "Logout",
         special_point_desc: "+ Received special points (+1 point) from the website creator"
     },
-    zh: {
+    ch: {
         app_title: "防务部新闻",
         app_subtitle: "Defense Unit News & Hygiene Tracking",
         guide_btn: "使用指南",
@@ -559,7 +543,7 @@ function updateLiveClock() {
         logout: "退出登录",
         special_point_desc: "+ 获得网站创作者的特殊加分 (+1分)"
     },
-    ko: {
+    kr: {
         app_title: "방위부 뉴스",
         app_subtitle: "Defense Unit News & Hygiene Tracking",
         guide_btn: "사용 가이드",
@@ -657,42 +641,55 @@ function updateLiveClock() {
         special_point_desc: "+ 웹사이트 제작자로부터 특별 점수를 받았습니다 (+1점)"
     }
 };
-const translations = {
-    lo: {
-        logout: "ອອກຈາກລະບົບ"
-    }, // 👈 ຕ້ອງມີ comma (,) ັ້ນກາງແຕ່ລະພາສາ
-    vn: {
-        logout: "Đăng xuất"
-    },
-    th: {
-        logout: "ออกจากระบบ"
-    },
-    en: {
-        logout: "Logout"
-    },
-    ch: {
-        logout: "退出登录"
-    },
-    kr: {
-        logout: "로그아웃"
-    }
-};
 
 // ⚙️ ຟັງຊັນຊ່ວຍດຶງຄຳສັບ ແລະ ຈັດການພາສາ
 function getCurrentLang() {
-    return localStorage.getItem("app_lang") || "lo";
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('lang') || localStorage.getItem("app_lang") || "lo";
 }
 
 function t(key) {
     const lang = getCurrentLang();
-    return translations[lang] ? translations[lang][key] || key : key;
+    return translations[lang] ? translations[lang][key] || translations['lo'][key] || key : key;
 }
 
 window.changeAppLanguage = function(lang) {
     localStorage.setItem("app_lang", lang);
-    location.reload();
+    const url = new URL(window.location);
+    url.searchParams.set('lang', lang);
+    window.location.href = url.toString();
 };
-// 🌍 ຜູກຟັງຊັນທັງໝົດລົງໃນ window ເພື່ອໃຫ້ HTML ສามารถເອີ້ນໃຊ້ງານໄດ້ໂດຍตรง
+
+// 🕒 ຟັງຊັນອັບເດດ Live Clock ຕາມພາສາ
+function updateLiveClock() { 
+    const clockElement = document.getElementById('live-clock'); 
+    if (!clockElement) return; 
+    const now = new Date(); 
+
+    const lang = getCurrentLang();
+    let localeMap = {
+        'lo': 'lo-LA',
+        'th': 'th-TH',
+        'vn': 'vi-VN',
+        'en': 'en-US',
+        'ch': 'zh-CN',
+        'kr': 'ko-KR'
+    };
+    let currentLocale = localeMap[lang] || 'lo-LA';
+
+    clockElement.innerText = now.toLocaleDateString(currentLocale, { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false 
+    }); 
+}
+
+// 🌍 ຜູກຟັງຊັນທັງໝົດລົງໃນ window ເພື່ອໃຫ້ HTML ສามารถເອີ້ນໃຊ້ງານໄດ້ໂດຍຕົງ
 window.searchNews = searchNews;
 window.handleLoginTypeChange = handleLoginTypeChange;
 window.confirmRoomLogin = confirmRoomLogin;
