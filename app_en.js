@@ -511,6 +511,7 @@ async function verifySubAdminSession() {
             const docRef = doc(db, "admin_sessions", adminKey); 
             const docSnap = await getDoc(docRef); 
             if (docSnap.exists()) { 
+                
                 const data = docSnap.data(); 
                 if (adminKey === 'SUB_ADMIN_1') { 
                     let devices = data.devices || []; 
@@ -558,13 +559,17 @@ function checkRoomAuthUI() {
         if (roomDisplay) roomDisplay.value = currentRoomUser; 
         if (feedbackRoomDisplay) feedbackRoomDisplay.value = currentRoomUser; 
 
-        if (authNav) authNav.innerHTML = ` 
-            <div class="text-right"> 
-                <span class="text-xs block text-emerald-400 font-bold">🏠 ${currentRoomUser}</span> 
-                <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-300 uppercase">${userRole}</span> 
-            </div> 
-            <button onclick="logoutSession()" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg transition shadow">Sign out</button> 
-        `; 
+       if (authNav) {
+    authNav.innerHTML = ` 
+        <div class="text-right"> 
+            <span class="text-xs block text-emerald-400 font-bold">🏠 ${currentRoomUser}</span> 
+            <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-300 uppercase">${userRole}</span> 
+        </div> 
+        <button onclick="logoutSession()" class="bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg transition shadow">
+            ${typeof t === 'function' ? t('logout') : 'Sign out'}
+        </button> 
+    `;
+}
 
         if (userRole === 'admin') { 
             if (adminBox) adminBox.classList.remove('hidden'); 
