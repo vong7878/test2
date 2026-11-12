@@ -809,20 +809,20 @@ window.switchSummaryPeriod = (period) => {
 };
 
 window.submitUserFeedback = async () => { 
-    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) { 
-        alert('ກະລຸນາລັອກອິນດ້ວຍໄອດີຫ້ອງພັກກ່ອນສົ່ງຄຳຄິດຄຳເຫັນ!'); 
+    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('Creator')) { 
+        alert('Please login with your room ID before submitting a comment!'); 
         document.getElementById('room-login-modal').classList.remove('hidden'); return; 
     } 
     const commentText = document.getElementById('feedback-text-input').value.trim(); 
-    if (!commentText) { alert('ກະລຸນາປ້ອນຂໍ້ຄວາມຄຳຄິດຄຳເຫັນ!'); return; } 
+    if (!commentText) { alert('Please enter a comment message!'); return; } 
 
     try { 
         await addDoc(collection(db, "user_feedbacks"), { room: currentRoomUser, comment: commentText, date: new Date().toLocaleString('lo-LA'), timestamp: new Date() }); 
-        await addDoc(collection(db, "admin_chats"), { sender: `💬 ຄວາມຄິດຄຳເຫັນຈາກ [${currentRoomUser}]`, text: commentText, time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }), timestamp: new Date() }); 
-        alert('🎉 ສົ່ງຄຳຄິດຄຳເຫັນສຳເລັດ!'); 
+        await addDoc(collection(db, "admin_chats"), { sender: `💬 Comment from [${currentRoomUser}]`, text: commentText, time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }), timestamp: new Date() }); 
+        alert('🎉 Comment submitted successfully!'); 
         document.getElementById('feedback-text-input').value = ''; 
         loadUserFeedbacks(); 
-    } catch (err) { alert('ຜິດພາດ: ' + err.message); } 
+    } catch (err) { alert('Error: ' + err.message); } 
 }; 
 
 async function loadUserFeedbacks() { 
@@ -830,7 +830,7 @@ async function loadUserFeedbacks() {
     if (!container) return; 
     try { 
         const snapshot = await getDocs(query(collection(db, "user_feedbacks"), orderBy("timestamp", "desc"))); 
-        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-6 text-slate-500">ຍັງບໍ່ມີປະຫວັດຄຳຄິດຄຳເຫັນ.</div>`; return; } 
+        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-6 text-slate-500">No comment history yet.</div>`; return; } 
         let html = ''; 
         snapshot.forEach(docSnap => { 
             const fb = docSnap.data(); 
@@ -847,8 +847,8 @@ async function loadUserFeedbacks() {
                 `; 
             } 
         }); 
-        container.innerHTML = html || `<div class="text-center py-6 text-slate-500">ຍັງບໍ່ມີປະຫວັດສຳລັບຫ້ອງຂອງທ່ານ.</div>`; 
-    } catch (err) { container.innerHTML = `<div class="text-center py-6 text-red-400">ຜິດພາດ: ${err.message}</div>`; } 
+        container.innerHTML = html || `<div class="text-center py-6 text-slate-500">No history for your room yet.</div>`; 
+    } catch (err) { container.innerHTML = `<div class="text-center py-6 text-red-400">Error: ${err.message}</div>`; } 
 } 
 
 function listenAdminChat() { 
@@ -856,12 +856,12 @@ function listenAdminChat() {
     chatUnsubscribe = onSnapshot(query(collection(db, "admin_chats"), orderBy("timestamp", "asc")), (snapshot) => { 
         const container = document.getElementById('admin-chat-messages'); 
         if (!container) return; 
-        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-12 text-slate-500">ຍັງບໍ່ມີຂໍ້ຄວາມສົນທະນາ.</div>`; return; } 
+        if (snapshot.empty) { container.innerHTML = `<div class="text-center py-12 text-slate-500">No chat messages yet.</div>`; return; } 
         let html = ''; 
         snapshot.forEach((docSnap) => { 
             const msg = docSnap.data(); 
             const isMe = msg.sender === currentRoomUser; 
-            const isFeedback = msg.sender.includes('ຄວາມຄິດຄຳເຫັນ'); 
+            const isFeedback = msg.sender.includes('Comment'); 
             html += ` 
                 <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} animate-fade-in"> 
                     <span class="text-[10px] text-slate-400 mb-1 px-1">${msg.sender} (${msg.time || ''})</span> 
@@ -882,7 +882,7 @@ window.sendAdminMessage = async () => {
     try { 
         input.value = ''; 
         await addDoc(collection(db, "admin_chats"), { sender: currentRoomUser, text: text, time: new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' }), timestamp: new Date() }); 
-    } catch (err) { alert('ຜິດພາດ: ' + err.message); } 
+    } catch (err) { alert('Error: ' + err.message); } 
 }; 
 
 let selectedWeekHistory = null; // 👈 ຕົວແปรເກັບອາທິດທີ່ຜູ້ໃຊ້ເລືອກເບິ່ງຢ້ອນຫຼັງ
@@ -926,10 +926,10 @@ async function loadFullScoreSummary() {
 
         if (currentSummaryPeriod === 'weekly') { 
             selectedFilterText = weekPicker ? weekPicker.value : getCurrentWeekInputString(now);
-            if (topRoomLabel) topRoomLabel.innerText = `ຫ້ອງອັນດັບ 1 (${selectedFilterText})`; 
-            if (totalPtsLabel) totalPtsLabel.innerText = `ຄະແນນລວມ (${selectedFilterText})`; 
-            if (appCountLabel) appCountLabel.innerText = `ບົດລາຍງານທີ່ອະນຸມັດ (${selectedFilterText})`; 
-            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>ກຣາຟສະຫຼຸບຄະແນນປະຈຳອາທິດ (${selectedFilterText})</span>`; 
+            if (topRoomLabel) topRoomLabel.innerText = `Ranking room 1 (${selectedFilterText})`; 
+            if (totalPtsLabel) totalPtsLabel.innerText = `Total score (${selectedFilterText})`; 
+            if (appCountLabel) appCountLabel.innerText = `Approved reports (${selectedFilterText})`; 
+            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>Weekly score summary graph (${selectedFilterText})</span>`; 
 
             let scores = {}; let totalPts = 0; let approvedReportsCount = 0; 
             rooms.forEach(r => { scores[r] = 0; }); 
@@ -953,12 +953,12 @@ async function loadFullScoreSummary() {
             }); 
 
             totalPts = Object.values(scores).reduce((a, b) => a + b, 0); 
-            let maxPts = -1; let topRoom = 'ຍັງບໍ່ມີຂໍ້ມູນ'; 
+            let maxPts = -1; let topRoom = 'No data yet'; 
             rooms.forEach(r => { if (scores[r] > maxPts) { maxPts = scores[r]; topRoom = r; } }); 
 
-            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} ຄະແນນ)`; 
-            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalPts} ຄະແນນ`; 
-            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${approvedReportsCount} ບົດລາຍງານ`; 
+            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} Score)`; 
+            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalPts} Score`; 
+            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${approvedReportsCount} Report`; 
 
             const highestPoint = Math.max(...Object.values(scores), 1); 
             container.innerHTML = rooms.map(room => { 
@@ -968,7 +968,7 @@ async function loadFullScoreSummary() {
                     <div class="space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 animate-fade-in"> 
                         <div class="flex justify-between items-center text-xs font-semibold"> 
                             <span class="text-slate-200">🏠 ${room}</span> 
-                            <span class="text-amber-400 font-bold">${pts} ຄະແນນ (${percent}%)</span> 
+                            <span class="text-amber-400 font-bold">${pts} Score (${percent}%)</span> 
                         </div> 
                         <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700"> 
                             <div class="bg-gradient-to-r from-emerald-500 to-amber-400 h-3 rounded-full transition-all duration-500" style="width: ${percent}%"></div> 
@@ -982,10 +982,10 @@ async function loadFullScoreSummary() {
             selectedFilterText = monthPicker ? monthPicker.value : ''; // ຕົວຢ່າງ: 2026-11
             const [selYear, selMonth] = selectedFilterText.split('-').map(Number);
 
-            if (topRoomLabel) topRoomLabel.innerText = `ຫ້ອງອັນດັບ 1 (ເດືອນ ${selectedFilterText})`; 
-            if (totalPtsLabel) totalPtsLabel.innerText = `ຄະແນນລວມທັງເດືອນ`; 
-            if (appCountLabel) appCountLabel.innerText = `ບົດລາຍງານທັງໝົດໃນເດືອນ`; 
-            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>ກຣາຟຄະແນນແຕ່ລະຫ້ອງ ປະຈຳເດືອນ (${selectedFilterText})</span>`; 
+            if (topRoomLabel) topRoomLabel.innerText = `Ranking room 1 (Month ${selectedFilterText})`; 
+            if (totalPtsLabel) totalPtsLabel.innerText = `Total score for the month`; 
+            if (appCountLabel) appCountLabel.innerText = `All reports in the month`; 
+            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span> Monthly score graph by room (${selectedFilterText})</span>`; 
 
             let scores = {}; let totalMonthPts = 0; let monthReportsCount = 0;
             rooms.forEach(r => { scores[r] = 0; });
@@ -1008,12 +1008,12 @@ async function loadFullScoreSummary() {
                 } 
             }); 
 
-            let maxPts = -1; let topRoom = 'ຍັງບໍ່ມີຂໍ້ມູນ';
+            let maxPts = -1; let topRoom = 'No data yet';
             rooms.forEach(r => { if (scores[r] > maxPts) { maxPts = scores[r]; topRoom = r; } });
 
-            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} ຄະແນນ)`; 
-            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalMonthPts} ຄະແນນ`; 
-            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${monthReportsCount} ບົດລາຍງານ`; 
+            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} Score)`; 
+            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalMonthPts} Score`; 
+            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${monthReportsCount} Report`; 
 
             const highestPoint = Math.max(...Object.values(scores), 1); 
             container.innerHTML = rooms.map(room => { 
@@ -1023,7 +1023,7 @@ async function loadFullScoreSummary() {
                     <div class="space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 animate-fade-in"> 
                         <div class="flex justify-between items-center text-xs font-semibold"> 
                             <span class="text-amber-300 font-bold">🏠 ${room}</span> 
-                            <span class="text-emerald-400 font-bold">${pts} ຄະແນນ (${percent}%)</span> 
+                            <span class="text-emerald-400 font-bold">${pts} Score (${percent}%)</span> 
                         </div> 
                         <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700"> 
                             <div class="bg-gradient-to-r from-sky-500 to-emerald-400 h-3 rounded-full transition-all duration-500" style="width: ${percent}%"></div> 
@@ -1037,10 +1037,10 @@ async function loadFullScoreSummary() {
             selectedFilterText = yearPicker ? yearPicker.value : String(now.getFullYear());
             const selYear = Number(selectedFilterText);
 
-            if (topRoomLabel) topRoomLabel.innerText = `ຫ້ອງອັນດັບ 1 (ປີ ${selectedFilterText})`; 
-            if (totalPtsLabel) totalPtsLabel.innerText = `ຄະແນນລວມທັງປີ (${selectedFilterText})`; 
-            if (appCountLabel) appCountLabel.innerText = `ບົດລາຍງານທັງໝົດໃນປີ`; 
-            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>ກຣາຟຄະແນນແຕ່ລະຫ້ອງ ປະຈຳປີ (${selectedFilterText})</span>`; 
+            if (topRoomLabel) topRoomLabel.innerText = `Ranking room 1 (Year ${selectedFilterText})`; 
+            if (totalPtsLabel) totalPtsLabel.innerText = `Total score for the year (${selectedFilterText})`; 
+            if (appCountLabel) appCountLabel.innerText = `All reports in the year`; 
+            if (chartTitle) chartTitle.innerHTML = `<span>📈</span> <span>Yearly score graph by room (${selectedFilterText})</span>`; 
             
             let scores = {}; let totalYearPts = 0; let yearReportsCount = 0;
             rooms.forEach(r => { scores[r] = 0; });
@@ -1063,12 +1063,12 @@ async function loadFullScoreSummary() {
                 } 
             }); 
 
-            let maxPts = -1; let topRoom = 'ຍັງບໍ່ມີຂໍ້ມູນ';
+            let maxPts = -1; let topRoom = 'No data yet';
             rooms.forEach(r => { if (scores[r] > maxPts) { maxPts = scores[r]; topRoom = r; } });
 
-            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} ຄະແນນ)`; 
-            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalYearPts} ຄະແນນ`; 
-            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${yearReportsCount} ບົດລາຍງານ`; 
+            if (document.getElementById('summary-top-room')) document.getElementById('summary-top-room').innerText = `${topRoom} (${maxPts} Score)`; 
+            if (document.getElementById('summary-total-points')) document.getElementById('summary-total-points').innerText = `${totalYearPts} Score`; 
+            if (document.getElementById('summary-approved-count')) document.getElementById('summary-approved-count').innerText = `${yearReportsCount} Report`; 
 
             const highestPoint = Math.max(...Object.values(scores), 1); 
             container.innerHTML = rooms.map(room => { 
@@ -1078,7 +1078,7 @@ async function loadFullScoreSummary() {
                     <div class="space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 animate-fade-in"> 
                         <div class="flex justify-between items-center text-xs font-semibold"> 
                             <span class="text-amber-300 font-bold">🏠 ${room}</span> 
-                            <span class="text-emerald-400 font-bold">${pts} ຄະແນນ (${percent}%)</span> 
+                            <span class="text-emerald-400 font-bold">${pts} Score (${percent}%)</span> 
                         </div> 
                         <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700"> 
                             <div class="bg-gradient-to-r from-amber-500 to-emerald-400 h-3 rounded-full transition-all duration-500" style="width: ${percent}%"></div> 
@@ -1090,7 +1090,7 @@ async function loadFullScoreSummary() {
 
     } catch (err) { 
         console.error("Dashboard error:", err);
-        container.innerHTML = `<div class="text-center py-6 text-red-400">ເກີດຂໍ້ຜິດພາດ: ${err.message}</div>`; 
+        container.innerHTML = `<div class="text-center py-6 text-red-400">Error: ${err.message}</div>`; 
     } 
 }
 
@@ -1181,7 +1181,7 @@ async function loadFullScoreboard() {
 
                             <h4 class="font-bold text-slate-100 text-base">${room}</h4> 
 
-                            <p class="text-xs text-slate-400">ສະຖານະ: ພ້ອມປະຕິບັດງານ</p> 
+                            <p class="text-xs text-slate-400">Status: Ready to operate</p> 
 
                         </div> 
 
@@ -1191,7 +1191,7 @@ async function loadFullScoreboard() {
 
                         <span class="text-2xl font-extrabold text-amber-400">${pts}</span> 
 
-                        <span class="block text-[10px] text-slate-400 uppercase">ຄະແນນສະສົມ</span> 
+                        <span class="block text-[10px] text-slate-400 uppercase">Cumulative score</span> 
 
                     </div> 
 
@@ -1201,7 +1201,7 @@ async function loadFullScoreboard() {
 
         }).join(''); 
 
-    } catch (err) { container.innerHTML = `<div class="text-center py-12 text-red-400 col-span-full">ຜິດພາດ: ${err.message}</div>`; } 
+    } catch (err) { container.innerHTML = `<div class="text-center py-12 text-red-400 col-span-full">Error: ${err.message}</div>`; } 
 
 } 
 
@@ -1325,7 +1325,7 @@ function renderNews(newsList) {
 
                     <span class="text-xs px-3 py-1 rounded-full font-medium ${item.category === 'notice' ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'}"> 
 
-                        ${item.category === 'notice' ? '📢 ແຈ້ງການດ່ວນ' : '🎖️ ພາວະກິດ/ກິດຈະກຳ'} 
+                        ${item.category === 'notice' ? '📢 Urgent notice' : '🎖️ Mission / Activity'} 
 
                     </span> 
 
@@ -1345,11 +1345,11 @@ function renderNews(newsList) {
 
                         <button onclick="toggleLike('${item.id}')" class="text-xs px-3.5 py-1.5 rounded-xl border transition flex items-center space-x-1.5 ${hasLiked ? 'bg-pink-600/30 text-pink-400 border-pink-500/50' : 'bg-slate-900/60 text-slate-300 border-slate-700'}"> 
 
-                            <span>${hasLiked ? '❤️' : '🤍'}</span> <span>${hasLiked ? 'ຖືກໃຈແນວ' : 'ຖືກໃຈ'} (${likes.length})</span> 
+                            <span>${hasLiked ? '❤️' : '🤍'}</span> <span>${hasLiked ? 'Super like' : 'Like'} (${likes.length})</span> 
 
                         </button> 
 
-                        <button onclick="handleShare('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, ' ').substring(0, 100)}...')" class="text-xs bg-emerald-900/60 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-700/60 transition flex items-center space-x-1"><span>🔗</span> <span>ແຊ</span></button> 
+                        <button onclick="handleShare('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, ' ').substring(0, 100)}...')" class="text-xs bg-emerald-900/60 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-700/60 transition flex items-center space-x-1"><span>🔗</span> <span>Share</span></button> 
 
                     </div> 
 
@@ -1357,9 +1357,9 @@ function renderNews(newsList) {
 
                         <div class="flex space-x-2"> 
 
-                            <button onclick="openEditNewsModal('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.category}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="text-xs bg-amber-600 px-3 py-1.5 rounded-lg text-white">ແກ້ໄຂ</button> 
+                            <button onclick="openEditNewsModal('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.category}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="text-xs bg-amber-600 px-3 py-1.5 rounded-lg text-white">Edit</button> 
 
-                            <button onclick="deleteNewsItem('${item.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ລົບ</button> 
+                            <button onclick="deleteNewsItem('${item.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">Delete</button> 
 
                         </div> 
 
@@ -1379,7 +1379,7 @@ function renderNews(newsList) {
 
 window.toggleLike = async (newsId) => { 
 
-    if (!currentRoomUser) { alert('ກະລຸນາເລືອກຫ້ອງພັກກ່ອນ!'); document.getElementById('room-login-modal').classList.remove('hidden'); return; } 
+    if (!currentRoomUser) { alert('Please select a room first!'); document.getElementById('room-login-modal').classList.remove('hidden'); return; } 
 
     const newsRef = doc(db, "news", newsId); 
 
@@ -1389,7 +1389,7 @@ window.toggleLike = async (newsId) => {
 
             const docSnap = await transaction.get(newsRef); 
 
-            if (!docSnap.exists()) throw "ບໍ່ພົບຂ່າວສານ!"; 
+            if (!docSnap.exists()) throw "No news found!"; 
 
             let likes = docSnap.data().likes || []; 
 
@@ -1403,7 +1403,7 @@ window.toggleLike = async (newsId) => {
 
         loadNews(); 
 
-    } catch (e) { alert('ຜິດພາດ: ' + e); } 
+    } catch (e) { alert('Error: ' + e); } 
 
 }; 
 
@@ -1444,7 +1444,7 @@ window.shareToPlatform = (platform) => {
 
     else if (platform === 'copy') { 
 
-        navigator.clipboard.writeText(`${currentShareData.title}\n${currentShareData.url}`).then(() => { alert('ກ໊ອບປີ້ລິ້ງສຳເລັດ!'); closeShareModal(); }); 
+        navigator.clipboard.writeText(`${currentShareData.title}\n${currentShareData.url}`).then(() => { alert('Link copied successfully!'); closeShareModal(); }); 
 
     } 
 
@@ -1452,13 +1452,13 @@ window.shareToPlatform = (platform) => {
 
  
 
-window.openNewsModal = () => { if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } document.getElementById('news-modal').classList.remove('hidden'); }; 
+window.openNewsModal = () => { if (!isSuperAdmin()) { alert('Website creator only!'); return; } document.getElementById('news-modal').classList.remove('hidden'); }; 
 
 window.closeNewsModal = () => document.getElementById('news-modal').classList.add('hidden'); 
 
 window.openEditNewsModal = (id, title, category, content) => { 
 
-    if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } 
+    if (!isSuperAdmin()) { alert('Website creator only!'); return; } 
 
     document.getElementById('edit-news-id').value = id; 
 
@@ -1486,11 +1486,11 @@ window.saveNews = async () => {
 
     const content = document.getElementById('news-content').value; 
 
-    if (!title || !content) return alert('ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!title || !content) return alert('Please fill in all information'); 
 
     await addDoc(collection(db, "news"), { title, category, content, date: new Date().toLocaleString('lo-LA'), likes: [] }); 
 
-    alert('ເພີ່ມຂ່າວສຳເລັດ!'); closeNewsModal(); loadNews(); 
+    alert('News added successfully!'); closeNewsModal(); loadNews(); 
 
 }; 
 
@@ -1508,11 +1508,11 @@ window.updateNews = async () => {
 
     const content = document.getElementById('edit-news-content').value; 
 
-    if (!title || !content) return alert('ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!title || !content) return alert('Please fill in all information'); 
 
     await updateDoc(doc(db, "news", id), { title, category, content }); 
 
-    alert('ແກ້ໄຂຂ່າວສຳເລັດ!'); closeEditNewsModal(); loadNews(); 
+    alert('News edited successfully!'); closeEditNewsModal(); loadNews(); 
 
 }; 
 
@@ -1520,7 +1520,7 @@ window.updateNews = async () => {
 
 window.deleteNewsItem = async (id) => { 
     if (!isSuperAdmin()) return; 
-    if (confirm('ລົບຂ່າວນີ້ແທ້ບໍ?')) { 
+    if (confirm('Are you sure you want to delete this news?')) { 
         try {
             // 1. ລົບໂພສออกจาก Firestore Database
             await deleteDoc(doc(db, "news", id)); 
@@ -1542,9 +1542,9 @@ window.deleteNewsItem = async (id) => {
             updateNotificationUI();
             loadNews(); 
             
-            alert('ລົບຂ່າວ ແລະ ການແຈ້ງເຕືອນທີ່ກ່ຽວຂ້ອງສຳເລັດ!');
+            alert('News and related notifications deleted successfully!');
         } catch (e) {
-            alert('ເກີດຂໍ້ຜິດພາດໃນການລົບ: ' + e.message);
+            alert('Error in deletion: ' + e.message);
         }
     } 
 };
@@ -1588,7 +1588,7 @@ const uploadMediaSmart = (file) => {
 
                 } else { 
 
-                    reject(new Error(result.message || "ອັບໂຫລດບໍ່ສຳເລັດ")); 
+                    reject(new Error(result.message || "Upload failed")); 
 
                 } 
 
@@ -1652,9 +1652,9 @@ function checkVideoDuration(file) {
 
 window.submitMemberReport = async () => { 
 
-    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes('ຜູ້ສ້າງ')) { 
+    if (!currentRoomUser || currentRoomUser.includes('Admin') || currentRoomUser.includes(', Creator')) { 
 
-        alert('ກະລຸນາລັອກອິນດ້ວຍໄອດີຫ້ອງພັກກ່ອນ!'); 
+        alert(', Please login with your room ID first!'); 
 
         document.getElementById('room-login-modal').classList.remove('hidden'); return; 
 
@@ -1664,11 +1664,11 @@ window.submitMemberReport = async () => {
 
     const now = new Date(); 
 
-    if (now.getDay() !== 0) { alert('⚠️ ລະບົບອະນຸຍາດໃຫ້ສົ່ງສະເພາະມື້ວັນອາທິດເທົ່ານັ້ນ!'); return; } 
+    if (now.getDay() !== 0) { alert('⚠️ The system only allows submissions on Sundays!'); return; } 
 
     const totalMinutesNow = now.getHours() * 60 + now.getMinutes(); 
 
-    if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ ເວລາສົ່ງ: 16:00 - 19:00 ໂມງ!'); return; } 
+    if (totalMinutesNow < 960 || totalMinutesNow > 1140) { alert('⚠️ Submission time: 16:00 - 19:00!'); return; } 
 
  
 
@@ -1680,13 +1680,13 @@ window.submitMemberReport = async () => {
 
     const statusText = document.getElementById('member-upload-status'); 
 
-    if (!name || !description) return alert('ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ'); 
+    if (!name || !description) return alert('Please fill in all information'); 
 
  
 
     const files = fileInput.files; 
 
-    if (files.length === 0) return alert('ກະລຸນາເປີດກ້ອງຖ່າຍວິດີໂອສົດກ່ອນສົ່ງ!'); 
+    if (files.length === 0) return alert('Please turn on the video camera before submitting!'); 
 
  
 
@@ -1694,15 +1694,15 @@ window.submitMemberReport = async () => {
 
  
 
-    statusText.innerText = `⏳ ກຳລັງກວດສອບຄວາມຍາວວິດີໂອ...`; 
+    statusText.innerText = `⏳ Checking video length...`; 
 
     const duration = await checkVideoDuration(videoFile); 
 
     if (duration > 62) { 
 
-        alert(`❌ ວິດີໂະຍາວເກີນໄປ (${Math.round(duration)} ວິນາທີ)! ລະບົບກຳນົດໃຫ້ຖ່າຍວິດີໂອຄວາມຍາວສູງສຸດບໍ່ເກີນ 1 ນາທີ.`); 
+        alert(`❌ Video is too long (${Math.round(duration)} seconds)! The system sets a maximum video length of no more than 1 minute.`); 
 
-        statusText.innerText = '⚠️ ກະລຸນາຖ່າຍວິດີໂອໃໝ່ ຄວາມຍາວບໍ່ເກີນ 1 ນາທີ!'; 
+        statusText.innerText = '⚠️ Please retake a video with a length of no more than 1 minute!'; 
 
         return; 
 
@@ -1722,11 +1722,11 @@ window.submitMemberReport = async () => {
 
     }); 
 
-    if (submitted) return alert('⚠️ ຫ້ອງຂອງທ່ານສົ່ງບົດລາຍງານສຳລັບອາທິດນີ້ໄປແລ້ວ!'); 
+    if (submitted) return alert('⚠️ Your room has already submitted the report for this week!'); 
 
  
 
-    statusText.innerText = `⏳ ກຳລັງອັບໂຫລດວິດີໂອສົດຂຶ້ນ Google Drive...`; 
+    statusText.innerText = `⏳ Uploading live video Google Drive...`; 
 
     try { 
 
@@ -1738,7 +1738,7 @@ window.submitMemberReport = async () => {
 
  
 
-        statusText.innerText = `⏳ ກຳລັງບັນທຶກບົດລາຍງານ...`; 
+        statusText.innerText = `⏳ Saving report...`; 
 
         await addDoc(collection(db, "member_reports"), { 
 
@@ -1746,7 +1746,7 @@ window.submitMemberReport = async () => {
 
         }); 
 
-        alert('🎉 ສົ່ງບົດລາຍງານວິດີໂອສຳເລັດ!'); 
+        alert('🎉 Video report submitted successfully!'); 
 
         document.getElementById('member-name').value = ''; 
 
@@ -1754,11 +1754,11 @@ window.submitMemberReport = async () => {
 
         fileInput.value = ''; 
 
-        statusText.innerText = '⚠️ ລະບົບກວດສອບຄວາມຍາວວິດີໂອຕ້ອງບໍ່ເກີນ 60 ວິນາທີ ແລະ ຈະອັບໂຫລດຂຶ້ນ Google Drive ອັດຕະໂນມັດ'; 
+        statusText.innerText = '⚠️ The system checks that the video length must not exceed 60 seconds and will automatically upload to Google Drive'; 
 
         loadMemberReports(); loadFullScoreSummary(); 
 
-    } catch (e) { alert(e.message); statusText.innerText = '❌ ອັບໂຫລດບໍ່ສຳເລັດ'; } 
+    } catch (e) { alert(e.message); statusText.innerText = '❌ Upload failed'; } 
 
 }; 
 
@@ -1780,7 +1780,7 @@ async function loadMemberReports() {
 
         renderMemberReports(); 
 
-    } catch (e) { container.innerHTML = `<div class="text-center py-6 text-red-400">ຜິດພາດ: ${e.message}</div>`; } 
+    } catch (e) { container.innerHTML = `<div class="text-center py-6 text-red-400">Error: ${e.message}</div>`; } 
 
 } 
 
@@ -1812,7 +1812,7 @@ function renderMemberReports() {
 
     if (!container) return; 
 
-    if (allMemberReports.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">ຍັງບໍ່ມີບົດລາຍງານ</div>`; return; } 
+    if (allMemberReports.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">No reports yet, Room</div>`; return; } 
 
     container.innerHTML = allMemberReports.map(rep => { 
 
@@ -1830,13 +1830,13 @@ function renderMemberReports() {
 
                 <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-2"> 
 
-                    <span class="font-bold text-emerald-400">🏠 ຫ້ອງ: ${rep.room || ''} | 👤 ຜູ້ສົ່ງ: ${rep.name}</span> 
+                    <span class="font-bold text-emerald-400">🏠 room: ${rep.room || ''} | 👤 Sender: ${rep.name}</span> 
 
                     <div class="flex items-center space-x-2"> 
 
                         <span class="px-2 py-0.5 rounded text-[10px] ${rep.approved ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}"> 
 
-                            ${rep.approved ? '✅ ອະນຸມັດແລ້ວ' : '⏳ ລໍຖ້າ Admin ອະນຸມັດ'} 
+                            ${rep.approved ? '✅ Approved' : '⏳ Waiting for Admin approval'} 
 
                         </span> 
 
@@ -1862,7 +1862,7 @@ function renderMemberReports() {
 
                                 <div class="relative group bg-slate-950 p-2 rounded-xl border border-slate-700 text-center space-y-2"> 
 
-                                    <span class="text-xs text-emerald-400 font-bold block">📷 ຮູບພາບການປະຕິບັດງານ</span> 
+                                    <span class="text-xs text-emerald-400 font-bold block">📷 Action photos</span> 
 
                                     <img src="${mediaUrl}" alt="Report Image" class="max-h-64 mx-auto rounded-lg object-contain cursor-pointer hover:opacity-95 transition" onclick="window.open('${mediaUrl}')"> 
 
@@ -1876,9 +1876,9 @@ function renderMemberReports() {
 
                                 <div class="relative group bg-slate-950 p-3 rounded-xl border border-slate-700 text-center space-y-2"> 
 
-                                    <span class="text-xs text-emerald-400 font-bold block">📁 ວິດີໂອບົນ Google Drive</span> 
+                                    <span class="text-xs text-emerald-400 font-bold block">📁 Video on Google Drive</span> 
 
-                                    <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 ເປີດເບິ່ງວິດີໂອໃນ Google Drive</a> 
+                                    <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 Open video in Google Drive</a> 
 
                                 </div> 
 
@@ -1894,9 +1894,9 @@ function renderMemberReports() {
 
                     ${userRole === 'admin' ? ` 
 
-                        ${!rep.approved ? `<button onclick="approveMemberReport('${rep.id}')" class="text-xs bg-emerald-600 px-3 py-1.5 rounded-lg text-white font-medium">✅ ອະນຸມັດ</button>` : ''} 
+                        ${!rep.approved ? `<button onclick="approveMemberReport('${rep.id}')" class="text-xs bg-emerald-600 px-3 py-1.5 rounded-lg text-white font-medium">✅  Approve</button>` : ''} 
 
-                        ${isSuperAdmin() ? `<button onclick="deleteMemberReport('${rep.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">ລົບລາຍງານ</button>` : ''} 
+                        ${isSuperAdmin() ? `<button onclick="deleteMemberReport('${rep.id}')" class="text-xs bg-red-950 px-3 py-1.5 rounded-lg text-red-300">Delete report</button>` : ''} 
 
                     ` : ''} 
 
@@ -1914,7 +1914,7 @@ function renderMemberReports() {
 
 window.approveMemberReport = async (reportId) => { 
 
-    if (userRole !== 'admin') { alert('⚠️ ສະເພາະ Admin ເທົ່ານັ້ນ!'); return; } 
+    if (userRole !== 'admin') { alert('⚠️ Admin only!'); return; } 
 
     const report = allMemberReports.find(r => r.id === reportId); 
 
@@ -1928,7 +1928,7 @@ window.approveMemberReport = async (reportId) => {
 
         await addDoc(collection(db, "cyber_tasks"), { 
 
-            title: `${report.room || ''} - ໂດຍ: ${report.name}`, 
+            title: `${report.room || ''} - By: ${report.name}`, 
 
             description: report.description, 
 
@@ -1938,11 +1938,11 @@ window.approveMemberReport = async (reportId) => {
 
         }); 
 
-        alert('ອະນຸມັດສຳເລັດ!'); 
+        alert('Approved successfully!'); 
 
         loadMemberReports(); loadCyberTasks(); loadFullScoreSummary(); 
 
-    } catch (e) { alert('ຜິດພາດ: ' + e.message); } 
+    } catch (e) { alert('Error: ' + e.message); } 
 
 }; 
 
@@ -1950,9 +1950,9 @@ window.approveMemberReport = async (reportId) => {
 
 window.deleteMemberReport = async (id) => { 
 
-    if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } 
+    if (!isSuperAdmin()) { alert('Website creator only!'); return; } 
 
-    if (confirm('ລົບລາຍງານນີ້ແທ້ບໍ?')) { await deleteDoc(doc(db, "member_reports", id)); loadMemberReports(); loadFullScoreSummary(); } 
+    if (confirm('Are you sure you want to delete this report?')) { await deleteDoc(doc(db, "member_reports", id)); loadMemberReports(); loadFullScoreSummary(); } 
 
 }; 
 
@@ -1976,7 +1976,7 @@ async function loadCyberTasks() {
 
         renderCyberTasks(); 
 
-    } catch (e) { container.innerHTML = `<div class="text-center py-12 text-red-400">ຜິດພາດ: ${e.message}</div>`; } 
+    } catch (e) { container.innerHTML = `<div class="text-center py-12 text-red-400">Error: ${e.message}</div>`; } 
 
 } 
 
@@ -1988,7 +1988,7 @@ function renderCyberTasks() {
 
     if (!container) return; 
 
-    if (allCyberTasks.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-500 bg-slate-800/85 rounded-2xl border border-slate-700">ຍັງບໍ່ມີລາຍການ</div>`; return; } 
+    if (allCyberTasks.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-500 bg-slate-800/85 rounded-2xl border border-slate-700">No items yet</div>`; return; } 
 
     container.innerHTML = allCyberTasks.map(task => { 
 
@@ -2014,7 +2014,7 @@ function renderCyberTasks() {
 
                             <h4 class="font-bold text-emerald-300 text-base">${task.title}</h4> 
 
-                            <p class="text-[11px] text-emerald-400/90 mt-0.5">📅 ວັນເວລາ: ${task.date || ''}</p> 
+                            <p class="text-[11px] text-emerald-400/90 mt-0.5">📅 Date and time: ${task.date || ''}</p> 
 
                             <p class="text-xs text-slate-300 mt-1">${task.description || ''}</p> 
 
@@ -2022,7 +2022,7 @@ function renderCyberTasks() {
 
                     </div> 
 
-                    ${userRole === 'admin' && isSuperAdmin() ? `<button onclick="deleteCyberTask('${task.id}')" class="text-xs bg-red-950 px-3 py-1 rounded-lg text-red-300">ລົບ</button>` : ''} 
+                    ${userRole === 'admin' && isSuperAdmin() ? `<button onclick="deleteCyberTask('${task.id}')" class="text-xs bg-red-950 px-3 py-1 rounded-lg text-red-300">Delete</button>` : ''} 
 
                 </div> 
 
@@ -2040,7 +2040,7 @@ function renderCyberTasks() {
 
                                 <div class="relative group bg-slate-950 p-2 rounded-xl border border-slate-700 text-center space-y-2"> 
 
-                                    <span class="text-xs text-emerald-400 font-bold block">📷 ຮູບພາບການປະຕິບັດງານ</span> 
+                                    <span class="text-xs text-emerald-400 font-bold block">📷 Action photos</span> 
 
                                     <img src="${mediaUrl}" alt="Task Image" class="max-h-64 mx-auto rounded-lg object-contain cursor-pointer hover:opacity-95 transition" onclick="window.open('${mediaUrl}')"> 
 
@@ -2054,9 +2054,9 @@ function renderCyberTasks() {
 
                                 <div class="relative group bg-slate-950 p-3 rounded-xl border border-slate-700 text-center space-y-2"> 
 
-                                    <span class="text-xs text-emerald-400 font-bold block">📁 ວິດີໂອບົນ Google Drive</span> 
+                                    <span class="text-xs text-emerald-400 font-bold block">📁 Video on Google Drive</span> 
 
-                                    <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 ເປີດເບິ່ງວິດີໂອໃນ Google Drive</a> 
+                                    <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl shadow transition font-medium">🔗 Open video in Google Drive</a> 
 
                                 </div> 
 
@@ -2078,7 +2078,7 @@ function renderCyberTasks() {
 
  
 
-window.openCyberModal = () => { if (!isSuperAdmin()) { alert('ສະເພາະຜູ້ສ້າງເວັບໄຊເທົ່ານັ້ນ!'); return; } document.getElementById('cyber-modal').classList.remove('hidden'); }; 
+window.openCyberModal = () => { if (!isSuperAdmin()) { alert('Website creator only!'); return; } document.getElementById('cyber-modal').classList.remove('hidden'); }; 
 
 window.closeCyberModal = () => document.getElementById('cyber-modal').classList.add('hidden'); 
 
@@ -2094,15 +2094,15 @@ window.saveCyberTaskVideo = async () => {
 
     const files = document.getElementById('cyber-media-files').files; 
 
-    if (!title) return alert('ກະລຸນາໃສ່ຫົວຂໍ້'); 
+    if (!title) return alert('Please enter a title'); 
 
-    if (files.length === 0) return alert('ກະລຸນາເລືອກຮູບພາບ ຫຼື ວິດີໂອ'); 
+    if (files.length === 0) return alert('Please select an image or video'); 
 
  
 
     const statusText = document.getElementById('upload-status'); 
 
-    statusText.innerText = `⏳ ກຳລັງປະມວນຜົນໄຟລ໌...`; 
+    statusText.innerText = `⏳ Processing file...`; 
 
     try { 
 
@@ -2116,11 +2116,11 @@ window.saveCyberTaskVideo = async () => {
 
         await addDoc(collection(db, "cyber_tasks"), { title, description, mediaItems, date: new Date().toLocaleString('lo-LA') }); 
 
-        alert('ເພີ່ມລາຍການສຳເລັດ!'); 
+        alert('Item added successfully!'); 
 
         closeCyberModal(); loadCyberTasks(); switchTab('cyber'); 
 
-    } catch (e) { alert(e.message); statusText.innerText = '❌ ອັບໂຫລດບໍ່ສຳເລັດ'; } 
+    } catch (e) { alert(e.message); statusText.innerText = '❌ Upload failed'; } 
 
 }; 
 
@@ -2130,7 +2130,7 @@ window.deleteCyberTask = async (id) => {
 
     if (!isSuperAdmin()) return; 
 
-    if (confirm('ລົບລາຍການນີ້ແທ້ບໍ?')) { await deleteDoc(doc(db, "cyber_tasks", id)); loadCyberTasks(); } 
+    if (confirm('Are you sure you want to delete this item?')) { await deleteDoc(doc(db, "cyber_tasks", id)); loadCyberTasks(); } 
 
 }; 
 
