@@ -2149,6 +2149,49 @@ window.filterCategory = (cat) => {
 
 }; 
 
+// 🌍 ຜູກຟັງຊັນທັງໝົດລົງໃນ window ເພື່ອໃຫ້ HTML ສามารถເອີ້ນໃຊ້ງານໄດ້ໂດຍຕົງ
+window.searchNews = searchNews;
+window.handleLoginTypeChange = handleLoginTypeChange;
+window.confirmRoomLogin = confirmRoomLogin;
+window.logoutSession = logoutSession;
+window.submitSpecialPoint = submitSpecialPoint;
+window.switchTab = switchTab;
+window.switchSummaryPeriod = switchSummaryPeriod;
+window.submitUserFeedback = submitUserFeedback;
+window.sendAdminMessage = sendAdminMessage;
+window.changeHistoryWeek = changeHistoryWeek;
+window.filterScoreSummaryByPeriod = filterScoreSummaryByPeriod;
+window.toggleLike = toggleLike;
+window.handleShare = handleShare;
+window.closeShareModal = closeShareModal;
+window.shareToPlatform = shareToPlatform;
+window.openNewsModal = openNewsModal;
+window.closeNewsModal = closeNewsModal;
+window.openEditNewsModal = openEditNewsModal;
+window.closeEditNewsModal = closeEditNewsModal;
+window.saveNews = saveNews;
+window.updateNews = updateNews;
+window.deleteNewsItem = deleteNewsItem;
+window.submitMemberReport = submitMemberReport;
+window.approveMemberReport = approveMemberReport;
+window.deleteMemberReport = deleteMemberReport;
+window.openCyberModal = openCyberModal;
+window.closeCyberModal = closeCyberModal;
+window.saveCyberTaskVideo = saveCyberTaskVideo;
+window.deleteCyberTask = deleteCyberTask;
+window.filterCategory = filterCategory;
+window.openGuideModal = openGuideModal;
+window.closeGuideModal = closeGuideModal;
+window.openAdminLoginFromBlocked = openAdminLoginFromBlocked;
+window.startSnakeGame = startSnakeGame;
+window.changeSnakeDir = changeSnakeDir;
+window.toggleHeaderVis = toggleHeaderVis;
+window.toggleSidebarMobile = toggleSidebarMobile;
+window.clickNotificationItem = clickNotificationItem;
+window.toggleNotificationDropdown = toggleNotificationDropdown;
+window.clearNotifications = clearNotifications;
+window.changeAppLanguage = changeAppLanguage;
+
 
 
 
